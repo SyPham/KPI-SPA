@@ -8,12 +8,12 @@
       <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form>
+     
           <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" />
+            <input type="text" v-model="user.username" class="form-control" placeholder="Username" />
             <div class="input-group-append">
               <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
+                <span class="fas fa-user"></span>
               </div>
             </div>
           </div>
@@ -21,6 +21,7 @@
             <input
               type="password"
               class="form-control"
+              v-model="user.password"
               placeholder="Password"
             />
             <div class="input-group-append">
@@ -40,13 +41,10 @@
             </div>
             <!-- /.col -->
             <div class="col-4">
-              <a href="/" class="btn btn-primary btn-block">
-                Sign In
-              </a>
+              <button @click="login" class="btn btn-primary btn-block">Sign In</button>
             </div>
             <!-- /.col -->
           </div>
-        </form>
       </div>
       <!-- /.login-card-body -->
     </div>
@@ -54,9 +52,42 @@
 </template>
 
 <script>
-export default {};
+export default {
+   data() {
+    return {
+      user: {
+        username: '',
+        password: ''
+      } 
+    }
+  },
+  created(){
+
+  },
+  methods: {
+    login(){
+      this.$http.post("http://10.4.4.224:98/api/auth/login", this.user)
+        .then(function(res) {
+          console.log(res)
+          // localStorage.setItem('menus', res.user.menus);
+          // console.log( localStorage.getItem('menus'));
+          this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.menus); // + 4 hours
+          this.$router.push("/home");
+          swal.fire({
+            title: "Success!",
+            text: "Login successfully!",
+            type: "success"
+          });
+      }).catch((res) => {
+          swal.fire({
+            title: "Error!",
+            text: "Username or password is incorrect ! Please try again",
+            type: "Error"
+          });
+        });
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
 
-</style>

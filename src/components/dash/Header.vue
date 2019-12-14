@@ -20,7 +20,7 @@
               <!-- Message Start -->
               <div class="media">
                 <img
-                  src="node_modules/admin-lte/dist/img/user1-128x128.jpg"
+                  src="/node_modules/admin-lte/dist/img/user1-128x128.jpg"
                   alt="User Avatar"
                   class="img-size-50 mr-3 img-circle"
                 />
@@ -44,7 +44,7 @@
               <!-- Message Start -->
               <div class="media">
                 <img
-                  src="node_modules/admin-lte/dist/img/user8-128x128.jpg"
+                  src="/node_modules/admin-lte/dist/img/user8-128x128.jpg"
                   alt="User Avatar"
                   class="img-size-50 img-circle mr-3"
                 />
@@ -68,7 +68,7 @@
               <!-- Message Start -->
               <div class="media">
                 <img
-                  src="node_modules/admin-lte/dist/img/user3-128x128.jpg"
+                  src="/node_modules/admin-lte/dist/img/user3-128x128.jpg"
                   alt="User Avatar"
                   class="img-size-50 img-circle mr-3"
                 />
@@ -103,7 +103,7 @@
               <i class="fas fa-envelope mr-2"></i> Change Password
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#/auth/login" class="dropdown-item">
+            <a href="#" @click.prevent="logout" class="dropdown-item">
               <i class="fas fa-users mr-2"></i> Logout
             </a>
             <div class="dropdown-divider"></div>
@@ -127,7 +127,30 @@
 
 <script>
 export default {
-  name: "appHeader"
+  name: "appHeader",
+  created: function() {},
+  data: function() {
+    return {
+      
+    };
+  },
+  computed: {
+    // user: function() {
+    //   return this.$store.state.currentUser;
+    // }
+  },
+  methods: {
+    logout: function() {
+      this.$auth.destroyToken();
+      // this.user = {};
+      this.$router.push("/login");
+      swal.fire({
+        title: "Success!",
+        text: "Logout successfully!",
+        type: "success"
+      });
+    }
+  }
 };
 </script>
 

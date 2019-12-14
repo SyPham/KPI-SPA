@@ -5,7 +5,7 @@
       <app-sidebar />
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
-        <app-breadcumb />
+        <!-- <app-breadcumb /> -->
 
         <!-- Main content -->
         <section class="content">
