@@ -1,22 +1,22 @@
 var AuthPlugin = {
 
-    setToken: function (token, expiration,menus) {
+    setToken: function (token, expiration,Menus) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('authTokenExpiration', expiration);
-        localStorage.setItem('menus', menus);
+        localStorage.setItem('Menus', Menus);
     },
 
     destroyToken: function () {
         localStorage.removeItem('authToken');
         localStorage.removeItem('authTokenExpiration');
-        localStorage.removeItem('menus');
+        localStorage.removeItem('Menus');
     },
 
     getToken: function () {
         var token = localStorage.getItem('authToken');
         var expiration = localStorage.getItem('authTokenExpiration');
-        var menus = localStorage.getItem('menus');
-        if (!token || !expiration || !menus)
+        var Menus = localStorage.getItem('Menus');
+        if (!token || !expiration || !Menus)
             return null;
 
         if (Date.now() > parseInt(expiration)) {

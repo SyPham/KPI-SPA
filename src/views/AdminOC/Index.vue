@@ -1191,6 +1191,7 @@ export default {
             QuarterlyStandard: QuarterlyStandard,
             YearlyStandard: YearlyStandard
           };
+         
           $.ajax({
             url: "https://localhost:44309/AdminKPILevel/UpdateKPILevel",
             data: JSON.stringify(mObj),
@@ -1198,6 +1199,7 @@ export default {
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function(result) {
+             
               if (result) {
                 swal.fire({
                   title: "Success!",

@@ -71,13 +71,22 @@ export default {
           console.log(res)
           // localStorage.setItem('menus', res.user.menus);
           // console.log( localStorage.getItem('menus'));
-          this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.menus); // + 4 hours
+          this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.Menus); // + 4 hours
           this.$router.push("/home");
-          swal.fire({
-            title: "Success!",
-            text: "Login successfully!",
-            type: "success"
+          const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              customClass: {
+                  title: 'title-class',
+                  icon: 'icon-class'
+              }
           });
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
+          })
       }).catch((res) => {
           swal.fire({
             title: "Error!",

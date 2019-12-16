@@ -83,7 +83,7 @@ export default {
   methods: {
     loadmenu(){
         let seft = this;
-        seft.menus = JSON.parse(localStorage.getItem("menus"));
+        seft.menus = JSON.parse(localStorage.getItem("Menus"));
         // console.log(seft.menus)
     }
   }

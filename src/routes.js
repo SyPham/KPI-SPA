@@ -51,6 +51,10 @@ import AdminOCCategoryKpi from "./views/AdminOCCategoryKpi/Index"
 //UserKPI
 import UserKPI from "./views/UserKPI/Index"
 
+//ChartPeriod
+import ChartPeriod from "./views/ChartPeriod/Index"
+
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -181,7 +185,14 @@ const router = new VueRouter({
         { path: "/CategoryKPILevel",component: UserKPI}
       ]
     },
-
+    //ChartPeriod
+    {
+      path: "/ChartPeriod",
+      component: Dash,
+      children: [
+        { path: "/ChartPeriod",component: ChartPeriod}
+      ]
+    },
  
 
   ]
