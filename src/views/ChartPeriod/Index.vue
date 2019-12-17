@@ -401,7 +401,7 @@
                         v-for="(item,key,index) in dataremarks "
                         :key="index"
                         :class="item.Value == 0 ? ' text-center active-td' : 'active-td2 text-center'"
-                        data-id
+                        :data-id="item.ID"
                         @click="opencomment"
                       >{{item.Value}}</td>
                     </tr>
@@ -568,33 +568,44 @@ export default {
     }
   },
   methods: {
+    remark(id) {
+      $.post("https://localhost:44309/ChartPeriod/Remark", { dataid: id }, function (data) {
+        console.log(data)
+        var result = data.model;
+        var userid = $('#user').data('userid');
+        var users = [],username,fullname;
+        var arrays = data.users;
+        $.each(arrays, function (i,item) {
+            users.push({
+                username: item.Username,
+                fullname:item.FullName
+            })
+        })
+        console.log(users)
+      });
+    },
     opencomment(e) {
-      console.log(e)
+      console.log(e);
+      let seft = this
       if (e.toElement.classList[1] === "active-td") {
-        let number = Number($(this).text()),
-          value = Number($(this).index()),
+        let number = Number(e.text),
           period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
         $("#modal-group-comment-data").modal("show");
-
-        var id = $(this).data("id");
-
+        
+        var id = e.toElement.dataset.id;
+        console.log(id)
         $(".dataid").text(id);
 
         $(".RemarkChart").text("");
 
-        $(".RemarkChart").text(
-          "Remark - " +
-            period +
-            " " +
-            value +
-            " - KPI Chart - @models.kpiname - " +
-            periodText("@models.period")
-        );
+        // $(".RemarkChart").text(
+        //   "Remark - " + period + " " + value + " - KPI Chart - @models.kpiname - " + periodText("@models.period")
+        // );
 
-        chartperiodController.remark(id);
+        self.remark(id);
 
         //Khi tao ra table roi thi moi load data
-        chartperiodController.loadDataComment();
+        // chartperiodController.loadDataComment();
       }
     },
     hiddenData() {
