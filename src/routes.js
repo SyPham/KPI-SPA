@@ -189,8 +189,9 @@ const router = new VueRouter({
     {
       path: "/ChartPeriod",
       component: Dash,
+      
       children: [
-        { path: "/ChartPeriod",component: ChartPeriod}
+        { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod},
       ]
     },
  

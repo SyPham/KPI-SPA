@@ -117,8 +117,8 @@
                   <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="M" disabled   class="btn btn-sm bg-navy month"><i class="fas fa-chart-bar"></i> Monthly</button>
 
                   <!-- button Quarterly -->
-                  <button v-if="item.QuarterlyChecked === true && (item.StatusUploadDataQ === true && item.StatusEmptyDataQ === true)" :data-kpilevelcode="item.KPILevelCode" data-period="Q" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning quarter" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
-                  <button v-else-if="item.QuarterlyChecked === true && item.StatusUploadDataQ === false " :data-kpilevelcode="item.KPILevelCode" data-period="Q"  :class='item.QuarterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataQ === true ? "btn btn-sm btn-warning month" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
+                  <button v-if="item.QuarterlyChecked === true && (item.StatusUploadDataQ === true && item.StatusEmptyDataQ === true)" :data-kpilevelcode="item.KPILevelCode" data-period="Q" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success quarter" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning quarter" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
+                  <button v-else-if="item.QuarterlyChecked === true && item.StatusUploadDataQ === false " :data-kpilevelcode="item.KPILevelCode" data-period="Q"  :class='item.QuarterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn btn-sm btn-success quarter" : (item.StatusEmptyDataQ === true ? "btn btn-sm btn-warning quarter" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
                   <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="Q" disabled   class="btn btn-sm bg-navy quarter"><i class="fas fa-chart-bar"></i> Quarterly</button>
                   <!-- button Yearly -->
 
@@ -346,32 +346,35 @@ export default {
             let year = date.getFullYear();
             var kpilevelcode = $(this).data('kpilevelcode');
             var period = $(this).data('period');
-            var currentWeek = categoryKPILevelAdmin.getDateOfWeekInYear(date);
+            var end = categoryKPILevelAdmin.getDateOfWeekInYear(date);
             var catid = Number($('#box .catid').val());
-            self.$router.push("/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentWeek);
+            self.$router.push(`/ChartPeriod/${kpilevelcode}/${catid}/${period}/${year}/1/${end}`);
+            //self.$router.push("/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentWeek);
             // window.location.href = "/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentWeek;
           })
           $('#tblkpilevel .month').off('click').on('click', function (e) {
             //e.preventDefault();
+            let seft = this;
             var kpilevelcode = $(this).data('kpilevelcode');
             var period = $(this).data('period');
             let year = date.getFullYear();
-
-            var currentMonth = date.getMonth();
+            var start = date.getMonth();
+            var end = date.getMonth();
             var catid = Number($('#box .catid').val());
-            self.$router.push("/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentMonth);
-            // window.location.href = "/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentMonth ;
-
+            // self.$router.push("/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + end);
+            //self.$router.push(`/ChartPeriod/${seft.kpilevelcode}/${seft.catid}/${seft.period}/${seft.year}/1/${seft.end}`);
+            self.$router.push(`/ChartPeriod/${kpilevelcode}/${catid}/${period}/${year}/1/${end}`);
+          
           })
           $('#tblkpilevel .quarter').off('click').on('click', function (e) {
             //e.preventDefault();
             var kpilevelcode = $(this).data('kpilevelcode');
             var period = $(this).data('period');
             let year = date.getFullYear();
-            let currentQuarter = categoryKPILevelAdmin.getCurrentQuarter(date);
+            let end = categoryKPILevelAdmin.getCurrentQuarter(date);
             var catid = Number($('#box .catid').val());
 
-            window.location.href = "/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + currentQuarter ;
+           self.$router.push(`/ChartPeriod/${kpilevelcode}/${catid}/${period}/${year}/1/${end}`);
 
           })
           $('#tblkpilevel .year').off('click').on('click', function (e) {
@@ -380,7 +383,8 @@ export default {
             var period = $(this).data('period');
             let year = date.getFullYear();
             var catid = Number($('#box .catid').val());
-            window.location.href = "/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=" + year + "&end=" + year ;
+            self.$router.push(`/ChartPeriod/${kpilevelcode}/${catid}/${period}/${year}/${year}/${year}`);
+            //window.location.href = "/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=" + year + "&end=" + year ;
 
           })
 

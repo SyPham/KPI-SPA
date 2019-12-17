@@ -7,9 +7,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
-
 import Vuelidate from 'vuelidate'
 
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
 // import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI);
 // import './custom.scss'
@@ -18,7 +19,6 @@ Vue.use(BootstrapVue)
 Vue.use(Auth);
 Vue.use(VueResource);
 /* eslint-disable no-new */
-
 //configure alertify defaults
 // alertify.defaults.notifier.position = 'top-right';
 Vue.http.interceptors.push(function (request, next) {
