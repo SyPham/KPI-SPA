@@ -411,7 +411,7 @@
           </div>
         </div>
       </div>
-
+      <comment></comment>
       <!-- @RenderPage("_Modal.cshtml") -->
     </section>
   </div>
@@ -421,6 +421,7 @@ import { HTTP } from "../../http-constants";
 import LineChart from "../../utils/ChartJs/LineChart";
 import { initLineChart } from "../../plugins/LineChartPlugin";
 import planetChartData from "../../plugins/Chartjs2/Demo";
+import Comment from "../ChartPeriod/Modal";
 export default {
   data() {
     return {
@@ -465,24 +466,8 @@ export default {
             formatter: function(value, context) {
               return value;
             }
-          },
-          hiddendatalabels: {
-            backgroundColor: function(context) {
-              return context.dataset.backgroundColor;
-            },
-            borderRadius: 4,
-            color: "white",
-            font: {
-              weight: "bold",
-              size: 12
-            },
-            formatter: function(value, context) {
-              return value;
-            },
-            display: function(context) {
-              return false;
-            }
           }
+          
         },
         scales: {
           yAxes: [
@@ -548,7 +533,8 @@ export default {
     };
   },
   components: {
-    LineChart
+    LineChart,
+    Comment
   },
   mounted() {
     // seft.createChart("planet-chart");
@@ -584,7 +570,7 @@ export default {
   methods: {
     hiddenData() {
       let seft = this;
-      seft.chart.options.plugins = {
+      seft.chart.options.plugins.datalabels = {
         backgroundColor: function(context) {
           return context.dataset.backgroundColor;
         },
@@ -595,7 +581,7 @@ export default {
           size: 12
         },
         formatter: function(value, context) {
-          return value;
+          return false;
         },
         display: function(context) {
           return false;

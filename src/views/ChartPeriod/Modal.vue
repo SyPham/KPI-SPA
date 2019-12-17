@@ -1,7 +1,5 @@
 <template>
   <div>
-    
-
     <div class="modal fade modal" id="modal-group-comment-data">
         <div class="modal-dialog modal-lg" style="width:90%">
             <div class="modal-content">
