@@ -402,6 +402,7 @@
                         :key="index"
                         :class="item.Value == 0 ? ' text-center active-td' : 'active-td2 text-center'"
                         data-id
+                        @click="opencomment"
                       >{{item.Value}}</td>
                     </tr>
                   </tbody>
@@ -467,7 +468,6 @@ export default {
               return value;
             }
           }
-          
         },
         scales: {
           yAxes: [
@@ -568,6 +568,35 @@ export default {
     }
   },
   methods: {
+    opencomment(e) {
+      console.log(e)
+      if (e.toElement.classList[1] === "active-td") {
+        let number = Number($(this).text()),
+          value = Number($(this).index()),
+          period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
+        $("#modal-group-comment-data").modal("show");
+
+        var id = $(this).data("id");
+
+        $(".dataid").text(id);
+
+        $(".RemarkChart").text("");
+
+        $(".RemarkChart").text(
+          "Remark - " +
+            period +
+            " " +
+            value +
+            " - KPI Chart - @models.kpiname - " +
+            periodText("@models.period")
+        );
+
+        chartperiodController.remark(id);
+
+        //Khi tao ra table roi thi moi load data
+        chartperiodController.loadDataComment();
+      }
+    },
     hiddenData() {
       let seft = this;
       seft.chart.options.plugins.datalabels = {
@@ -721,7 +750,6 @@ export default {
               "KPI Chart -" + response.label + " - " + response.kpiname),
             (seft.options.scales.yAxes[0].scaleLabel.labelString =
               response.Unit);
-
           seft.options.scales.xAxes[0].scaleLabel.labelString = seft.convertPeriod(
             response.period
           );
