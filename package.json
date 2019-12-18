@@ -29,6 +29,7 @@
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.5.1",
     "vue-chartjs": "^3.5.0",
+    "vue-jwt-decode": "^0.1.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
     "vuejs-paginate": "^2.1.0",

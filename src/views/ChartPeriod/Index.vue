@@ -412,7 +412,168 @@
           </div>
         </div>
       </div>
-      <comment></comment>
+      <!-- <comment></comment> -->
+      <div class="modal fade modal" id="modal-group-comment-data">
+        <div class="modal-dialog modal-lg" >
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                    <h4 class="modal-title">
+                        <i class="fa fa-tags"></i>&#32;
+                        <span class="RemarkChart"></span>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row bootstrap snippets">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="comment-wrapper">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <span class="dataid" style="display:none"></span>
+                                        <div class="form-group">
+                                            <textarea class="form-control" id="comment" placeholder="write a comment..." rows="6"></textarea>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                        <hr />
+                                        <ul class="media-list" id="media-list">
+                                        </ul>
+                                        <button type="button" @click="addcomment()" class="btn btn-info pull-right btnComment">
+                                            <i class="far fa-paper-plane"></i> Post
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+      </div>
+
+      <div class="modal fade modal-window modal" id="modal-group-comment-data2">
+        <div class="modal-dialog modal-lg" >
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                    <h4 class="modal-title">
+                      <a
+                        href="#modal-group-comment-data"
+                        data-toggle="modal"
+                        data-dismiss="modal"
+                        style="color:#fff;cursor:pointer"
+                      >
+                        <i class="fa fa-reply"></i>
+                      </a>
+                      &#32;
+                      <span class="ActionPlanChart"></span>
+                    </h4>
+                    <span class="commentid" style="display:none"></span>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home">List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile">Add</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-home">
+                            <div class="listTask">
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">No.</th>
+                                            <th>Task name</th>
+                                            <th>Descriptions</th>
+                                            <th>PIC</th>
+                                            <th>Due date</th>
+                                            <th>Update shedule date</th>
+                                            <th>Actual finish date</th>
+                                            <th>Status</th>
+                                            <th class="Approval" style="width: 100px">Approve</th>
+                                            <th class="Option" style="width: 50px">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tblActionPlan">
+                                        <tr>
+                                            <td>1.</td>
+                                            <td>To do list</td>
+                                            <td>
+                                                <ul>
+                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
+                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
+                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
+                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
+                                                </ul>
+                                            </td>
+                                            <td>swook, peter, henry</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>20-10-2019</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile">
+                            <div class="addTask">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>Task name</label>
+                                    <input type="text" class="form-control Title" autocomplete="off" placeholder="Enter ..." />
+                                </div>
+
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <div class="editable Description" style="border:1px solid #d2d6de" contenteditable="true">
+                                        <ul style="list-style: decimal;padding-left: 20px;">
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- input states -->
+                                <div class="form-group">
+                                    <label class="control-label" for="Tag">Assign PIC</label>
+                                    <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder="Require ..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="Auditor">Auditor</label>
+                                    <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder="Optional ..."></textarea>
+                                </div>
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <label>Due date</label>
+                                    <input autocomplete="off" type="text" class="form-control DueDate datepicker" name="datepicker" />
+                                </div>
+                                <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" class="btn btn-primary">Back to remark</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
       <!-- @RenderPage("_Modal.cshtml") -->
     </section>
   </div>
@@ -423,6 +584,7 @@ import LineChart from "../../utils/ChartJs/LineChart";
 import { initLineChart } from "../../plugins/LineChartPlugin";
 import planetChartData from "../../plugins/Chartjs2/Demo";
 import Comment from "../ChartPeriod/Modal";
+import VueJwtDecode from 'vue-jwt-decode'
 export default {
   data() {
     return {
@@ -537,7 +699,9 @@ export default {
     Comment
   },
   mounted() {
+    let seft = this
     // seft.createChart("planet-chart");
+    seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
   },
   created() {
     let seft = this;
@@ -545,7 +709,7 @@ export default {
     seft.start = seft.$route.params.start;
     seft.end = seft.$route.params.end;
     seft.Loadchart();
-    seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
+    
   },
   watch: {
     searchyear: function(newOld, oldVal) {
@@ -568,42 +732,443 @@ export default {
     }
   },
   methods: {
-    remark(id) {
-      $.post("https://localhost:44309/ChartPeriod/Remark", { dataid: id }, function (data) {
-        console.log(data)
-        var result = data.model;
-        var userid = $('#user').data('userid');
-        var users = [],username,fullname;
-        var arrays = data.users;
-        $.each(arrays, function (i,item) {
-            users.push({
-                username: item.Username,
-                fullname:item.FullName
+    btnSaveActionPlan(){
+      let seft = this
+       $('.btnSaveActionPlan').unbind('click').on('click', function () {
+            seft.addActionPlan();
+        });
+    },
+    validate(){
+       var isValid = true;
+      if ($('.Title').val().trim() === "") {
+        $('.Title').css('border-color', 'Red');
+        isValid = false;
+      }
+      else {
+        $('.Title').css('border-color', 'lightgrey');
+      }
+      //if ($('.Description').val().trim() === "") {
+      //    $('.Description').css('border-color', 'Red');
+      //    isValid = false;
+      //}
+      //else {
+      //    $('.Description').css('border-color', 'lightgrey');
+      //}
+      if ($('.DueDate').val().trim() === "") {
+        $('.DueDate').css('border-color', 'Red');
+        isValid = false;
+      }
+      else {
+        $('.DueDate').css('border-color', 'lightgrey');
+      }
+      return isValid;
+    },
+    addActionPlan(){
+      // debugger
+        let seft = this
+        var res = seft.validate();
+        if (res === false) {
+          return false;
+        }
+        var KPILevelCodeAndPeriod = seft.$route.params.kpilevelcode + seft.$route.params.period;
+        var phrases = new Array();
+
+        $('.Description').each(function () {
+          $(this).find('li').each(function () {
+            var current = $(this);
+            if (current.children().length > 0) { return true; }
+            phrases.push($(this).text().trim());
+          });
+        });
+        var Description = phrases.join(';');
+        var Tag = $('#Tag').val().trim();
+        if (Tag !== null || Tag !== "" || Tag !== undefined)
+          Tag = Tag.replace(/\@@/g, '').replace(/\ /g, ',');
+
+        var Auditor = $('#Auditor').val().replace("@@","").trim();
+        var obj = {
+          // ID: id,
+          UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+          DataID: Number($('.dataid').text()),
+          CommentID: Number($('.commentid').text()),
+          Title: $('.addTask .Title').val(),
+          Tag: Tag,
+          KPILevelCodeAndPeriod: KPILevelCodeAndPeriod,
+          Description: Description,
+          Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
+          SubmitDate: convertDate(new Date),
+          Link: window.location.href,
+          Subject: $('.ActionPlanChart').text(),
+          Auditor: Auditor,
+          CategoryID: Number(seft.$route.params.catid),
+          KPILevelCode: seft.$route.params.kpilevelcode,
+        };
+        
+        $.post('https://localhost:44309/ChartPeriod/Add', { obj: obj }, function (res) {
+        console.log(res);
+        if (res.status === true && res.isSendmail === true) {
+          var commentid = Number($('.commentid').text());
+          var dataid = Number($('.dataid').text());
+          seft.LoadDataActionPlan(dataid, commentid);
+          // chartperiodController.resetForm();
+          activaTab('pills-home');
+        }
+        else if (res.status === true && res.isSendmail === false) {
+          var commentid = Number($('.commentid').text());
+          var dataid = Number($('.dataid').text());
+          seft.LoadDataActionPlan(dataid, commentid);
+          // chartperiodController.resetForm();
+          activaTab('pills-home');
+          console.log("Can not send email")
+        }
+        else {
+          if (res.message !== "") {
+            Toast.fire({
+              type: 'warning',
+              title: res.message
             })
-        })
-        console.log(users)
+
+          } else {
+            error( "Failed");
+          }
+        }
       });
+       $("#modal-group-comment-data").on("shown.bs.modal", function (){
+            activaTab('pills-home');
+        });
+    },
+    LoadDataActionPlan(dataid, commentid) {
+      let seft = this
+     HTTP.post("ChartPeriod/getall",{
+       DataID: dataid,
+       CommentID: commentid,
+       UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+     }).then(res => {
+       console.log(res)
+      //  var res = res.data;
+       if (res.data.status) {
+            var data = res.data.data;
+            console.log(data)
+            var html = '';
+            $.each(data, function (i, item) {
+                $('.listTask .Approval').hide();
+                $('.listTask .Option').hide();
+                console.log(item.ApprovedStatus)
+
+                if (item.CreatedBy === $('#user').data('userid') || item.Auditor === $('#user').data('userid'))
+                {
+                    html += '<tr data-id="' + item.ID + '">';
+                    html += '<td>' + (i + 1) + '</td>';
+                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                    html += '<td><div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;"  data-type="textarea"  data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
+                    html += '</td>';
+                    html += '<td>';
+
+                    if (item.Tag !== null)
+                    {
+                        var array2 = item.Tag.split(',');
+
+                        $.each(array2, function (i, item2)
+                        {
+                            if (item2.length > 1) {
+                                html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
+                            }
+                        });
+                    }
+
+                    html += '</td>';
+                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
+                    html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
+                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
+                    html += '<td > ';
+                    html += '<div class="pretty p-icon p-round p-pulse">';
+
+                    if (item.Status)
+                    {
+                        html += '<input type="checkbox" class="updateStatus" checked  />';
+                        html += '<div class="state p-success">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label>Finished</label>';
+                    }
+                    else
+                    {
+                        html += '<input type="checkbox" class="updateStatus" />';
+                        html += '<div class="state p-danger">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label>Not finished</label>';
+                    }
+
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</td > ';
+
+                    $('.listTask .Approval').show();
+                    $('.listTask .Option').show();
+                    html += '<td> ';
+
+                    if (item.ApprovedStatus)
+                    {
+                        html += '<div class="pretty p-icon p-round p-jelly">';
+                        html += '<input type="checkbox" checked class="btnApproveActionPlan" />';
+                        html += '<div class="state p-success">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label class="black">Approved</label>';
+                        html += '</div>';
+                        html += '</div >';
+                    }
+                    else
+                    {
+                        html += '<div class="pretty p-icon p-round p-jelly">';
+                        html += '<input type="checkbox" class="btnApproveActionPlan" />';
+                        html += '<div class="state p-danger">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label class="black">Not approved</label>';
+                        html += '</div>';
+                        html += '</div >';
+                    }
+
+                    html += '</td > ';
+                    html += '<td>';
+                    html += '<div class="btn-group">';
+                    html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fa fa-remove"></i></button>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '</tr>';
+                }
+                else
+                {
+                    if(item.ListUserIDs.indexOf($('#user').data('userid')) !== -1)
+                        html += '<tr data-id="' + item.ID + '">';
+                    else
+                        html += '<tr style="pointer-events: none;" data-id="' + item.ID + '">';
+
+                    html += '<td>' + (i + 1) + '</td>';
+                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                    html += '<td><div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;"  data-type="textarea"  data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
+                    html += '</td>';
+                    html += '<td>';
+
+                    if (item.Tag !== null)
+                    {
+                        var array2 = item.Tag.split(',');
+                        $.each(array2, function (i, item2) {
+                            if (item2.length > 1) {
+                                html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
+                            }
+                        });
+                    }
+
+                    html += '</td>';
+                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
+                    html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
+                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
+                    html += '<td > ';
+                    html += '<div class="pretty p-icon p-round p-pulse">';
+
+                    if (item.Status)
+                    {
+                        html += '<input type="checkbox" class="updateStatus" checked />';
+                        html += '<div class="state p-success">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label>Finished</label>';
+                    }
+                    else
+                    {
+                        html += '<input type="checkbox" class="updateStatus" />';
+                        html += '<div class="state p-danger">';
+                        html += '<i class="icon fa fa-check"></i>';
+                        html += '<label>Not finished</label>';
+                    }
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</td > ';
+                    html += '</tr>';
+                }
+            });
+
+            $('.tblActionPlan').empty();
+            $('.tblActionPlan').append(html);
+            seft.btnSaveActionPlan();
+        }
+     });
+       
+    },
+    btntabload(){
+      let seft = this
+      $('.btnTask').unbind('click').on('click', function () {
+      var commentid = $(this).data('commentid');
+      $(".commentid").text(commentid);
+      var commentid = $(this).data('commentid');
+      var dataid = Number($('.dataid').text());
+      var textRemark = $('.RemarkChart').text();
+      textRemark = textRemark.replace("Remark", "Action Plan");
+      $('.ActionPlanChart').text('');
+
+        $('.ActionPlanChart').text(textRemark);
+
+      seft.LoadDataActionPlan(dataid, commentid);
+      });
+    },
+    loadDataComment() {
+      let seft = this 
+      $.ajax({
+          url: 'https://localhost:44309/ChartPeriod/LoadDataComment',
+          //url: '/ChartPeriod/GetAllComments',
+          type: "GET",
+          data: {
+              dataid: Number($(".dataid").text()),
+              userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+          },
+          dataType: "json",
+          success: function (res) {
+            var data = res.data;
+            console.log("Lay ra tat ca comment");
+            console.log(res);
+            var total = res.total;
+
+            $('.total-comments').text(total);
+            var html = '';
+            $.each(data, function (i, item) {
+              var nowDate = new Date(parseInt(item.CommentedDate.substr(6)));
+              var date = new Date(nowDate);
+              var result = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+              html += ' <li class="media">';
+              html += '<a href="#" class="pull-left">';
+              html += '    <img src="src/img/user-icon.png" alt="" class="img-circle">';
+              html += '</a>';
+              html += '<div class="media-body">';
+              html += '<span class="text-muted pull-right">';
+              html += '    <small class="text-muted">' + JSONDateWithTime(item.CommentedDate) + '</small>';
+              html += '</span>';
+              html += '<strong class="text-success">' + item.FullName + '</strong>';
+              if (item.Read) {
+                  html += '<span class="label bg-green"> new</span>';
+              }
+              if (item.Task) {
+                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-xs btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
+              }
+              else {
+                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" title="There are no task." data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-xs btn-success text-bold btnTask tooltip-ui"><i class="fa fa-tags"></i> Task</a> </p>';
+              }
+              html += '<p>';
+              html += item.CommentMsg;
+              html += '</p>';
+              html += '</div>';
+              html += '</li >';
+            });
+            $('#media-list').empty();
+            $('#media-list').append(html);
+            
+            seft.btntabload();
+          },
+          error: function (err) {
+        }
+      });
+    },
+    remark(id) {
+      HTTP.post("ChartPeriod/Remark", {
+        dataid: id
+      }).then(r => {
+        console.log(r);
+        let result = r.data.model;
+        var userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+        var users = [],
+          username,
+          fullname;
+        var arrays = r.data.users;
+        $.each(arrays, function(i, item) {
+          users.push({
+            username: item.Username,
+            fullname: item.FullName
+          });
+        });
+        
+        console.log(userid);
+        console.log(users);
+        console.log(result);
+      })
+    },
+    addcomment() {
+      // debugger
+      if ($("#comment").val() == "") {
+        warning("Please enter message!!");
+        return;
+      }
+      var CommentMsg = $("#comment").val();
+
+      var list = [];
+      for (let item of CommentMsg.split(" ")) {
+        let x = item.match(/[@@].+[\f]/g);
+        if (x !== null)
+          list.push(
+            x
+              .toString()
+              .replace("@@", " ")
+              .trim()
+          );
+      }
+      var Tag = [...new Set(list.map(x => x))].join();
+
+      var mObj = {
+        DataID: Number($(".dataid").text()),
+        CommentMsg: CommentMsg,
+        UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        Tag: Tag,
+        Link: window.location.href,
+        Title: $(".RemarkChart").text(),
+        KPILevelCode: this.$route.params.kpilevelcode,
+        CategoryID: Number(this.$route.params.catid)
+      };
+      
+       HTTP.post("ChartPeriod/AddComment",mObj)
+        .then(data => {
+          
+          var res = data.data;
+          // console.log(res.status);
+
+          if (res.status == true && res.isSendmail == true) {
+            $("#comment").val("");
+            success("success!");
+            this.loadDataComment();
+          }
+           else if (res.status === true && res.isSendmail === false) {
+            $("#comment").val("");
+            this.loadDataComment();
+            warning("Failed sending mail!");
+            console.log("Khong gui duoc mail");
+          } else {
+            warning("error!");
+            console.log("Loi roi");
+          }
+        })
+        .catch(error => {
+          // console.log(error)
+          //error("error!");
+          console.log("Loi comment");
+        });
     },
     opencomment(e) {
       console.log(e);
-      let seft = this
       if (e.toElement.classList[1] === "active-td") {
-        let number = Number(e.text),
+        let number = Number(e.toElement.textContent),
+          value = Number(e.toElement.cellIndex),
           period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
+
         $("#modal-group-comment-data").modal("show");
-        
+        console.log(number);
+        console.log(value);
+        console.log(period);
+
         var id = e.toElement.dataset.id;
-        console.log(id)
+        console.log(id);
         $(".dataid").text(id);
 
-        $(".RemarkChart").text("");
+        $(".RemarkChart").text(e.text);
 
-        // $(".RemarkChart").text(
-        //   "Remark - " + period + " " + value + " - KPI Chart - @models.kpiname - " + periodText("@models.period")
-        // );
+        $(".RemarkChart").text( "Remark - " + period + " " + value + " - " + " KPI Chart " + " - " + this.kpiname + " - " + this.convertPeriod(this.period, false));
 
-        self.remark(id);
-
+        this.remark(id);
         //Khi tao ra table roi thi moi load data
         // chartperiodController.loadDataComment();
       }
@@ -710,20 +1275,33 @@ export default {
       seft.chart = myChart;
       console.log(seft.chart);
     },
-    convertPeriod(period) {
-      switch (period) {
-        case "M":
-          return "Months In Year";
-        case "W":
-          return "Weeks In Year";
-        case "Q":
-          return "Quarters In Year";
-        case "Y":
-          return "Years In Year";
+    convertPeriod(period, status = true) {
+      if (status) {
+        switch (period) {
+          case "M":
+            return "Months In Year";
+          case "W":
+            return "Weeks In Year";
+          case "Q":
+            return "Quarters In Year";
+          case "Y":
+            return "Years In Year";
+        }
+      } else {
+        switch (period) {
+          case "M":
+            return "Monthly";
+          case "W":
+            return "Weekly";
+          case "Q":
+            return "Quarterly";
+          case "Y":
+            return "Yearly";
+        }
       }
+
       return "N/A";
     },
-
     Loadchart() {
       let seft = this;
       $.ajax({

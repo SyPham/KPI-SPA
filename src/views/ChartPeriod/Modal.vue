@@ -4,14 +4,14 @@
         <div class="modal-dialog modal-lg" style="width:90%">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                    <h4 class="modal-title">
+                        <i class="fa fa-tags"></i>&#32;
+                        <span class="RemarkChart"></span>
+                    </h4>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                         <span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title">
-              <i class="fa fa-tags"></i>&#32;
-              <span class="RemarkChart"></span>
-            </h4>
                 </div>
                 <div class="modal-body">
                     <div class="row bootstrap snippets">
@@ -24,7 +24,7 @@
                                             <textarea class="form-control" id="comment" placeholder="write a comment..." rows="6"></textarea>
                                         </div>
 
-                                        <button type="button" class="btn btn-info pull-right btnComment">
+                                        <button type="button" @click="addcomment()" class="btn btn-info pull-right btnComment">
                                             <i class="fa fa-send-o"></i> Post
                                         </button>
                                         <div class="clearfix"></div>
@@ -163,3 +163,20 @@
     </div>
 </div>
 </template>
+<script>
+export default {
+    data(){
+        return {
+
+        }
+    },
+    created() {
+
+    },
+    method: {
+        addcomment(){
+            console.log('ballala')
+        }
+    }
+}
+</script>

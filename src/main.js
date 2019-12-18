@@ -8,6 +8,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
 import Vuelidate from 'vuelidate'
+import VueJwtDecode from 'vue-jwt-decode'
 
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
@@ -18,6 +19,9 @@ Vue.use(Vuelidate)
 Vue.use(BootstrapVue)
 Vue.use(Auth);
 Vue.use(VueResource);
+Vue.use(VueJwtDecode)
+VueJwtDecode.decode(localStorage.getItem("authToken"))
+
 /* eslint-disable no-new */
 //configure alertify defaults
 // alertify.defaults.notifier.position = 'top-right';

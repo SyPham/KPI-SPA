@@ -1,154 +1,408 @@
-'use strict';
+//Common
+//"use strict";
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
 
-(function (global) {
+    timer: 3000,
+    customClass: {
+        title: 'title-class',
+        icon: 'icon-class'
+    }
+});
 
-    var Samples = global.Samples || (global.Samples = {});
-    var Color = global.Color;
+const success = function (message) {
+    Toast.fire({
+        title: message,
+        type: 'success'
+    });
+};
 
-    function fallback(/* values ... */) {
-        var ilen = arguments.length;
-        var i = 0;
-        var v;
 
-        for (; i < ilen; ++i) {
-            v = arguments[i];
-            if (v !== undefined) {
-                return v;
+const error = function (message) {
+    Toast.fire({
+        title: message,
+        type: 'error'
+    });
+};
+const warning = function (message) {
+    Toast.fire({
+        title: message,
+        type: 'warning'
+    });
+};
+const info = function (message) {
+    Toast.fire({
+        title: message,
+        type: 'info'
+    });
+};
+const question = function (message) {
+    Toast.fire({
+        title: message,
+        type: 'question'
+    });
+};
+////http
+const $post = function (url, data) {
+    return new Promise(function (res, rej) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            beforeSend: function () {
+                $("#main-loading-delay").show();
             }
+        })
+        .done(function (data) {
+            $("#main-loading-delay").hide();
+            res(data);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            $("#main-loading-delay").hide();
+            rej(textStatus);
+        });
+    });
+};
+const $get = function (url, data) {
+    return new Promise(function (res, rej) {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: data,
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            beforeSend: function () {
+                $("#main-loading-delay").show();
+            }
+        })
+        .done(function (data) {
+            res(data);
+            $("#main-loading-delay").hide();
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            $("#main-loading-delay").hide();
+            rej(textStatus);
+        });
+    });
+};
+
+///end http
+$(".datepicker.date").datepicker({
+    format: 'MM/DD/YYYY',
+    icons: {
+        time: "fa fa-clock-o",
+        date: "fa fa-calendar",
+        up: "fa fa-arrow-up",
+        down: "fa fa-arrow-down"
+    }
+});
+
+function periodText(value) {
+    switch (value.toLowerCase()) {
+        case "w": period = "Weekly"; break;
+        case "m": period = "Monthly"; break;
+        case "q": period = "Quaterly"; break;
+        case "y": period = "Yearly"; break;
+        default:
+    }
+    return period || "";
+}
+function toTitleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function (match) {
+        return match.toUpperCase();
+    });
+}
+
+function genarateCode(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+function getCurrentQuarter(date) {
+    var month = date.getMonth() + 1;
+    return Math.ceil(month / 3);
+}
+function getDateOfWeekInYear(dt) {
+    var tdt = new Date(dt.valueOf());
+    var dayn = (dt.getDay() + 6) % 7;
+    tdt.setDate(tdt.getDate() - dayn + 3);
+    var firstThursday = tdt.valueOf();
+    tdt.setMonth(0, 1);
+    if (tdt.getDay() !== 4) {
+        tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+}
+function isInt(n) {
+    return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n) {
+    return Number(n) === n && n % 1 !== 0;
+}
+
+function toInt(n) {
+    var result = Number(n);
+    if (isNaN(result))
+        return 0;
+    else return Number(n);
+}
+
+
+function convertNumberMonthToText(value) {
+    switch (value) {
+        case 1:
+            result = "Jan"; break;
+        case 2:
+            result = "Feb"; break;
+        case 3:
+            result = "Mar"; break;
+        case 4:
+            result = "Apr"; break;
+        case 5:
+            result = "May"; break;
+        case 6:
+            result = "Jun"; break;
+        case 7:
+            result = "Jul"; break;
+        case 8:
+            result = "Aug"; break;
+        case 9:
+            result = "Sep"; break;
+        case 10:
+            result = "Oct"; break;
+        case 11:
+            result = "Nov"; break;
+        case 12:
+            result = "Dec"; break;
+        default:
+            result = "N/A";
+            break;
+    }
+    return result;
+}
+
+
+function activaTab(tab) {
+    $('.nav-pills a[href="#' + tab + '"]').tab('show');
+}
+///Tuan bat dau tu thu 2
+function getDateOfISOWeek(w, y) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    var dow = simple.getDay();
+    var ISOweekStart = simple;
+    var date = simple.getDate();
+    var day = simple.getDay();
+    if (dow <= 4)
+        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    return getFormattedDate(ISOweekStart);
+}
+function getEndDateOfISOWeek(w, y) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    var dow = simple.getDay();
+    var ISOweekStart = simple;
+    if (dow <= 4)
+        ISOweekStart.setDate((simple.getDate() - simple.getDay() + 1) + 5);
+    else
+        ISOweekStart.setDate((simple.getDate() + 8 - simple.getDay()) + 5);
+    return getFormattedDate(ISOweekStart);
+}
+//Dinh dang ngay thang
+function getFormattedDate(d) {
+    var todayTime = d;
+    todayTime = new Date(todayTime);
+    var month = todayTime.getMonth() + 1;
+    var day = todayTime.getDate();
+    var year = todayTime.getFullYear();
+    return month + "-" + day + "-" + year;
+}
+
+function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
     }
+}
 
-    Samples.COLORS = [
-        '#FF3784',
-        '#36A2EB',
-        '#4BC0C0',
-        '#F77825',
-        '#9966FF',
-        '#00A8C6',
-        '#379F7A',
-        '#CC2738',
-        '#8B628A',
-        '#8FBE00',
-        '#606060'
-    ];
+function convertDateJson(d) {
+    if (d === null)
+        d = "/Date(1000000000000)/";
 
-    // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
-    Samples.srand = function (seed) {
-        this._seed = seed;
-    };
+    let milli = d.replace(/\/Date\((-?\d+)\)\//, '$1');
+    let date = new Date(parseInt(milli));
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = date.getFullYear();
 
-    Samples.rand = function (min, max) {
-        var seed = this._seed;
-        min = min === undefined ? 0 : min;
-        max = max === undefined ? 1 : max;
-        this._seed = (seed * 9301 + 49297) % 233280;
-        return min + (this._seed / 233280) * (max - min);
-    };
+    return mm + '/' + dd + '/' + yyyy;
+}
+function JSONDateWithTime(dateStr) {
+    jsonDate = dateStr;
+    var d = new Date(parseInt(jsonDate.substr(6)));
+    var m, day;
+    m = d.getMonth() + 1;
+    if (m < 10)
+        month = '0' + m;
+    else
+        month = m;
+    if (d.getDate() < 10)
+        day = '0' + d.getDate();
+    else
+        day = d.getDate();
 
-    Samples.numbers = function (config) {
-        var cfg = config || {};
-        var min = fallback(cfg.min, 0);
-        var max = fallback(cfg.max, 1);
-        var from = fallback(cfg.from, []);
-        var count = fallback(cfg.count, 8);
-        var decimals = fallback(cfg.decimals, 8);
-        var continuity = fallback(cfg.continuity, 1);
-        var dfactor = Math.pow(10, decimals) || 0;
-        var data = [];
-        var i, value;
+    var year = d.getFullYear();
+    var formattedDate = day + "/" + month + "/" + year;
+    var hours = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
+    var minutes = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+    var seconds = d.getSeconds();
+    var formattedTime = hours + ":" + minutes;
+    formattedDate = formattedTime + " - " + formattedDate;
 
-        for (i = 0; i < count; ++i) {
-            value = (from[i] || 0) + this.rand(min, max);
-            if (this.rand() <= continuity) {
-                data.push(Math.round(dfactor * value) / dfactor);
-            } else {
-                data.push(null);
-            }
-        }
+    //Ngày giờ hiện tại
+    var dateObj = new Date();
+    var dayNow = dateObj.getDate();
+    var monthNow = dateObj.getMonth() + 1;
+    var yearNow = dateObj.getFullYear();
+    var hoursNow = dateObj.getHours();
+    var minutesNow = dateObj.getMinutes();
+    var secondsNow = dateObj.getSeconds();
 
-        return data;
-    };
+    dateObj = formattedDate;
 
-    Samples.color = function (offset) {
-        var count = Samples.COLORS.length;
-        var index = offset === undefined ? ~~Samples.rand(0, count) : offset;
-        return Samples.COLORS[index % count];
-    };
-
-    Samples.colors = function (config) {
-        var cfg = config || {};
-        var color = cfg.color || Samples.color(0);
-        var count = cfg.count !== undefined ? cfg.count : 8;
-        var method = cfg.mode ? Color.prototype[cfg.mode] : null;
-        var values = [];
-        var i, f, v;
-
-        for (i = 0; i < count; ++i) {
-            f = i / count;
-
-            if (method) {
-                v = method.call(Color(color), f).rgbString();
-            } else {
-                v = Samples.color(i);
-            }
-
-            values.push(v);
-        }
-
-        return values;
-    };
-
-    Samples.transparentize = function (color, opacity) {
-        var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-        return Color(color).alpha(alpha).rgbString();
-    };
-
-    // INITIALIZATION
-
-    Samples.srand(Date.now());
-
-    var root = (function () {
-        var scripts = document.getElementsByTagName('script');
-        var script = scripts[scripts.length - 1];
-        var path = script.src;
-        return path.substr(0, path.lastIndexOf('/') + 1);
-    }());
-
-    window.addEventListener('DOMContentLoaded', function load() {
-        window.removeEventListener('DOMContentLoaded', load, true);
-        var header = document.getElementById('header');
-        var info = global.SAMPLE_INFO;
-
-        if (header && info) {
-            var group = info.group;
-            var name = info.name;
-            var desc = info.desc;
-
-            document.title = name + (group ? ' / ' + group : '') + ' / chartjs-plugin-datalabels';
-            header.innerHTML =
-                '<div class="scope">' +
-                '<a href="' + root + 'index.html">&laquo; chartjs-plugin-datalabels</a>' +
-                '</div>' +
-                '<div class="title">' +
-                '<span class="group">' + group + ' / </span>' +
-                '<span class="name">' + name + '</span>' +
-                (desc ? '<div class="desc">' + desc + '</div>' : '') +
-                '</div>';
-        }
-    }, true);
-
-    // Google Analytics
-    /* eslint-disable */
-    if (['localhost', '127.0.0.1', ''].indexOf(document.location.hostname) === -1) {
-        (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-99068522-2', 'auto');
-        ga('send', 'pageview');
+    if (hoursNow - hours === 0 && minutesNow - minutes === 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+        if (secondsNow - seconds === 0)
+            dateObj = "just recently";
+        else if (secondsNow - seconds === 1)
+            dateObj = secondsNow - seconds + " second ago";
+        else
+            dateObj = secondsNow - seconds + " seconds ago";
     }
-    /* eslint-enable */
 
-}(this));
+    if (hoursNow - hours === 0 && minutesNow - minutes > 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+
+
+        if (minutesNow - minutes === 1)
+            dateObj = minutesNow - minutes + " minute ago";
+        else
+            dateObj = minutesNow - minutes + " minutes ago";
+    }
+
+    if (hoursNow - hours > 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+        if (hoursNow - hours === 1)
+            dateObj = hoursNow - hours + " hour ago";
+        else
+            dateObj = hoursNow - hours + " hours ago";
+    }
+
+    if (yearNow - year === 0 && monthNow - month === 0 && dayNow - day > 0 && dayNow - day <= 7) {
+        if (dayNow - day === 1)
+            dateObj = dayNow - day + " day ago";
+        else
+            dateObj = dayNow - day + " days ago";
+    }
+
+    if (yearNow - year === 0 && monthNow !== month) {
+        day = dayNow - day;
+        var month = monthNow - month;
+        day = month * 30 + day;
+        if (0 < day && day <= 7) {
+            dateObj = day + " days ago";
+        }
+
+    }
+
+    return dateObj;
+}
+
+
+//function getCurrentQuarter(d) {
+//    d = d || new Date();
+//    var m = Math.floor(d.getMonth() / 3) + 2;
+//    return m > 4 ? m - 4 : m;
+//}
+//function getDateOfWeekInYear(dt) {
+//    var tdt = new Date(dt.valueOf());
+//    var dayn = (dt.getDay() + 6) % 7;
+//    tdt.setDate(tdt.getDate() - dayn + 3);
+//    var firstThursday = tdt.valueOf();
+//    tdt.setMonth(0, 1);
+//    if (tdt.getDay() !== 4) {
+//        tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+//    }
+//    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+//}
+function convertDate(inputFormat) {
+    function pad(s) { return s < 10 ? '0' + s : s; }
+    var d = new Date(inputFormat);
+    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+}
+
+function dateNow() {
+    var date = new Date();
+    var day = date.getDate();       // yields date
+    var month = date.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
+    var year = date.getFullYear();  // yields year
+    var hour = date.getHours();     // yields hours 
+    var minute = date.getMinutes(); // yields minutes
+    var second = date.getSeconds(); // yields seconds
+
+    // After this construct a string with the above results as below
+    var time = day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
+    return time;
+}
+
+
+function Binding(b) {
+    _this = this;
+    this.elementBindings = [];
+    this.value = b.object[b.property];
+    this.valueGetter = function () {
+        return _this.value;
+    };
+    this.valueSetter = function (val) {
+        _this.value = val;
+        for (var i = 0; i < _this.elementBindings.length; i++) {
+            var binding = _this.elementBindings[i];
+            binding.element[binding.attribute] = val;
+        }
+    }
+    this.addBinding = function (element, attribute, event) {
+        var binding = {
+            element: element,
+            attribute: attribute
+        };
+        if (event) {
+            element.addEventListener(event, function (event) {
+                _this.valueSetter(element[attribute]);
+            });
+            binding.event = event;
+        }
+        this.elementBindings.push(binding);
+        element[attribute] = _this.value;
+        return _this;
+    };
+
+    Object.defineProperty(b.object, b.property, {
+        get: this.valueGetter,
+        set: this.valueSetter
+    });
+
+    b.object[b.property] = this.value;
+}
