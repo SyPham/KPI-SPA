@@ -29,6 +29,7 @@
               >KPI Chart - {{kpiname}} - Yearly</h3>
             </div>
             <div class="box-body">
+              <!-- month  -->
               <div class="row">
                 <div class="col-md-7">
                   <div class="row">
@@ -155,7 +156,7 @@
                 class="form-inline"
                 :style="period ==  'W' ? 'display:block':'display:none'"
                 id="searchWeek"
-              >
+                >
                 <label class="my-1 mr-2" for="startMonth">Year</label>
                 <select class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
                   <option value="0" selected>Choose...</option>
@@ -181,12 +182,13 @@
                   <i class="fa fa-remove"></i> Reset search
                 </button>
               </div>
+
               <!-- @* Quarter *@ -->
               <div
                 class="form-inline"
                 :style="period ==  'Q' ? 'display:block':'display:none'"
                 id="searchQuarter"
-              >
+                >
                 <label class="my-1 mr-2" for="startMonth">Year</label>
                 <select class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
                   <option value="0" selected>Choose...</option>
@@ -220,12 +222,13 @@
                   <i class="fa fa-remove"></i> Reset search
                 </button>
               </div>
+
               <!-- @* Year *@ -->
               <div
                 class="form-inline"
                 :style="period ==  'Y' ? 'display:block':'display:none'"
                 id="searchYear"
-              >
+                >
                 <label class="my-1 mr-2" for="YearOfYear">Year</label>
                 <select class="custom-select form-control year my-1 mr-sm-2" id="YearOfYear">
                   <option value="0" selected>Choose...</option>
@@ -732,6 +735,55 @@ export default {
     }
   },
   methods: {
+    deleteActionPlan(id) {
+      let seft = this
+      if (Number(id) > 0) {
+        $.post('https://localhost:44309/ChartPeriod/Delete', { id: id }, function (res) {
+          if (res) {
+            var commentid = Number($('.commentid').text());
+            var dataid = Number($('.dataid').text());
+            seft.LoadDataActionPlan(dataid, commentid);
+            success("Successfully!");
+          }
+        });
+
+      }
+    },
+    approval(id) {
+      let seft = this
+      var data = {
+        id: id,
+        approveby: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        KPILevelCode: seft.$route.params.kpilevelcode,
+        CategoryID: Number(seft.$route.params.catid)
+      }
+      var promise = $post("https://localhost:44309/ChartPeriod/Approval", JSON.stringify(data));
+      promise.then(res => {
+        success("Successfully!")
+        var commentid = Number($('.commentid').text());
+        var dataid = Number($('.dataid').text());
+        seft.LoadDataActionPlan(dataid, commentid);
+      })
+    },
+    done(id) {
+      let seft = this 
+      // debugger
+      var data = {
+        id: id,
+        userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        KPILevelCode: seft.$route.params.kpilevelcode,
+        CategoryID: Number(seft.$route.params.catid)
+      };
+
+      let promise = $post("https://localhost:44309/ChartPeriod/Done", JSON.stringify(data))
+      promise.then(data => {
+        success("Successfully!")
+        var commentid = Number($('.commentid').text());
+        var dataid = Number($('.dataid').text());
+        seft.LoadDataActionPlan(dataid, commentid);
+        // chartperiodController.resetForm();
+      })
+    },
     btnSaveActionPlan(){
       let seft = this
        $('.btnSaveActionPlan').unbind('click').on('click', function () {
@@ -850,17 +902,18 @@ export default {
             var data = res.data.data;
             console.log(data)
             var html = '';
+            // debugger
             $.each(data, function (i, item) {
                 $('.listTask .Approval').hide();
                 $('.listTask .Option').hide();
-                console.log(item.ApprovedStatus)
+                console.log(item)
 
-                if (item.CreatedBy === $('#user').data('userid') || item.Auditor === $('#user').data('userid'))
+                if (item.CreatedBy  || item.Auditor )
                 {
                     html += '<tr data-id="' + item.ID + '">';
                     html += '<td>' + (i + 1) + '</td>';
-                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                    html += '<td><div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;"  data-type="textarea"  data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
+                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="https://localhost:44309/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                    html += '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'" data-userid ="'+ item.CreatedBy +'" > ' + item.Description + '</div> ';
                     html += '</td>';
                     html += '<td>';
 
@@ -871,7 +924,7 @@ export default {
                         $.each(array2, function (i, item2)
                         {
                             if (item2.length > 1) {
-                                html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
+                                html += '<span class="badge bg-navy text-bold ">' + item2 + '</span> ';
                             }
                         });
                     }
@@ -930,7 +983,7 @@ export default {
                     html += '</td > ';
                     html += '<td>';
                     html += '<div class="btn-group">';
-                    html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fa fa-remove"></i></button>';
+                    html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash-alt"></i></button>';
                     html += '</div>';
                     html += '</div>';
                     html += '</td>';
@@ -938,14 +991,15 @@ export default {
                 }
                 else
                 {
-                    if(item.ListUserIDs.indexOf($('#user').data('userid')) !== -1)
+                    if(item.ListUserIDs[0] !== -1)
+                    
                         html += '<tr data-id="' + item.ID + '">';
                     else
                         html += '<tr style="pointer-events: none;" data-id="' + item.ID + '">';
-
+                    console.log(item.ListUserIDs)
                     html += '<td>' + (i + 1) + '</td>';
                     html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                    html += '<td><div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;"  data-type="textarea"  data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
+                    html += '<td><div class="DescriptionEdit" data-userid ="'+ item.CreatedBy +'" style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
                     html += '</td>';
                     html += '<td>';
 
@@ -990,6 +1044,143 @@ export default {
             $('.tblActionPlan').empty();
             $('.tblActionPlan').append(html);
             seft.btnSaveActionPlan();
+
+            $('.updateStatus').unbind('click').on('click', function () {
+              var id = $(this).closest("tr").data('id');
+              seft.done(id);
+            });
+
+            $('.btnApproveActionPlan').off('click').on('click', function () {
+              var id = $(this).closest("tr").data('id');
+              seft.approval(id);
+            });
+
+            $('.btnDeleteActionPlan').off('click').on('click', function () {
+              var id = $(this).closest("tr").data('id');
+              seft.deleteActionPlan(id);
+            });
+
+            $('#modal-group-comment-data2 .datepickerEdit').datepicker({
+              dateFormat: "mm-dd-yy"
+            });
+            $('#modal-group-comment-data2 .datepickerEdit').off('change').on('change', function () {
+              var id = $(this).data('id'),
+                  value = $(this).val();
+
+                $.ajax({
+                  type: "Post",
+                  url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
+                  data: {
+                    name:"DeadLine",
+                    value:value,
+                    pk:id,
+                    userid : VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+                  },
+                  success: function(res)
+                  {
+                    console.log(res);
+                    success('Successfully!')
+                    var commentid = Number($('.commentid').text()),
+                    dataid = Number($('.dataid').text());
+
+                    seft.LoadDataActionPlan(dataid, commentid);
+                  },
+                  error: function (error) {
+                    console.log(error)
+                  }
+              });
+
+            });
+            $.fn.editable.defaults.mode = 'inline';
+
+            $('#modal-group-comment-data2 input[name=UpdateSheduleDate]').off('change').on('change', function () {
+              var id = $(this).data('id'),
+                  value = $(this).val(),
+                  userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+                  name = $(this).attr("name");
+              $.ajax({
+                type: "Post",
+                url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
+                data:
+                {
+                  name: name, value: value, pk: id, userid: userid
+                },
+                success: function (res) {
+                  success('Successfully!')
+                  var commentid = Number($('.commentid').text());
+
+                  var dataid = Number($('.dataid').text());
+
+                  seft.LoadDataActionPlan(dataid, commentid);
+                }
+              });
+            });
+
+            $('#modal-group-comment-data2 .TitleEdit').editable({
+              placement: "right",
+              type: "text",
+              // pk: $(this).data("item-id"),
+              url: 'https://localhost:44309/ChartPeriod/UpdateSheduleDate/' + $(this).params,
+              params: function(params) {
+                         var data = {};
+                         data['name'] = params.name;
+                         data['value'] = params.value;
+                         data['pk'] = params.pk;
+                         data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+                        //  abc=params; 
+                         data.item = { value: data.value,}
+                         console.log(data)
+                return data;
+              },
+              display: function (value, response) {
+                if (response) {
+                var commentid = Number($('.commentid').text()),
+                  dataid = Number($('.dataid').text());
+                seft.LoadDataActionPlan(dataid, commentid);
+                $(this).attr("data-value", value);
+                
+              }
+              },
+              ajaxOptions: {
+                type: "POST",
+                dataType: "json"
+              }
+            });
+
+            $('#modal-group-comment-data2 .DescriptionEdit').editable({
+                    type: "text",
+                    //pk: $(this).data("item-id"),
+                    url: 'https://localhost:44309/ChartPeriod/UpdateSheduleDate/' + $(this).params,
+                    params: function (params) {
+                      // debugger
+                         var data = {};
+                         data['name'] = params.name;
+                         data['value'] = params.value;
+                         data['pk'] = params.pk;
+                         data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+                        //  abc=params; 
+                         data.item = { value: data.value,}
+                    console.log(data)
+                        return data;
+                        
+                    },
+                    display: function (value, response) {
+                        if (response) {
+                            success('Successfully!')
+                            var commentid = Number($('.commentid').text()),
+                            dataid = Number($('.dataid').text());
+
+                            seft.LoadDataActionPlan(dataid, commentid);
+
+                            $(this).attr("data-value", value);
+                        }
+                    },
+                        ajaxOptions: {
+                            type: "POST",
+                            dataType: "json"
+                          }
+                });
+            
         }
      });
        
@@ -1305,16 +1496,16 @@ export default {
     Loadchart() {
       let seft = this;
       $.ajax({
-        url: "http://10.4.4.224:98/ChartPeriod/ListDatas",
+        url: `http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`,
         type: "GET",
-        data: {
-          kpilevelcode: seft.$route.params.kpilevelcode,
-          catid: seft.$route.params.catid,
-          period: seft.$route.params.period,
-          year: seft.$route.params.year,
-          start: seft.$route.params.start,
-          end: seft.$route.params.end
-        },
+        // data: {
+        //   kpilevelcode: seft.$route.params.kpilevelcode,
+        //   catid: seft.$route.params.catid,
+        //   period: seft.$route.params.period,
+        //   year: seft.$route.params.year,
+        //   start: seft.$route.params.start,
+        //   end: seft.$route.params.end
+        // },
         dataType: "json",
         success: function(response) {
           console.log(response);

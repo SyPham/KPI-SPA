@@ -420,7 +420,7 @@ export default {
         },
         getAllKPILevelByCategory: function (changePageSize, category) {
           $.ajax({
-            url: 'http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory',
+            url: `http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`,
             type: "GET",
             data: {
                 category: category,
@@ -448,14 +448,14 @@ export default {
         },
         getAllCategories: function (changePageSize, level,ocID) {
           $.ajax({
-              url: 'http://10.4.4.224:98/CategoryKPILevel/GetAllCategories',
+              url: `http://10.4.4.224:98/CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`,
               type: "GET",
-              data: {
-                ocID:ocID,
-                level: level,
-                page: config.pageIndex,
-                pageSize: config.pageSize
-              },
+              // data: {
+              //   ocID:ocID,
+              //   level: level,
+              //   page: config.pageIndex,
+              //   pageSize: config.pageSize
+              // },
               dataType: "json",
               success: function (response) {
                 console.log(response)
@@ -524,12 +524,11 @@ export default {
           });
         },
         getAllDataByCategory: function (catid, period) {
-          let seft = this
           let date = new Date();
           let year = date.getFullYear();
-          let week = seft.getDateOfWeekInYear(date);
+          let week = this.getDateOfWeekInYear(date);
           let month = date.getMonth();
-          let quarter = seft.getCurrentQuarter(date);
+          let quarter = this.getCurrentQuarter(date);
           let startYear = year - 5;
           //window.location.href = "/Dataset/?catid=" + catid + "&period=" + period
           if (period.toLowerCase() === "w")
