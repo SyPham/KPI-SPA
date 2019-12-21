@@ -260,7 +260,7 @@ export default {
           },
           glyph: glyph_opts,
           source: {
-            url: "https://localhost:44309/AdminKPILevel/GetListTree",
+            url: "http://localhost:44309/AdminKPILevel/GetListTree",
             debugDelay: 1000
           },
           table: {

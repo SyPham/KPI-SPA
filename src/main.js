@@ -19,8 +19,8 @@ Vue.use(Vuelidate)
 Vue.use(BootstrapVue)
 Vue.use(Auth);
 Vue.use(VueResource);
-Vue.use(VueJwtDecode)
-VueJwtDecode.decode(localStorage.getItem("authToken"))
+// Vue.use(VueJwtDecode)
+// VueJwtDecode.decode(localStorage.getItem("authToken"))
 
 /* eslint-disable no-new */
 //configure alertify defaults

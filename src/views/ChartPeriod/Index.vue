@@ -1191,6 +1191,7 @@ export default {
       var commentid = $(this).data('commentid');
       $(".commentid").text(commentid);
       var commentid = $(this).data('commentid');
+      console.log(commentid)
       var dataid = Number($('.dataid').text());
       var textRemark = $('.RemarkChart').text();
       textRemark = textRemark.replace("Remark", "Action Plan");
@@ -1361,7 +1362,7 @@ export default {
 
         this.remark(id);
         //Khi tao ra table roi thi moi load data
-        // chartperiodController.loadDataComment();
+        this.loadDataComment();
       }
     },
     hiddenData() {

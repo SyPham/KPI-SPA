@@ -57,6 +57,9 @@ import ChartPeriod from "./views/ChartPeriod/Index"
 //Datasets
 import Dataset from "./views/Datasets/Index"
 
+//Datasets
+import Workplace from "./views/Workplace/Index"
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -192,7 +195,6 @@ const router = new VueRouter({
     {
       path: "/ChartPeriod",
       component: Dash,
-      
       children: [
         { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod},
       ]
@@ -205,6 +207,15 @@ const router = new VueRouter({
       
       children: [
         { name: 'dataset', path: "/Dataset/:catid/:period/:start/:end/:year/",component: Dataset},
+      ]
+    },
+
+    //Workplace
+     {
+      path: "/Workplace",
+      component: Dash,
+      children: [
+        { path: "/Workplace",component: Workplace}
       ]
     },
  

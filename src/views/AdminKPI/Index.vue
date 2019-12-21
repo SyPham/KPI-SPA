@@ -137,7 +137,7 @@ export default {
       skip: 0,
       pageSize: 0,
       catID: 0,
-      name: "",
+      name: "a",
       searchname: ""
     };
   },
@@ -158,19 +158,14 @@ export default {
   },
   methods: {
     
-    LoadData(catID , name, page = 1, pageSize = 5 ) {
+    LoadData() {
       // debugger
       let seft = this;
-      HTTP.post("AdminKPI/LoadData", {
-        categoryID: catID,
-        name: name,
-        page: page,
-        pageSize: pageSize
-      }).then(res => {
+      HTTP.get(`AdminKPI/LoadData/${seft.catID}/${seft.name}/${seft.page}/${seft.pageSize}`).then(res => {
         // console.log(res);
         seft.skip = res.data.skip;
-        seft.totalPage = res.data.totalPage;
-        seft.page = res.data.CurrentPage;
+        seft.totalPage = res.data.total;
+        seft.page = res.data.page;
         seft.data = res.data.data;
         
       });

@@ -33,7 +33,7 @@
       <table id="tree"  class="table table-condensed table-hover table-striped fancytree-fade-expander fancytree-colorize-selected"  >
         <thead>
           <tr>
-            <th>Level Number</th>
+            <th style="width:10px">Level Number</th>
             <th class="text-right">Name</th>
           </tr>
         </thead>
@@ -94,7 +94,7 @@ export default {
             titlesTabbable: true, // Add all node titles to TAB chain
             //quicksearch: true, // Jump to nodes when pressing first character
             // source: SOURCE,
-            source: { url: "https://localhost:44309/AdminLevel/GetListTree" },
+            source: { url: "http://10.4.4.224:98/AdminLevel/GetListTree" },
             extensions: ["edit", "dnd5", "glyph", "table", "gridnav"],
             glyph: glyph_opts,
             dnd5: {
