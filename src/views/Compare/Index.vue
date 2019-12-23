@@ -8,14 +8,7 @@
             <div class="box-header with-border">
               <h3 class="box-title" style="font-weight:bold" >KPI Compare Chart - {{kpiname}} - {{period}}</h3>
 
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
+              
             </div>
             <div class="box-body">
               <button
@@ -87,7 +80,7 @@ export default {
       years: [],
       data: [],
       kpiname: "",
-      datasets: [],
+      datasets: {},
       period: "",
       unit: "",
       labels: [],
@@ -234,7 +227,20 @@ export default {
               pointBackgroundColor: "#e7263b",
               borderColor: "#e7263b ",
               fill: false,
-              data: datasets,
+              data: datasets[0].datasets,
+              datalabels: {
+                align: "center",
+                anchor: "center"
+              }
+            },
+            {
+              label: label,
+              spanGaps: true, //data=undefined thi k draw line
+              backgroundColor: "#182657 ",
+              pointBackgroundColor: "#182657",
+              borderColor: "#182657 ",
+              fill: false,
+              data: datasets[1].datasets,
               datalabels: {
                 align: "center",
                 anchor: "center"
@@ -247,15 +253,6 @@ export default {
               backgroundColor: "#3c8d8a",
               borderColor: "#3c8d8a",
               borderWidth: 3,
-              fill: false,
-            },
-            {
-              // another line graph
-              label: "CB",
-              data: datasets,
-              backgroundColor: "#182657",
-              borderColor: "#182657",
-              borderWidth: 4,
               fill: false,
             }
           ]
@@ -273,13 +270,23 @@ export default {
             seft.kpiname = r.data[0].kpiname
             seft.period = seft.convertPeriod(r.data[0].period)
             console.log(seft.period)
-            seft.datasets  = r.data[0].datasets;
-
+            seft.datasets  = r.data;
             seft.label = r.data[0].label;
-            // console.log(seft.datasets)
+            console.log(seft.datasets)
             seft.labels = r.data[0].labels;
             seft.targets = r.data[0].targets;
-            console.log(seft.label)
+            // console.log(seft.label)
+
+            (seft.options.label = r.label),
+            (seft.options.title.text =
+              "KPI Compare Chart -" + r.data[0].kpiname + " - " + seft.convertPeriod(
+                r.data[0].period
+            )),
+            (seft.options.scales.yAxes[0].scaleLabel.labelString =
+              r.data[0].Unit);
+            seft.options.scales.xAxes[0].scaleLabel.labelString = seft.convertPeriod(
+                r.data[0].period
+            );
             seft.createChart(
                 "planet-chart",
                 seft.datasets,
