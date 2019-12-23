@@ -60,6 +60,11 @@ import Dataset from "./views/Datasets/Index"
 //Datasets
 import Workplace from "./views/Workplace/Index"
 
+//Compare
+import Compare from "./views/Compare/Index"
+
+
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -216,6 +221,16 @@ const router = new VueRouter({
       component: Dash,
       children: [
         { path: "/Workplace",component: Workplace}
+      ]
+    },
+
+    //Compare
+    {
+      path: "/Compare",
+      component: Dash,
+      
+      children: [
+        { name: 'compare', path: "/compare/:obj",component: Compare},
       ]
     },
  

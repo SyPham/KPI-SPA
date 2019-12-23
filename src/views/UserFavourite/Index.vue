@@ -3,7 +3,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">List KPIs</h3>
+          <h3 class="card-title">KPI Lists</h3>
         </div>
         <div class="card-header">
           
@@ -114,6 +114,7 @@
 <script>
 import { HTTP } from "../../http-constants";
 import Paginate from "vuejs-paginate";
+import VueJwtDecode from 'vue-jwt-decode'
 export default {
   name: "IndexFavourite",
   data() {
@@ -124,7 +125,7 @@ export default {
       totalPage: 0,
       page: 1,
       skip: 0,
-      pageSize: 0,
+      pageSize: 10,
       catID: 0,
       name: "",
       searchname: ""
@@ -142,24 +143,21 @@ export default {
     let seft = this;
     // seft.getAll();
     seft.LoadData();
-    seft.ID = seft.$route.params.id;
+    // seft.ID = seft.$route.params.id;
     // console.log(seft.ID);
   },
   methods: {
     
-    LoadData(catID , name, page = 1, pageSize = 5 ) {
+    LoadData() {
       // debugger
       let seft = this;
-      HTTP.post("AdminKPI/LoadData", {
-        categoryID: catID,
-        name: name,
-        page: page,
-        pageSize: pageSize
-      }).then(res => {
-        // console.log(res);
+      let userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+      HTTP.get(`Favourite/LoadData/${userid}/${seft.page}/${seft.pageSize}`)
+        .then(res => {
+        console.log(res);
         seft.skip = res.data.skip;
-        seft.totalPage = res.data.totalPage;
-        seft.page = res.data.CurrentPage;
+        seft.totalPage = res.data.total;
+        seft.page = res.data.page;
         seft.data = res.data.data;
         
       });

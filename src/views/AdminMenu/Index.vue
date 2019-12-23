@@ -26,17 +26,17 @@
             </thead>
             <tbody v-for="(item,key,index) in Listmenus " :key ="index">
               <tr>
-                <td>{{item.name}}</td>
-                <td>{{item.link}}</td>
-                <td>{{item.fontAwesome}}</td>
-                <td>{{item.backgroudColor}}</td>
-                <td>{{item.permission}}</td>
-                <td>{{item.position}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Link}}</td>
+                <td>{{item.FontAwesome}}</td>
+                <td>{{item.BackgroudColor}}</td>
+                <td>{{item.Permission}}</td>
+                <td>{{item.Position}}</td>
                 <td>
                   <div class="btn-group">
                     <div class="btn-group">
 
-                      <button @click="$router.push(`/Menus/${item.id}/edit`)" class="btn btn-primary">
+                      <button @click="$router.push(`/Menus/${item.ID}/edit`)" class="btn btn-primary">
                         <i class="fa fa-edit"></i> Edit
                       </button>
 
@@ -82,6 +82,8 @@
 </template>
 
 <script>
+import { HTTP } from "../../http-constants";
+import VueJwtDecode from "vue-jwt-decode";
 export default {
   name: "IndexMenu",
   data() {
@@ -98,10 +100,10 @@ export default {
   methods: {
     loadmenu(){
         let seft = this;
-        this.$http.get("http://10.4.4.224:98/menus/getall")
+        HTTP.get("menus/getall")
         .then((r) => {
           seft.Listmenus = r.data
-          // console.log(seft.Listmenus);
+          console.log(seft.Listmenus);
         }).catch((err) => {
           
         });

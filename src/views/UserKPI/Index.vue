@@ -419,63 +419,94 @@ export default {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
         getAllKPILevelByCategory: function (changePageSize, category) {
-          $.ajax({
-            url: `http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`,
-            type: "GET",
-            data: {
-                category: category,
-                page: config.pageIndex,
-                pageSize: config.pageSize
-            },
-            dataType: "json",
-            success: function (response) {
-              console.log(response);
-              if (response.status) {
-                var count = 1;
-                var data = response.data;
-                self.dataKPILV = response.data;
-                console.log(self.dataKPILV)
-                categoryKPILevelAdmin.pagingKPILevel(response.total, function () {
-                  categoryKPILevelAdmin.getAllKPILevelByCategory("", category);
-                }, changePageSize);
-                categoryKPILevelAdmin.registerEvent();
-              }
-            },
-            error: function (err) {
-              console.log(err);
+          HTTP.get(`http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`)
+            .then(response=>{
+            if(response.status) {
+              var count = 1;
+              var data = response.data;
+              self.dataKPILV = response.data.data;
+              console.log(self.dataKPILV)
+              console.log(response)
+              categoryKPILevelAdmin.pagingKPILevel(response.data.total, function () {
+                categoryKPILevelAdmin.getAllKPILevelByCategory("", category);
+              }, changePageSize);
+              categoryKPILevelAdmin.registerEvent();
             }
-          });
+          })
+          // $.ajax({
+          //   url: `http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`,
+          //   type: "GET",
+          //   data: {
+          //       category: category,
+          //       page: config.pageIndex,
+          //       pageSize: config.pageSize
+          //   },
+          //   dataType: "json",
+          //   success: function (response) {
+          //     console.log(response);
+          //     if (response.status) {
+          //       var count = 1;
+          //       var data = response.data;
+          //       self.dataKPILV = response.data;
+          //       console.log(self.dataKPILV)
+          //       categoryKPILevelAdmin.pagingKPILevel(response.total, function () {
+          //         categoryKPILevelAdmin.getAllKPILevelByCategory("", category);
+          //       }, changePageSize);
+          //       categoryKPILevelAdmin.registerEvent();
+          //     }
+          //   },
+          //   error: function (err) {
+          //     console.log(err);
+          //   }
+          // });
         },
         getAllCategories: function (changePageSize, level,ocID) {
-          $.ajax({
-              url: `http://10.4.4.224:98/CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`,
-              type: "GET",
-              // data: {
-              //   ocID:ocID,
-              //   level: level,
-              //   page: config.pageIndex,
-              //   pageSize: config.pageSize
-              // },
-              dataType: "json",
-              success: function (response) {
-                console.log(response)
-                if (response.status) {
+          HTTP.get(`http://10.4.4.224:98/CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`)
+            .then(response =>{
+              if (response.status) {
                   if (response.data.length === 0) {
                     console.log("Not available!")
                   }
                   var data = response.data;
-                  self.events =response.data;
+                  self.events =response.data.data;
                   console.log(self.events)
-                  categoryKPILevelAdmin.pagingCategoryKPILevel(response.total, function () {
+                  console.log(response.data)
+                  console.log(response.data.total)
+                  categoryKPILevelAdmin.pagingCategoryKPILevel(response.data.total, function () {
                     categoryKPILevelAdmin.getAllCategories("", level,ocID);
                   }, changePageSize);
                   categoryKPILevelAdmin.registerEvent();
                 }
-              },
-              error: function (err) {
-                console.log(err);
-              }
-          });
+            })
+          // $.ajax({
+          //     url: `http://10.4.4.224:98/CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`,
+          //     type: "GET",
+          //     // data: {
+          //     //   ocID:ocID,
+          //     //   level: level,
+          //     //   page: config.pageIndex,
+          //     //   pageSize: config.pageSize
+          //     // },
+          //     dataType: "json",
+          //     success: function (response) {
+          //       console.log(response)
+          //       if (response.status) {
+          //         if (response.data.length === 0) {
+          //           console.log("Not available!")
+          //         }
+          //         var data = response.data;
+          //         self.events =response.data;
+          //         console.log(self.events)
+          //         categoryKPILevelAdmin.pagingCategoryKPILevel(response.total, function () {
+          //           categoryKPILevelAdmin.getAllCategories("", level,ocID);
+          //         }, changePageSize);
+          //         categoryKPILevelAdmin.registerEvent();
+          //       }
+          //     },
+          //     error: function (err) {
+          //       console.log(err);
+          //     }
+          // });
         },
         pagingCategoryKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);

@@ -125,15 +125,17 @@
                       data-target="#modal-group"
                       class="btn btn-danger margin btnLike pull-right"
                       id="btnCompare"
+                      @click="compare"
                     >
                       <i class="fa fa-adjust"></i> Compare
                     </button>
 
                     <button
-                      v-if="!this.statusfavorite"
+                      v-if="statusfavorite == false"
                       type="button"
                       class="btn margin btnLike bg-navy pull-right"
                       id="btnLike"
+                      @click="btnLike"
                     >
                       <i class="fa fa-heart"></i> Add Favourite
                     </button>
@@ -416,6 +418,95 @@
         </div>
       </div>
       <!-- <comment></comment> -->
+      <!-- compare -->
+      <div class="modal fade" id="modal-group">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Compare KPILevel </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <div>
+                          <div class="box-body" id="comparechart">
+                              <table class="table table-hover table-striped">
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center" style="width:3%">#</th>
+                                          <th class="text-center" style="width:5%">Checkbox</th>
+                                          <th class="text-center">Level Number</th>
+                                          <th class="text-center">Area</th>
+                                          <th class="text-center">Data Status </th>
+                                          <th class="text-center">Publicity Status</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody v-for="(item,key,index) in data2" :key="index" id="tblcomparechart">
+                                    <tr >
+                                        <td class="text-center">{{key+1}}</td>
+                                        <td class="text-center">
+                                            <div class="pretty p-image p-plain">
+                                                <input type="checkbox" :value="item.KPILevelCode" @click="clickcompare" v-if="item.StatusPublic == true"  class="compare" />
+                                                <input type="checkbox"  :value="item.KPILevelCode" @click="clickcompare" v-else class="compare" disabled />
+                                                <div class="state">
+                                                    <img class="image" src="src/img/004.png">
+                                                    <label class="comparelabel"></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{{item.LevelNumber}}</td>
+                                        <td class="text-center">{{item.Area}}</td>
+                                        <td class="text-center">
+                                          <span v-if="item.Status == true" class="badge badge-success">visible</span>
+                                          <span v-else class="badge badge-danger">not visible</span>
+                                        </td>
+                                        <td class="text-center">
+                                          <span v-if="item.StatusPublic == true" class="badge badge-success">Public</span>
+                                          <span v-else class="badge badge-danger">Private</span>
+                                        </td>
+                                    </tr>
+                                      
+                                  </tbody>
+                              </table>
+                              
+                          </div>
+                          <!-- /.box-body -->
+
+                          <div class="box-footer">
+                              <Paginate
+                                v-model="page"
+                                :page-count="totalPage"
+                                :prev-text="'Prev'"
+                                :next-text="'Next'"
+                                :page-range="3"
+                                :margin-pages="2"
+                                :container-class="'pagination'"
+                                :page-class="'page-item'"
+                                :prev-class="'page-item'"
+                                :next-class="'page-item'"
+                                :page-link-class="'page-link'"
+                                :prev-link-class="'page-link'"
+                                :next-link-class="'page-link'"
+                                :click-handler="changePage"
+                              ></Paginate>
+
+                          </div>
+                          <div class="box-footer">
+                              <span style="display:none" class="arrcompare"></span>
+                              <button id="btnCompare-kpilevel"   data-compare="" class="btn btn-primary">Compare</button>
+                              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- /.modal-content -->
+          </div>
+      </div>
+
+      <!-- endcompare -->
+
       <div class="modal fade modal" id="modal-group-comment-data">
         <div class="modal-dialog modal-lg" >
             <div class="modal-content">
@@ -588,9 +679,15 @@ import { initLineChart } from "../../plugins/LineChartPlugin";
 import planetChartData from "../../plugins/Chartjs2/Demo";
 import Comment from "../ChartPeriod/Modal";
 import VueJwtDecode from 'vue-jwt-decode'
+import Paginate from "vuejs-paginate";
 export default {
   data() {
     return {
+      data2:[],
+      totalPage: 0,
+      page: 1,
+      skip: 0,
+      pageSize: 10,
       OwnerManagerment: "",
       Owner: "",
       PIC: "",
@@ -699,7 +796,8 @@ export default {
   },
   components: {
     LineChart,
-    Comment
+    Comment,
+    Paginate
   },
   mounted() {
     let seft = this
@@ -735,6 +833,99 @@ export default {
     }
   },
   methods: {
+    btnCompare(){
+      let seft = this
+      $('#btnCompare-kpilevel').off('click').on('click', function () {
+          // debugger
+            var value = $('.arrcompare').text().toString();
+            var obj = value.substring(value.length - 1, 0);
+            var kpilevelcode = seft.$route.params.kpilevelcode;
+            var period = seft.$route.params.period;
+            obj = obj + '-' + kpilevelcode + ',' + period;
+            seft.$router.push(`/compare/${obj}`) ;
+        })
+    },
+    clickcompare(){
+      var old = "";
+      $('#comparechart .compare').unbind('click').change(function (e) {
+          // debugger
+          console.log('aaaa')
+          var code = $(this).val();
+          if (old.indexOf($(this).val()) == -1) {
+              old += code + '-';
+              $('.arrcompare').text(old);
+          }
+      });
+    },
+    addFavourite() {
+      let seft = this
+      // debugger
+      var UserID = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid 
+      if (UserID === 0 || UserID === "" || UserID === undefined) {
+          Swal.fire({
+              title: 'Warning!',
+              text: 'Error!',
+              type: 'warning',
+              confirmButtonText: 'OK'
+          });
+          return;
+      }
+      var mObj = {
+          KPILevelCode: seft.$route.params.kpilevelcode,
+          Period: seft.$route.params.period,
+          UserID: UserID,
+      };
+      HTTP.post("ChartPeriod/AddFavourite",{
+        data: JSON.stringify(mObj)
+      }).then(result=>{
+        Swal.fire({
+            title: 'success!',
+            text: 'Add success!',
+            type: 'success',
+            confirmButtonText: 'OK'
+        });
+      })
+      
+    },
+    btnLike(){
+      this.addFavourite();
+    },
+    compare(){
+       this.loadDataProvide();
+    },
+    loadDataProvide() {
+      // debugger
+      let seft = this 
+      var obj = seft.$route.params.kpilevelcode+ ',' + seft.$route.params.period ;
+      HTTP.get(`ChartPeriod/LoadDataProvide/${obj}/${seft.page}/${seft.pageSize}`)
+        .then(data => {
+        var count = 1;
+        console.log(data);
+        seft.skip = data.data.skip;
+        seft.totalPage = data.data.total;
+        seft.page = data.data.page;
+        seft.data2 = data.data.listCompare;
+        console.log(seft.data2)
+        // chartperiodController.registerEvent();
+        seft.clickcompare();
+        seft.btnCompare();
+        //Gửi chuỗi ở trên lên server
+        // $('#btnCompare-kpilevel').off('click').on('click', function () {
+        //   // debugger
+        //     console.log('aaa')
+        //     var value = $('.arrcompare').text().toString();
+        //     var obj = value.substring(value.length - 1, 0);
+        //     var kpilevelcode = seft.$route.params.kpilevelcode;
+        //     var period = seft.$route.params.period;
+        //     obj = obj + '-' + kpilevelcode + ',' + period;
+        //     seft.$router.push(`/compare/${obj}`) ;
+        // })
+      })
+     
+    },
+    changePage(pageNum) {
+      this.loadDataProvide(this.obj,pageNum);
+    },
     deleteActionPlan(id) {
       let seft = this
       if (Number(id) > 0) {
@@ -1458,7 +1649,8 @@ export default {
               data: targets,
               backgroundColor: "#3c8d8a",
               borderColor: "#3c8d8a",
-              borderWidth: 3
+              borderWidth: 3,
+              fill: false,
             }
           ]
         },
@@ -1496,43 +1688,33 @@ export default {
     },
     Loadchart() {
       let seft = this;
-      $.ajax({
-        url: `http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`,
-        type: "GET",
-        // data: {
-        //   kpilevelcode: seft.$route.params.kpilevelcode,
-        //   catid: seft.$route.params.catid,
-        //   period: seft.$route.params.period,
-        //   year: seft.$route.params.year,
-        //   start: seft.$route.params.start,
-        //   end: seft.$route.params.end
-        // },
-        dataType: "json",
-        success: function(response) {
-          console.log(response);
+      HTTP.get(`http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`)
+        .then(response=>{
+          console.log('respon1')
+           console.log(response);
 
-          seft.statusfavorite = response.statusfavorite;
-          seft.unit = response.Unit;
-          seft.datasets = response.datasets;
-          seft.labels = response.labels;
-          seft.label = response.label;
-          seft.kpiname = response.kpiname;
-          seft.PIC = response.PIC;
-          // console.log(seft.PIC)
-          seft.Owner = response.Owner;
-          seft.OwnerManagerment = response.OwnerManagerment;
-          seft.Sponsor = response.Sponsor;
-          seft.Participant = response.Participant;
-          seft.dataremarks = response.Dataremarks;
-          seft.targets = response.targets;
+          seft.statusfavorite = response.data.statusfavorite;
+          seft.unit = response.data.Unit;
+          seft.datasets = response.data.datasets;
+          seft.labels = response.data.labels;
+          seft.label = response.data.label;
+          seft.kpiname = response.data.kpiname;
+          seft.PIC = response.data.PIC;
+          // console.log(seft.statusfavorite)
+          seft.Owner = response.data.Owner;
+          seft.OwnerManagerment = response.data.OwnerManagerment;
+          seft.Sponsor = response.data.Sponsor;
+          seft.Participant = response.data.Participant;
+          seft.dataremarks = response.data.Dataremarks;
+          seft.targets = response.data.targets;
 
           (seft.options.label = response.label),
             (seft.options.title.text =
-              "KPI Chart -" + response.label + " - " + response.kpiname),
+              "KPI Chart -" + response.data.label + " - " + response.data.kpiname),
             (seft.options.scales.yAxes[0].scaleLabel.labelString =
-              response.Unit);
+              response.data.Unit);
           seft.options.scales.xAxes[0].scaleLabel.labelString = seft.convertPeriod(
-            response.period
+            response.data.period
           );
 
           seft.createChart(
@@ -1561,8 +1743,8 @@ export default {
           $("#editBugModal").modal("show");
           $(".btnShowData").hide();
           // console.log(seft.chart.data);
-        }
-      });
+        })
+      
     }
   }
 };

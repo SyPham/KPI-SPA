@@ -388,15 +388,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="box-body" id="Upload">
-                        <p class="text-red">*Notice: Excel file must be followed a system template. If you do not have a template, please <a @click="downloadExcel" class="download btn btn-sm bg-success">click here </a>to download. Thank you!</p>
-                        <form @submit.prevent="uploadExcel" id="upload" method="post" enctype="multipart/form-data">
+                        <p class="text-red">*Notice: Excel file must be followed a system template. If you do not have a template, please <button @click="downloadExcel" class="download btn btn-sm bg-success">click here </button>to download. Thank you!</p>
+                        <form  id="upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="Upload">Upload file: </label>
 
                                 <div class="input-group">
                                     <input type="file" class="form-control UploadedFile" name="UploadedFile" id="UploadedFile" placeholder="Upload file">
                                     <span class="input-group-btn">
-                                        <button  type="submit" class="btn btn-success btn-flat btnUpload" id="btnUpload"><i class="fa fa-upload"></i> Upload file</button>
+                                        <button @click="uploadExcel"  type="submit" class="btn btn-success btn-flat btnUpload" id="btnUpload"><i class="fa fa-upload"></i> Upload file</button>
                                     </span>
                                 </div>
                                 <!-- /.input group -->
@@ -444,7 +444,7 @@ export default {
             let formData = new FormData(this);
             console.log(formData)
             var upload = function () {
-                HTTP.post("https://localhost:44309/Workplace/Import",{
+                HTTP.post("http://10.4.4.224:98/Workplace/Import",{
                      data: formData
                 }).then(res=>{
                     if (res) {

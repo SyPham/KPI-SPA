@@ -93,6 +93,8 @@
 </template>
 
 <script>
+import { HTTP } from "../../http-constants";
+import VueJwtDecode from "vue-jwt-decode";
 export default {
   name: "UpdateMenu",
   data(){
@@ -115,7 +117,7 @@ export default {
   methods : {
     get(id) {
       if (id == undefined) return;
-        this.$http.get("http://10.4.4.224:98/menus/getbyid/" + id)
+        HTTP.get("menus/getbyid/" + id)
         // HTTP.get("AdminKPI/GetbyID/"+ id)
         .then(r => {
           this.Name = r.data.name
@@ -131,14 +133,14 @@ export default {
         });
     },
     getpermission() {
-      this.$http.get("http://10.4.4.224:98/menus/getpermissions")
+      HTTP.get("menus/getpermissions")
       .then(r => {
         this.data = r.data
         // console.log(this.data)
       })
     },
     update() {
-      this.$http.post("http://10.4.4.224:98/menus/update",{
+      HTTP.post("menus/update",{
         id: this.ID,
         name: this.Name,
         link: this.Link,
