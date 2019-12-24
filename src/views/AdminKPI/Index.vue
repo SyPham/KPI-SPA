@@ -1,24 +1,43 @@
 <template>
   <div class="row">
+    <div class="col-md-12 my-3">
+      <button
+        @click="$router.push(`/adminKPI/create`)"
+        class="btn btn-success float-right"
+      >
+        <i class="fa fa-plus"></i> Add
+      </button>
+    </div>
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">List KPIs</h3>
-        </div>
-        <div class="card-header">
-          <button @click="$router.push(`/adminKPI/create`)" class="btn btn-success pull-right">
-            <i class="fa fa-plus"></i> Add
-          </button>
-        </div>
-        <div class="card-header">
-          <input
-            v-model="searchname"
-            type="text"
-            class="form-control"
-            placeholder="Search name"
-          />
-          <br>
-          <button class="btn btn-success btn-sm" @click="searchname = ''">Cancel Search</button>
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="card-title">List KPIs</h3>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+
+            <div class="input-group">
+             <input
+              v-model="searchname"
+              type="text"
+              class="form-control"
+              placeholder="Search name"
+            />
+              <div
+                class="input-group-append"
+                data-target="#timepicker"
+                data-toggle="datetimepicker"
+              >
+                <button class="input-group-text btn-success" @click="searchname = null"> <i class="fa fa-remove"></i> Clear</button>
+              </div>
+            </div>
+            <!-- /.input group -->
+          </div>
+            </div>
+            <div class="col-md-4"></div>
+          </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -34,12 +53,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(kpi,key,index) in data" :key="index">
-                <td>{{key+1}}</td>
-                <td>{{kpi.Name}}</td>
-                <td>{{kpi.Code}}</td>
-                <td>{{kpi.LevelID}}</td>
-                <td>{{kpi.Unit}}</td>
+              <tr v-for="(kpi, key, index) in data" :key="index">
+                <td>{{ key + 1 }}</td>
+                <td>{{ kpi.Name }}</td>
+                <td>{{ kpi.Code }}</td>
+                <td>{{ kpi.LevelID }}</td>
+                <td>{{ kpi.Unit }}</td>
                 <td>
                   <div class="btn-group">
                     <div class="btn-group">
@@ -50,7 +69,10 @@
                         <i class="fa fa-edit"></i> Edit
                       </button>
 
-                      <button @click="remove(kpi.ID)" class="btn btn-danger btn-sm">
+                      <button
+                        @click="remove(kpi.ID)"
+                        class="btn btn-danger btn-sm"
+                      >
                         <i class="fa fa-trash"></i> Delete
                       </button>
 
@@ -63,10 +85,18 @@
                         aria-labelledby="exampleModalCenterTitle"
                         aria-hidden="true"
                       >
-                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div
+                          class="modal-dialog modal-dialog-centered"
+                          role="document"
+                        >
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLongTitle">Delete KPIs</h5>
+                              <h5
+                                class="modal-title"
+                                id="exampleModalLongTitle"
+                              >
+                                Delete KPIs
+                              </h5>
                               <button
                                 type="button"
                                 class="close"
@@ -76,18 +106,24 @@
                                 <span aria-hidden="true">&times;</span>
                               </button>
                             </div>
-                            <div class="modal-body">Are you sure delete this ?</div>
+                            <div class="modal-body">
+                              Are you sure delete this ?
+                            </div>
                             <div class="modal-footer">
                               <button
                                 type="button"
                                 class="btn btn-primary"
                                 data-dismiss="modal"
-                              >Close</button>
+                              >
+                                Close
+                              </button>
                               <button
                                 @click="remove(kpi.ID)"
                                 type="button"
                                 class="btn btn-danger"
-                              >OK</button>
+                              >
+                                OK
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -102,7 +138,7 @@
         <div class="card-footer clearfix">
           <Paginate
             v-model="page"
-            :page-count="totalPage"
+            :page-count="totalPage "
             :prev-text="'Prev'"
             :next-text="'Next'"
             :page-range="3"
@@ -134,11 +170,11 @@ export default {
       DID: 0,
       totalPage: 0,
       page: 1,
-      skip: 0,
-      pageSize: 0,
+      pageSize: 10,
       catID: 0,
-      name: "a",
-      searchname: ""
+      name: null,
+      searchname: " "
+
     };
   },
   components: {
@@ -146,35 +182,44 @@ export default {
   },
   watch: {
     searchname: function(newOld, oldVal) {
-      this.LoadData(this.searchname, newOld, 1);
+      console.log(newOld)
+      console.log(oldVal)
+
+      this.name = newOld;
+      this.LoadData();
     }
   },
   created() {
+
     let seft = this;
     // seft.getAll();
     seft.LoadData();
     seft.ID = seft.$route.params.id;
-    // console.log(seft.ID);
+     console.log(seft.a);
   },
   methods: {
-    
     LoadData() {
       // debugger
-      let seft = this;
-      HTTP.get(`AdminKPI/LoadData/${seft.catID}/${seft.name}/${seft.page}/${seft.pageSize}`).then(res => {
-        // console.log(res);
-        seft.skip = res.data.skip;
-        seft.totalPage = res.data.total;
+      let seft = this, url =`AdminKPI/LoadData/${seft.name}/${seft.page}/${seft.pageSize}`;
+      HTTP.get("AdminKPI/LoadData/",{
+        params: {
+          name: seft.name,
+         page: seft.page,
+          pageSize: seft.pageSize
+        }
+      }).then(res => {
+        console.log(res);
+        seft.totalPage = res.data.pageCount;
         seft.page = res.data.page;
         seft.data = res.data.data;
-        
+        seft.pageSize = res.data.pageSize;
       });
     },
     // FilterTable: function() {
     //   this.LoadData(this.name, 1);
     // },
     changePage(pageNum) {
-      this.LoadData(this.catID, this.name, pageNum);
+      this.LoadData(this.name, pageNum);
     },
     getAll() {
       HTTP.get("AdminKPI/getall")
@@ -243,6 +288,7 @@ export default {
     showRemoveModal: function(kpi) {
       $("#RemoveModal").modal("show");
     }
-  }
+  },
+
 };
 </script>
