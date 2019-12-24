@@ -34,7 +34,7 @@
       </table>
     </div>
     <div class="col-md-8">
-      
+
       <!-- <modal-oc></modal-oc> -->
 
       <!-- categorylist -->
@@ -47,11 +47,11 @@
           <input type="text" class="form-control levelID" style="display:none" />
           <!-- <select class="form-control pull-right" style="width:50%"></select> -->
         </div>
-        <div  class="box-body pb-3" id="btnCategory" style="max-height:200px;overflow-y:scroll;overflow-y:hidden"> 
-          <button 
-          v-for="(item,key,index) in events" 
-          :key="index" 
-          class="btn mb-2 btn-sm btnCategory category2" 
+        <div  class="box-body pb-3" id="btnCategory" style="max-height:200px;overflow-y:scroll;overflow-y:hidden">
+          <button
+          v-for="(item,key,index) in events"
+          :key="index"
+          class="btn mb-2 btn-sm btnCategory category2"
           :data-id="item.ID">
           <span v-if="item.Total > 1" class="name">{{item.Name}} {{item.Total}} (items)</span>
           <span v-else class="name">{{item.Name}} {{item.Total}} (item)</span>
@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="box-body">
-         
+
           <table class="table table-striped">
             <thead>
               <tr>
@@ -110,7 +110,7 @@
 
                   <button v-if="item.WeeklyChecked === true && (item.StatusUploadDataW === true && item.StatusEmptyDataW === true)" :data-kpilevelcode="item.KPILevelCode" data-period="W" :class='item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn btn-sm btn-success week" : (item.StatusEmptyDataW === true ? "btn btn-sm btn-warning week" : "btn btn-sm btn-success week")) : "btn btn-sm bg-navy week"'   ><i class="fas fa-chart-bar"></i> Weekly</button>
                   <button v-if="item.WeeklyChecked === true && item.StatusUploadDataW === false " :data-kpilevelcode="item.KPILevelCode" data-period="W" :class='item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn btn-sm btn-success week" : (item.StatusEmptyDataW === true ? "btn btn-sm btn-warning week" : "btn btn-sm btn-success week")) : "btn btn-sm bg-navy week"'   ><i class="fas fa-chart-bar"></i> Weekly</button>
-                  <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="W"  disabled class="btn btn-sm bg-navy  week" ><i class="fas fa-chart-bar"></i> Weekly</button>                  
+                  <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="W"  disabled class="btn btn-sm bg-navy  week" ><i class="fas fa-chart-bar"></i> Weekly</button>
                   <!-- button Monthly -->
                   <button v-if="item.MonthlyChecked === true && (item.StatusUploadDataM === true && item.StatusEmptyDataM === true)" :data-kpilevelcode="item.KPILevelCode" data-period="M" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning month" : "btn btn-sm btn-success month")) : "btn btn-sm bg-navy month"' ><i class="fas fa-chart-bar"></i> Monthly</button>
                   <button v-else-if="item.MonthlyChecked === true && item.StatusUploadDataM === false " :data-kpilevelcode="item.KPILevelCode" data-period="M"  :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning month" : "btn btn-sm btn-success month")) : "btn btn-sm bg-navy month"' ><i class="fas fa-chart-bar"></i> Monthly</button>
@@ -127,7 +127,7 @@
                   <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="Y" disabled   class="btn btn-sm bg-navy year"><i class="fas fa-chart-bar"></i> Yearly</button>
               </td>
             </tr>
-            </tbody> 
+            </tbody>
           </table>
         </div>
         <div class="box-footer clearfix">
@@ -312,7 +312,7 @@ export default {
             var catName = $(this).find('td:eq(1)').text();
             $('#boxKPILevel .kpi-name h3').text("KPI Level - " + catName);
             var catID = $(this).data('id');
-            
+
             $('#boxKPILevel .catid').val(catID)
             categoryKPILevelAdmin.getAllKPIlevels();
           });
@@ -364,7 +364,7 @@ export default {
             // self.$router.push("/ChartPeriod/?kpilevelcode=" + kpilevelcode + "&catid=" + catid + "&period=" + period + "&year=" + year + "&start=1&end=" + end);
             //self.$router.push(`/ChartPeriod/${seft.kpilevelcode}/${seft.catid}/${seft.period}/${seft.year}/1/${seft.end}`);
             self.$router.push(`/ChartPeriod/${kpilevelcode}/${catid}/${period}/${year}/1/${end}`);
-          
+
           })
           $('#tblkpilevel .quarter').off('click').on('click', function (e) {
             //e.preventDefault();
@@ -419,7 +419,7 @@ export default {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
         getAllKPILevelByCategory: function (changePageSize, category) {
-          HTTP.get(`http://10.4.4.224:98/CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`)
+          HTTP.get(`CategoryKPILevel/getAllKPILevelByCategory/${category}/${config.pageIndex}/${config.pageSize}`)
             .then(response=>{
             if(response.status) {
               var count = 1;
@@ -461,7 +461,7 @@ export default {
           // });
         },
         getAllCategories: function (changePageSize, level,ocID) {
-          HTTP.get(`http://10.4.4.224:98/CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`)
+          HTTP.get(`CategoryKPILevel/GetAllCategories/${ocID}/${level}/${config.pageIndex}/${config.pageSize}`)
             .then(response =>{
               if (response.status) {
                   if (response.data.length === 0) {

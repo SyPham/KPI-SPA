@@ -389,19 +389,19 @@
                 <div class="modal-body">
                     <div class="box-body" id="Upload">
                         <p class="text-red">*Notice: Excel file must be followed a system template. If you do not have a template, please <button @click="downloadExcel" class="download btn btn-sm bg-success">click here </button>to download. Thank you!</p>
-                        <form  id="upload" method="post" enctype="multipart/form-data">
+
                             <div class="form-group">
                                 <label for="Upload">Upload file: </label>
 
                                 <div class="input-group">
                                     <input type="file" class="form-control UploadedFile" name="UploadedFile" id="UploadedFile" placeholder="Upload file">
                                     <span class="input-group-btn">
-                                        <button @click="uploadExcel"  type="submit" class="btn btn-success btn-flat btnUpload" id="btnUpload"><i class="fa fa-upload"></i> Upload file</button>
+                                        <button @click="uploadData"  type="submit" class="btn btn-success btn-flat btnUpload" id="btnUpload"><i class="fa fa-upload"></i> Upload file</button>
                                     </span>
                                 </div>
                                 <!-- /.input group -->
                             </div>
-                        </form>
+
                     </div>
                 </div>
             </div>
@@ -436,40 +436,36 @@ export default {
     seft.LoadAll();
   },
   methods: {
-    uploadExcel(){
-        $("form#upload").submit(function (e) {
-            console.log(e)
-            e.preventDefault();
-            console.log("Import data");
-            let formData = new FormData(this);
-            console.log(formData)
-            var upload = function () {
-                HTTP.post("http://10.4.4.224:98/Workplace/Import",{
-                     data: formData
-                }).then(res=>{
-                    if (res) {
-                        $('#main-loading-delay').hide();
-                        success('Upload successfully!');
+    uploadData(e){
+      var formData = new FormData();
+      var fileUpload = document.querySelector('#UploadedFile');
+      formData.append("UploadedFile", fileUpload.files[0]);
+      HTTP.post('Workplace/Import', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      }).then( res => {
+        if(res.status){
+            success('Upload successfully!');
+        }
+      })
 
-                    } else {
-                        $('#main-loading-delay').hide();
-                        error('Upload failed!');
-                    }
-                })
-            }
-            upload();
-        });
-    },
+    }
+    ,
     downloadExcel(){
          $('#Upload .download').click(function () {
-             
+
             console.log("click download");
             // HTTP.get("http://10.4.4.224:98/Workplace/ExcelExport/"+VueJwtDecode.decode(localStorage.getItem("authToken")).nameid)
             window.location.href = "http://10.4.4.224:98/Workplace/ExcelExport/"+VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-           
+
         });
     },
     LoadAll() {
+       var config = {
+            pageSize: 6,
+            pageIndex: 1
+          };
       let seft = this;
 
       var glyph_opts = {
@@ -520,7 +516,7 @@ export default {
           glyph: glyph_opts,
           source: {
             url:
-              "https://localhost:44309/KPI/GetListTreeClient/" +
+              "http://10.4.4.224:98/KPI/GetListTreeClient/" +
               VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
             debugDelay: 1000
           },
@@ -555,7 +551,7 @@ export default {
           lazyLoad: function(event, data) {
             data.result = {
               url:
-                "https://localhost:44309/KPI/GetListTreeClient/" +
+                "http://10.4.4.224:98/KPI/GetListTreeClient/" +
                 VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
               debugDelay: 1000
             };
@@ -658,23 +654,16 @@ export default {
         },
         loadActionPlan(changePageSize) {
           var role = $("#boxActionPlan .role").val();
-          $.get(
-            "https://localhost:44309/Workplace/loadActionPlan",
-            {
-              role: role,
-              page: config.pageIndex,
-              pageSize: config.pageSize
-            },
-            function(res) {
+          HTTP.get(`Workplace/loadActionPlan/${role}/${config.pageIndex}/${config.pageSize}`)
+          .then( res => {
               console.log(res);
-
               if (res.status) {
                 // var data = res.data;
-                var total = res.total;
-                var page = res.page;
+                var total = res.data.total;
+                var page = res.data.page;
                 var count;
-                var pageSize = res.pageSize;
-                seft.list1 = res.data;
+                var pageSize = res.data.pageSize;
+                seft.list1 = res.data.data;
                 console.log("seft.list1");
                 console.log(seft.list1);
                 workplaceController.actionPlanPaging(
@@ -685,26 +674,16 @@ export default {
                   changePageSize
                 );
                 workplaceController.registerEvent();
-              } else {
               }
-            }
-          );
-        },
+            })
+        }
+        ,
         TrackKPI(changePageSize, levelid) {
-          var config = {
-            pageSize: 6,
-            pageIndex: 1
-          };
 
-          $.get(
-            "https://localhost:44309/Workplace/KPIRelated",
-            {
-              levelid: levelid,
-              page: config.pageIndex,
-              pageSize: config.pageSize
-            },
-            function(res) {
-              if (res.status) {
+          HTTP.get(`Workplace/KPIRelated/${levelid}/${config.pageIndex}/${config.pageSize}`)
+          .then(res => {
+            console.log(res)
+             if (res.status) {
                 var total = res.total;
                 var page = res.page;
                 var count;
@@ -719,16 +698,12 @@ export default {
                   changePageSize
                 );
                 workplaceController.registerEvent();
-              } else {
               }
-            }
-          );
+          })
+
         },
         TrackKPIPaging(totalRow, callback, changePageSize) {
-          var config = {
-            pageSize: 6,
-            pageIndex: 1
-          };
+
           var totalPage = Math.ceil(totalRow / config.pageSize);
           //Unbind pagination if it existed or click change pagesize
           if (
@@ -834,7 +809,7 @@ export default {
             });
         }
       };
-   
+
       workplaceController.init();
     }
   }
