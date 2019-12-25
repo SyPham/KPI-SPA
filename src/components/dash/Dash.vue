@@ -27,7 +27,7 @@
 </template>
 
 <script>
- import Sidebar from './Sidebar.vue';
+import Sidebar from './Sidebar.vue';
 import Footer from "./Footer.vue";
 import Header from "./Header";
 import Breadcrumb from "./Breadcrumb";

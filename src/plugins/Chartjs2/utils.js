@@ -359,7 +359,7 @@ function dateNow() {
     var day = date.getDate();       // yields date
     var month = date.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
     var year = date.getFullYear();  // yields year
-    var hour = date.getHours();     // yields hours 
+    var hour = date.getHours();     // yields hours
     var minute = date.getMinutes(); // yields minutes
     var second = date.getSeconds(); // yields seconds
 
@@ -405,4 +405,20 @@ function Binding(b) {
     });
 
     b.object[b.property] = this.value;
+}
+function getDateOfWeekInYear(dt) {
+  let tdt = new Date(dt.valueOf());
+  let dayn = (dt.getDay() + 6) % 7;
+  tdt.setDate(tdt.getDate() - dayn + 3);
+  let firstThursday = tdt.valueOf();
+  tdt.setMonth(0, 1);
+  if (tdt.getDay() !== 4) {
+    tdt.setMonth(0, 1 + ((4 - tdt.getDay() + 7) % 7));
+  }
+  return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+}
+function getCurrentQuarter(d) {
+  d = d || new Date();
+  let m = Math.floor(d.getMonth() / 3) + 2;
+  return m > 4 ? m - 4 : m;
 }
