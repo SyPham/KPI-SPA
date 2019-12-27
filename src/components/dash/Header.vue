@@ -24,7 +24,7 @@
                 :key="entry.title"
                 @click="changeLocale(entry.language)"
                 :title="entry.title"
-              >
+                >
                 <flag
                   style="fontsize:"
                   :iso="entry.flag"
@@ -48,25 +48,64 @@
               listdata.total
             }}</span>
           </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <div  class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <span class="dropdown-item dropdown-header"
               >{{ listdata.total }} Notifications</span
-            >
-            <div class="dropdown-divider"></div>
-            <a
-              v-for="(item, key, index) in data"
-              :key="index"
-              href="#"
-              class="dropdown-item"
-            >
-              <i class="fas fa-envelope mr-2"></i> 4 new messages
-              <span class="float-right text-muted text-sm">3 mins</span>
-            </a>
+              >
             <div class="dropdown-divider"></div>
 
-            <a href="#" class="dropdown-item dropdown-footer"
-              >See All Notifications</a
-            >
+            <div  v-for="(item, key, index) in data" :key="index">
+
+            <a v-if="item.Action == 'Comment' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h4><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fa fa-comment fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h4>
+              <p>The account {{item.SenderID === sessionUserID ? "you" : item.Sender}} mentioned {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} in {{item.Title}}</p>
+              <p>{{item.Content}}</p>
+            </a>
+
+            <a v-if="item.Action == 'Task' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>The account {{item.Sender}} assigned  {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} the task {{item.TaskName}} </p>
+              <p>{{item.Title}}</p>
+              <p>KPI - {{item.KPIName}}</p>
+            </a>
+
+            <a v-if="item.Action == 'Done' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
+              <p>{{item.Title}}</p>
+              <p>KPI - {{item.KPIName}}</p>
+            </a>
+
+            <a v-if="item.Action == 'Approval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
+             <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
+            </a>
+
+            <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
+            </a>
+
+            <a v-if="item.Action == 'LateOnTask' " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>Some of task are overdue. Please check your email</p>
+            </a>
+
+            <a v-if="item.Action == 'LateOnUploadData' " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>There are some KPIs that haven't uploaded their data on time. Please check your email</p>
+            </a>
+
+            <a v-if="item.Action == 'Upload' || item.SenderID === userid || item.RecipientID === userid || item.UserID === userid " href="#" class="dropdown-item" :data-id="item.ID" >
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <p>{{item.SenderID == userid ? "You" : "The account " + item.Sender}} has uploaded KPIs data successfully!</p>
+            </a>
+
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -109,6 +148,7 @@ export default {
   name: "appHeader",
   data: function() {
     return {
+      userid: 0,
       arrayID: [],
       data: [],
       listdata: [],
@@ -159,6 +199,7 @@ export default {
         seft.data = r.data.data;
         console.log(seft.data);
         seft.listdata = r.data;
+        seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
         console.log(seft.listdata);
       });
     },

@@ -25,12 +25,12 @@
     <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">
-          {{$t('title')}}
+          Login KPI SYSTEM
         </p>
 
      
           <div class="input-group mb-3">
-            <input type="text" v-model="user.username" class="form-control" :placeholder="$t('username')" />
+            <input type="text" v-model="user.username" class="form-control" placeholder="Username" />
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>
@@ -42,7 +42,7 @@
               type="password"
               class="form-control"
               v-model="user.password"
-              :placeholder="$t('password')"
+              placeholder="password"
             />
             <div class="input-group-append">
               <div class="input-group-text">
@@ -55,13 +55,13 @@
               <div class="icheck-primary">
                 <input type="checkbox" id="remember" />
                 <label for="remember">
-                  {{$t('remember')}}
+                  remember me
                 </label>
               </div>
             </div>
             <!-- /.col -->
             <div class="col-4">
-              <button @click="login" class="btn btn-primary btn-block">{{$t('login')}}</button>
+              <button @click="login" class="btn btn-primary btn-block">Login</button>
             </div>
             <!-- /.col -->
           </div>
@@ -79,21 +79,14 @@ export default {
       user: {
         username: '',
         password: ''
-      },
-      languages: [
-        { flag: 'us', language: 'en', title: 'English' },
-        { flag: 'vn', language: 'vi', title: 'Tiếng Việt' },
-        { flag: 'tw', language: 'tw-zh', title: '中文' }
-      ] 
+      }
     }
   },
   created(){
 
   },
   methods: {
-    changeLocale(locale) {
-      i18n.locale = locale;
-    },
+    
     login(){
       this.$http.post("http://10.4.4.224:98/api/auth/login", this.user , this.user.username)
         .then(function(res) {

@@ -48,7 +48,8 @@ export default {
      menus: [],
      arrayID: [],
      data: [],
-     listdata: []
+     listdata: [],
+     userid: 0
     }
   },
 
@@ -56,7 +57,7 @@ export default {
     let seft = this;
     seft.loadmenu();
     
-    // seft.getAllNotifications();
+     seft.getAllNotifications();
   }, 
 
   methods: {
@@ -70,15 +71,15 @@ export default {
         console.log(seft.data)
         seft.listdata = r.data
         console.log(seft.listdata)
-        let user = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-        console.log(user)
+        seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+        // console.log(user)
       })
     },
     loadmenu(){
         let seft = this;
         
         seft.menus = JSON.parse(localStorage.getItem("Menus"));
-        console.log(seft.menus)
+        // console.log(seft.menus)
     }
   }
 };

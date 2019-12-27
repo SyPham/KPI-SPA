@@ -172,7 +172,7 @@ export default {
       page: 1,
       pageSize: 10,
       catID: 0,
-      name: null,
+      name: " ",
       searchname: " "
 
     };
@@ -195,19 +195,12 @@ export default {
     // seft.getAll();
     seft.LoadData();
     seft.ID = seft.$route.params.id;
-     console.log(seft.a);
   },
   methods: {
     LoadData() {
       // debugger
-      let seft = this, url =`AdminKPI/LoadData/${seft.name}/${seft.page}/${seft.pageSize}`;
-      HTTP.get("AdminKPI/LoadData/",{
-        params: {
-          name: seft.name,
-         page: seft.page,
-          pageSize: seft.pageSize
-        }
-      }).then(res => {
+      let seft = this
+      HTTP.post(`AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}`).then(res => {
         console.log(res);
         seft.totalPage = res.data.pageCount;
         seft.page = res.data.page;

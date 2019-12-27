@@ -12,7 +12,6 @@ export default {
     let startedPromise = null;
     let manuallyClosed = false;
 
-debugger
 
     Vue.prototype.startSignalR = () => {
 

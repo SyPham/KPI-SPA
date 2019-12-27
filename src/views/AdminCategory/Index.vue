@@ -118,13 +118,9 @@ export default {
     }
   },
   methods: {
-    LoadData( name, page = 1, pageSize = 5) {
+    LoadData() {
       let seft = this;
-      HTTP.post("Admincategory/LoadData", {
-        name: name,
-        page: page,
-        pageSize: pageSize
-      }).then(res => {
+      HTTP.get(`Admincategory/LoadData/${seft.name}/${seft.page}/${seft.pageSize}`).then(res => {
         //console.log(res.data);
         seft.skip = res.data.skip;
         seft.totalPage = res.data.totalPage;

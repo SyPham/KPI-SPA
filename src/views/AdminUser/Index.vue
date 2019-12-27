@@ -178,14 +178,10 @@ export default {
     // console.log(seft.ID);
   },
   methods: {
-    LoadData(search ,page = 1, pageSize = 5 ) {
+    LoadData() {
       // debugger
       let seft = this;
-      HTTP.post("AdminUser/LoadData", {
-        search: search,
-        page: page,
-        pageSize: pageSize
-      }).then(res => {
+      HTTP.get(`AdminUser/LoadData/${seft.search}/${seft.page}/${seft.pageSize}`).then(res => {
         // console.log(res);
         seft.skip = res.data.skip;
         seft.totalPage = res.data.totalPage;
@@ -194,9 +190,7 @@ export default {
       });
     },
     LockUser(Id=1){
-      HTTP.post("AdminUser/LockUser", {
-        id: Id
-      })
+      HTTP.get(`AdminUser/LockUser/${Id}`)
         .then(r => {
           success('Successfully');
           this.LoadData();
