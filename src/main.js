@@ -11,13 +11,13 @@ import ElementUI from 'element-ui'
 import Vuelidate from 'vuelidate'
 import FlagIcon from 'vue-flag-icon'
 // import store from './store'
-import QuestionHub from './hub'
+import HenryHub from './hub'
 import VueJwtDecode from 'vue-jwt-decode'
 
 import VueApexCharts from 'vue-apexcharts'
-Vue.use(QuestionHub)
+Vue.use(HenryHub)
 Vue.use(FlagIcon)
-// Vue.use(QuestionHub) 
+// Vue.use(QuestionHub)
 Vue.use(VueApexCharts)
 // import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI);

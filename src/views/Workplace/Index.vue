@@ -570,6 +570,17 @@ export default {
   components: {
     Paginate
   },
+  mounted() {
+    let seft = this;
+    //seft.getAllNotifications();
+    seft.$henryHub.$on("SendMessage", message => {
+      debugger;
+      console.log("client on");
+      console.log(message);
+
+      //seft.getAllNotifications();
+    });
+  },
   created() {
     let seft = this;
     seft.LoadAll();
