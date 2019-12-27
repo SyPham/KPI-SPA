@@ -8,92 +8,41 @@
       </li>
     </ul>
       <!-- Right navbar links -->
-      <ul class="navbar-nav ml-auto">
+      <ul  class="navbar-nav ml-auto">
+
         <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
+        <!-- <button v-for="entry in languages" :key="entry.title" >
+          <flag :iso="entry.flag" v-bind:squared=false />
+            {{entry.title}}
+        </button> -->
+        <li>
+            <div class="henry-pham">
+              <ul>
+                <li v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)" :title="entry.title">
+                  <flag style="fontsize:" :iso="entry.flag" v-bind:squared=false /> 
+                  {{entry.title}} |
+                </li>
+                
+              </ul>
+            </div>
+        </li>
+        <li  class="nav-item dropdown">
+          <a  class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false" data-id="123">
             <i class="far fa-bell"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
+            <span  class="badge badge-warning navbar-badge">{{listdata.total}}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img
-                  src="/node_modules/admin-lte/dist/img/user1-128x128.jpg"
-                  alt="User Avatar"
-                  class="img-size-50 mr-3 img-circle"
-                />
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"
-                      ><i class="fas fa-star"></i
-                    ></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can...</p>
-                  <p class="text-sm text-muted">
-                    <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                  </p>
-                </div>
-              </div>
-              <!-- Message End -->
+            <span class="dropdown-item dropdown-header">{{listdata.total}} Notifications</span>
+            <div class="dropdown-divider"></div>
+            <a v-for="(item,key,index) in data" :key="index"  href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i> 4 new messages
+              <span class="float-right text-muted text-sm">3 mins</span>
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img
-                  src="/node_modules/admin-lte/dist/img/user8-128x128.jpg"
-                  alt="User Avatar"
-                  class="img-size-50 img-circle mr-3"
-                />
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"
-                      ><i class="fas fa-star"></i
-                    ></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted">
-                    <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                  </p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img
-                  src="/node_modules/admin-lte/dist/img/user3-128x128.jpg"
-                  alt="User Avatar"
-                  class="img-size-50 img-circle mr-3"
-                />
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"
-                      ><i class="fas fa-star"></i
-                    ></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted">
-                    <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                  </p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer"
-              >See All Messages</a
-            >
+            
+            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
         </li>
-
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
             User
@@ -119,6 +68,7 @@
             <i class="fas fa-th-large"></i>
           </a>
         </li>
+        
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -126,20 +76,58 @@
 </template>
 
 <script>
+import { HTTP } from "../../http-constants";
+import VueJwtDecode from "vue-jwt-decode";
+import i18n from '../../lang/i18n';
+import signal from '../../hub';
 export default {
   name: "appHeader",
-  created: function() {},
   data: function() {
     return {
-      
-    };
+        arrayID: [],
+        data: [],
+        listdata: [],
+        languages: [
+          { flag: 'tw', language: 'tw-zh', title: '中文' },
+          { flag: 'us', language: 'en', title: 'English' },
+          { flag: 'vn', language: 'vi', title: 'Tiếng Việt' }
+        ]
+      };
+  },
+  created: function() {
+    let seft = this ;
+    seft.getAllNotifications();
+    //seft.$henryHub.$on('SendMessage', seft.getAllNotifications())
+
+  },
+  mounted(){
+    let seft = this ;
+    //seft.getAllNotifications();
+    seft.$henryHub.$on('SendMessage', seft.getAllNotifications())
   },
   computed: {
-    // user: function() {
-    //   return this.$store.state.currentUser;
-    // }
+    user: function() {
+      return this.$store.state.currentUser;
+    }
   },
   methods: {
+    changeLocale(locale) {
+      i18n.locale = locale;
+      
+    },
+    getAllNotifications(){
+      console.log('connect hub')
+      let seft = this ;
+      HTTP.get("Home/GetNotifications")
+      .then(r=>{
+        seft.arrayID = r.data.arrayID
+        console.log(seft.arrayID)
+        seft.data = r.data.data
+        console.log(seft.data)
+        seft.listdata = r.data
+        console.log(seft.listdata)
+      })
+    },
     logout: function() {
       this.$auth.destroyToken();
       // this.user = {};
@@ -154,4 +142,48 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  button {
+    border: 1px solid green;
+    font-size: 15px;
+    margin: auto;
+  }
+
+  .henry-pham {
+    padding-right: 12px;
+    padding-left: 12px;
+    display: block;
+}
+
+    .henry-pham ul>li>:hover {
+        background-color: rgba(60, 105, 101, 0.5);
+    }
+
+   
+
+    .henry-pham li {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        cursor: pointer;
+    }
+
+        .henry-pham li img {
+            width: 29px;
+        }
+
+.ulbadge {
+    position: relative;
+    background: rgba(0, 0, 0, 0.1);
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    .ulbadge > .spabbadge {
+        position: absolute;
+        top: 0;
+        transform: translate(70%, 30%);
+    }
+
+</style>

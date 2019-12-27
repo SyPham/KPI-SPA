@@ -851,6 +851,7 @@ export default {
           // debugger
           console.log('aaaa')
           var code = $(this).val();
+          console.log(code)
           if (old.indexOf($(this).val()) == -1) {
               old += code + '-';
               $('.arrcompare').text(old);
@@ -1450,9 +1451,7 @@ export default {
       });
     },
     remark(id) {
-      HTTP.post("ChartPeriod/Remark", {
-        dataid: id
-      }).then(r => {
+      HTTP.get(`ChartPeriod/Remark/${id}`).then(r => {
         console.log(r);
         let result = r.data.model;
         var userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;

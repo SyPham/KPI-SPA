@@ -73,6 +73,7 @@ import planetChartData from "../../plugins/Chartjs2/Demo";
 export default {
   data() {
     return {
+      itemList: [],
       chart: {},
       planetChartData: planetChartData,
       datacollection: {},
@@ -90,6 +91,13 @@ export default {
       statusfavorite: true,
       dataCharts: {},
       options: {
+        animation: {
+			        duration: 0
+			    },
+			    hover: {
+			        animationDuration: 0
+			    },
+			    responsiveAnimationDuration: 0,
         plugins: {
           datalabels: {
             backgroundColor: function(context) {
@@ -129,7 +137,7 @@ export default {
         scales: {
           yAxes: [
             {
-              display: true,
+              // display: true,
               position: "left",
               ticks: {
                 beginAtZero: true,
@@ -139,7 +147,7 @@ export default {
                 min: 0
               },
               scaleLabel: {
-                display: true,
+                // display: true,
                 labelString: this.unit,
                 fontSize: 12,
                 fontStyle: "normal"
@@ -149,14 +157,14 @@ export default {
           xAxes: [
             {
               gridLines: {
-                display: true,
+                // display: true,
                 tickMarkLength: 8
               },
               ticks: {
                 fontSize: 12
               },
               scaleLabel: {
-                display: true,
+                // display: true,
                 labelString: this.period,
                 fontSize: 12,
                 fontStyle: "normal"
@@ -192,26 +200,6 @@ export default {
     },
     createChart(chartId, datasets, targets, labels, label, unit) {
       let seft = this;
-      let pluginsDatasets = {
-        datalabels: {
-          backgroundColor: function(context) {
-            return context.dataset.backgroundColor;
-          },
-          borderRadius: 4,
-          color: "white",
-          font: {
-            weight: "bold",
-            size: 12
-          },
-          formatter: function(value, context) {
-            return value;
-          },
-          display: function(context) {
-            //return context.dataset.label !=="Target" && context.dataset.label !=="Target";
-          },
-          id: "p1"
-        }
-      };
       const ctx = document.getElementById(chartId);
 
       const myChart = new Chart(ctx, {
@@ -219,47 +207,13 @@ export default {
         labels: labels,
         data: {
           labels: labels,
-          datasets: [
-            {
-              label: label,
-              spanGaps: true, //data=undefined thi k draw line
-              backgroundColor: "#e7263b ",
-              pointBackgroundColor: "#e7263b",
-              borderColor: "#e7263b ",
-              fill: false,
-              data: datasets[0].datasets,
-              datalabels: {
-                align: "center",
-                anchor: "center"
-              }
-            },
-            {
-              label: label,
-              spanGaps: true, //data=undefined thi k draw line
-              backgroundColor: "#182657 ",
-              pointBackgroundColor: "#182657",
-              borderColor: "#182657 ",
-              fill: false,
-              data: datasets[1].datasets,
-              datalabels: {
-                align: "center",
-                anchor: "center"
-              }
-            },
-            {
-              // another line graph
-              label: "Targets",
-              data: targets,
-              backgroundColor: "#3c8d8a",
-              borderColor: "#3c8d8a",
-              borderWidth: 3,
-              fill: false,
-            }
-          ]
+          datasets: seft.itemList
+          
         },
         options: seft.options
       });
       seft.chart = myChart;
+      seft.chart.update();
       console.log(seft.chart);
     },
     LoadDataCompare(){
@@ -271,8 +225,38 @@ export default {
             seft.period = seft.convertPeriod(r.data[0].period)
             console.log(seft.period)
             seft.datasets  = r.data;
+            let COLORS =  [
+                '#FF3784',
+                '#36A2EB',
+                '#4BC0C0',
+                '#F77825',
+                '#9966FF',
+                '#00A8C6',
+                '#379F7A',
+                '#CC2738',
+                '#8B628A',
+                '#8FBE00',
+                '#606060'
+            ];
+            for (var item = 0; item < seft.datasets.length; item ++) {
+               let  ListData = {
+                  label: seft.datasets[item].label,
+                  spanGaps: false, //data=undefined thi k draw line
+                  backgroundColor: COLORS[(item+1)],
+                  borderColor: COLORS[(item+1)],
+                  fill: false,
+                  data: seft.datasets[item].datasets,
+                  datalabels: {
+                      align: 'center',
+                      anchor: 'center'
+                  }
+                };
+                  seft.itemList.push(ListData);
+                  
+            }
+            console.log('itemList');
+            console.log(seft.itemList);
             seft.label = r.data[0].label;
-            console.log(seft.datasets)
             seft.labels = r.data[0].labels;
             seft.targets = r.data[0].targets;
             // console.log(seft.label)

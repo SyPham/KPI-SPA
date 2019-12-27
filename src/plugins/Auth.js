@@ -4,19 +4,22 @@ var AuthPlugin = {
         localStorage.setItem('authToken', token);
         localStorage.setItem('authTokenExpiration', expiration);
         localStorage.setItem('Menus', Menus);
+        // localStorage.setItem('Username', Username);
     },
 
     destroyToken: function () {
         localStorage.removeItem('authToken');
         localStorage.removeItem('authTokenExpiration');
         localStorage.removeItem('Menus');
+        // localStorage.removeItem('Username');
     },
 
     getToken: function () {
         var token = localStorage.getItem('authToken');
         var expiration = localStorage.getItem('authTokenExpiration');
         var Menus = localStorage.getItem('Menus');
-        if (!token || !expiration || !Menus)
+        // var Username = localStorage.getItem('Username');
+        if (!token || !expiration || !Menus )
             return null;
 
         if (Date.now() > parseInt(expiration)) {

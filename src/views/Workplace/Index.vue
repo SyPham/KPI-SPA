@@ -586,6 +586,8 @@ export default {
       }).then(res => {
         if (res.status) {
           success("Upload successfully!");
+          $("#modal-group").modal("hide");
+
         }
       });
     },

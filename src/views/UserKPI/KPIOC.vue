@@ -437,7 +437,25 @@ export default {
           var catid = Number($("#box .catid").val());
           self.getAllDataByCategory(catid, period);
         });
-    }
+    },
+    getAllDataByCategory(catid, period) {
+      let self = this
+      let date = new Date();
+      let year = date.getFullYear();
+      let week = getDateOfWeekInYear(date);
+      let month = date.getMonth();
+      let quarter = getCurrentQuarter(date);
+      let startYear = year - 5;
+
+      if (period.toLowerCase() === "w")
+        self.$router.push(`/dataset/${self.categoryId}/w/1/${week}/${year}`);
+      if (period.toLowerCase() === "m")
+        self.$router.push(`/dataset/${self.categoryId}/m/1/${month}/${year}`);
+      if (period.toLowerCase() === "q")
+        self.$router.push(`/dataset/${self.categoryId}/q/1/${quarter}/${year}`);
+      if (period.toLowerCase() === "y")
+        self.$router.push(`/dataset/${self.categoryId}/y/${startYear}/${year}/${year}`);
+    },
   },
   created() {
     this.getAllKPILevelByCategory();

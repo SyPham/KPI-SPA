@@ -1,5 +1,6 @@
 //Common
 //"use strict";
+
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',

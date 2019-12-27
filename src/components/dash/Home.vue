@@ -14,16 +14,16 @@
         </div>
       </div>
     </div>
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminLevel" style="text-decoration:none">
+      <div v-for="(item,key,index) in menus" :key="index" class="col-12 col-sm-6 col-md-3">
+        <a :href="'#' + item.Link" style="text-decoration:none">
           <div class="info-box">
-            <span class="info-box-icon bg-orange elevation-1"
-              ><i class="fas fa-list-ol"></i
+            <span :class="'info-box-icon' + ' ' + item.BackgroudColor+ ' ' + 'elevation-1'"
+              ><i :class="item.FontAwesome"></i
             ></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">OC</span>
-              <span class="info-box-number">
+              <span class="info-box-text">{{$t(item.Code)}}</span>
+              <span class="info-box-number " style="color:#fff">
                 (1) 
               </span>
             </div>
@@ -33,183 +33,50 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminKPI" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-aqua "
-              ><i class="fas fa-money-bill-alt"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">KPI</span>
-              <span class="info-box-number">(2) </span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-
-      <!-- fix for small devices only -->
-      <div class="clearfix hidden-md-up"></div>
-
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminCategory" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"
-              ><i class="fab fa-gg-circle"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Category</span>
-              <span class="info-box-number">(3)</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/OCCategories" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="far fa-gem"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">OC Category</span>
-              <span class="info-box-number">(4)</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminOC" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="fas fa-book"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">OC KPI</span>
-              <span class="info-box-number">(5)</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </a>
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/CategoryKPILevelAdmin" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="far fa-gem"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Category KPI OC</span>
-              <span class="info-box-number">(6)</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </a>
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminUser" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="fas fa-user-circle"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">User</span>
-              <span class="info-box-number"></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </a>
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/AddUserToLevel" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="fas fa-leaf"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Add User Of OC</span>
-              <span class="info-box-number"></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminLevel" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="fas fa-cogs"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Setting</span>
-              <span class="info-box-number"></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </a>
-      </div>
-      <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <a href="#/adminLevel" style="text-decoration:none">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"
-              ><i class="fas fa-bars"></i
-            ></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Menu</span>
-              <span class="info-box-number"></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </a>
-      </div>
+      
     </div>
   </div>
 </template>
 
 <script>
+import { HTTP } from "../../http-constants";
+import VueJwtDecode from "vue-jwt-decode";
 export default {
   name: "home",
  data() {
     return {
-     menus: []
+     menus: [],
+     arrayID: [],
+     data: [],
+     listdata: []
     }
   },
 
   created(){
     let seft = this;
     seft.loadmenu();
+    
+    // seft.getAllNotifications();
   }, 
 
   methods: {
+    getAllNotifications(){
+      let seft = this ;
+      HTTP.get("Home/GetNotifications")
+      .then(r=>{
+        seft.arrayID = r.data.arrayID
+        console.log(seft.arrayID)
+        seft.data = r.data.data
+        console.log(seft.data)
+        seft.listdata = r.data
+        console.log(seft.listdata)
+        let user = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+        console.log(user)
+      })
+    },
     loadmenu(){
         let seft = this;
+        
         seft.menus = JSON.parse(localStorage.getItem("Menus"));
         console.log(seft.menus)
     }

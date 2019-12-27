@@ -2,6 +2,9 @@
 *{
     
 }
+.modal-backdrop.fade.show {
+    display: none;
+}
 #tblDataset {
     overflow-x: unset !important;
 }

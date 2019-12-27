@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import Router from "./routes";
+import i18n from './lang/i18n'
 import VueResource from 'vue-resource';
 import Auth from './plugins/Auth.js';
 import 'bootstrap/dist/css/bootstrap.css'
@@ -8,9 +9,15 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
 import Vuelidate from 'vuelidate'
+import FlagIcon from 'vue-flag-icon'
+// import store from './store'
+import QuestionHub from './hub'
 import VueJwtDecode from 'vue-jwt-decode'
 
 import VueApexCharts from 'vue-apexcharts'
+Vue.use(QuestionHub)
+Vue.use(FlagIcon)
+// Vue.use(QuestionHub) 
 Vue.use(VueApexCharts)
 // import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI);
@@ -19,6 +26,7 @@ Vue.use(Vuelidate)
 Vue.use(BootstrapVue)
 Vue.use(Auth);
 Vue.use(VueResource);
+
 // Vue.use(VueJwtDecode)
 // VueJwtDecode.decode(localStorage.getItem("authToken"))
 
@@ -63,8 +71,13 @@ Router.beforeEach(function (to, from, next) {
   }
 });
 new Vue({
-  el: "#app",
+  // el: "#app",
   router: Router,
+  i18n,
+  // store,
   template: "<App/>",
-  components: { App }
-});
+  components: { App },
+  render: h => h(App)
+}).$mount('#app');
+
+// export default app
