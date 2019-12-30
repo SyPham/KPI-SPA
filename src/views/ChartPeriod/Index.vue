@@ -2,7 +2,8 @@
   <div>
     <section id="chartperiod" class="animatedParent">
       <div class="row">
-        <div class="col-md-12"></div>
+        <div class="col-md-12">
+        </div>
         <div class="col-md-12">
           <!-- LINE CHART -->
           <div class="box box-widget">
@@ -417,259 +418,252 @@
           </div>
         </div>
       </div>
-      <!-- <comment></comment> -->
+      <!-- <comment> -->
       <!-- compare -->
-      <div class="modal fade" id="modal-group">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h4 class="modal-title">Compare KPILevel </h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">×</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <div>
-                          <div class="box-body" id="comparechart">
-                              <table class="table table-hover table-striped">
-                                  <thead>
-                                      <tr>
-                                          <th class="text-center" style="width:3%">#</th>
-                                          <th class="text-center" style="width:5%">Checkbox</th>
-                                          <th class="text-center">Level Number</th>
-                                          <th class="text-center">Area</th>
-                                          <th class="text-center">Data Status </th>
-                                          <th class="text-center">Publicity Status</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody v-for="(item,key,index) in data2" :key="index" id="tblcomparechart">
-                                    <tr >
-                                        <td class="text-center">{{key+1}}</td>
-                                        <td class="text-center">
-                                            <div class="pretty p-image p-plain">
-                                                <input type="checkbox" :value="item.KPILevelCode" @click="clickcompare" v-if="item.StatusPublic == true"  class="compare" />
-                                                <input type="checkbox"  :value="item.KPILevelCode" @click="clickcompare" v-else class="compare" disabled />
-                                                <div class="state">
-                                                    <img class="image" src="src/img/004.png">
-                                                    <label class="comparelabel"></label>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">{{item.LevelNumber}}</td>
-                                        <td class="text-center">{{item.Area}}</td>
-                                        <td class="text-center">
-                                          <span v-if="item.Status == true" class="badge badge-success">visible</span>
-                                          <span v-else class="badge badge-danger">not visible</span>
-                                        </td>
-                                        <td class="text-center">
-                                          <span v-if="item.StatusPublic == true" class="badge badge-success">Public</span>
-                                          <span v-else class="badge badge-danger">Private</span>
-                                        </td>
-                                    </tr>
-                                      
-                                  </tbody>
-                              </table>
-                              
-                          </div>
-                          <!-- /.box-body -->
+      
 
-                          <div class="box-footer">
-                              <Paginate
-                                v-model="page"
-                                :page-count="totalPage"
-                                :prev-text="'Prev'"
-                                :next-text="'Next'"
-                                :page-range="3"
-                                :margin-pages="2"
-                                :container-class="'pagination'"
-                                :page-class="'page-item'"
-                                :prev-class="'page-item'"
-                                :next-class="'page-item'"
-                                :page-link-class="'page-link'"
-                                :prev-link-class="'page-link'"
-                                :next-link-class="'page-link'"
-                                :click-handler="changePage"
-                              ></Paginate>
-
-                          </div>
-                          <div class="box-footer">
-                              <span style="display:none" class="arrcompare"></span>
-                              <button id="btnCompare-kpilevel"   data-compare="" class="btn btn-primary">Compare</button>
-                              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                          </div>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- /.modal-content -->
-          </div>
-      </div>
-
-      <!-- endcompare -->
-
-      <div class="modal fade modal" id="modal-group-comment-data">
-        <div class="modal-dialog modal-lg" >
+      <!-- </comment>  -->
+    </section>
+    <div class="modal fade" id="modal-group">
+        <div class="modal-dialog modal-lg " >
             <div class="modal-content">
-                <div class="modal-header" style="background-color:#00a65a;color:#fff">
-                    <h4 class="modal-title">
-                        <i class="fa fa-tags"></i>&#32;
-                        <span class="RemarkChart"></span>
-                    </h4>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row bootstrap snippets">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="comment-wrapper">
-                                <div class="panel panel-info">
-                                    <div class="panel-body">
-                                        <span class="dataid" style="display:none"></span>
-                                        <div class="form-group">
-                                            <textarea class="form-control" id="comment" placeholder="write a comment..." rows="6"></textarea>
-                                        </div>
-
-                                        <div class="clearfix"></div>
-                                        <hr />
-                                        <ul class="media-list" id="media-list">
-                                        </ul>
-                                        <button type="button" @click="addcomment()" class="btn btn-info pull-right btnComment">
-                                            <i class="far fa-paper-plane"></i> Post
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-      </div>
-
-      <div class="modal fade modal-window modal" id="modal-group-comment-data2">
-        <div class="modal-dialog modal-lg" >
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:#00a65a;color:#fff">
-                    <h4 class="modal-title">
-                      <a
-                        href="#modal-group-comment-data"
-                        data-toggle="modal"
-                        data-dismiss="modal"
-                        style="color:#fff;cursor:pointer"
-                      >
-                        <i class="fa fa-reply"></i>
-                      </a>
-                      &#32;
-                      <span class="ActionPlanChart"></span>
-                    </h4>
-                    <span class="commentid" style="display:none"></span>
-
+                <div class="modal-header">
+                    <h4 class="modal-title">Compare KPILevel </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home">List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile">Add</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade" id="pills-home">
-                            <div class="listTask">
-                                <table class="table table-condensed table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10px">No.</th>
-                                            <th>Task name</th>
-                                            <th>Descriptions</th>
-                                            <th>PIC</th>
-                                            <th>Due date</th>
-                                            <th>Update shedule date</th>
-                                            <th>Actual finish date</th>
-                                            <th>Status</th>
-                                            <th class="Approval" style="width: 100px">Approve</th>
-                                            <th class="Option" style="width: 50px">Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tblActionPlan">
-                                        <tr>
-                                            <td>1.</td>
-                                            <td>To do list</td>
-                                            <td>
-                                                <ul>
-                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                                                    <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                                                </ul>
-                                            </td>
-                                            <td>swook, peter, henry</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>20-10-2019</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div>
+                        <div class="box-body" id="comparechart">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:3%">#</th>
+                                        <th class="text-center" style="width:5%">Checkbox</th>
+                                        <th class="text-center">Level Number</th>
+                                        <th class="text-center">Area</th>
+                                        <th class="text-center">Data Status </th>
+                                        <th class="text-center">Publicity Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="(item,key,index) in data2" :key="index" id="tblcomparechart">
+                                  <tr >
+                                      <td class="text-center">{{key+1}}</td>
+                                      <td class="text-center">
+                                          <div class="pretty p-image p-plain">
+                                              <input type="checkbox" :value="item.KPILevelCode" @click="clickcompare" v-if="item.StatusPublic == true"  class="compare" />
+                                              <input type="checkbox"  :value="item.KPILevelCode" @click="clickcompare" v-else class="compare" disabled />
+                                              <div class="state">
+                                                  <img class="image" src="src/img/004.png">
+                                                  <label class="comparelabel"></label>
+                                              </div>
+                                          </div>
+                                      </td>
+                                      <td class="text-center">{{item.LevelNumber}}</td>
+                                      <td class="text-center">{{item.Area}}</td>
+                                      <td class="text-center">
+                                        <span v-if="item.Status == true" class="badge badge-success">visible</span>
+                                        <span v-else class="badge badge-danger">not visible</span>
+                                      </td>
+                                      <td class="text-center">
+                                        <span v-if="item.StatusPublic == true" class="badge badge-success">Public</span>
+                                        <span v-else class="badge badge-danger">Private</span>
+                                      </td>
+                                  </tr>
+                                    
+                                </tbody>
+                            </table>
+                            
                         </div>
-                        <div class="tab-pane fade" id="pills-profile">
-                            <div class="addTask">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>Task name</label>
-                                    <input type="text" class="form-control Title" autocomplete="off" placeholder="Enter ..." />
-                                </div>
+                        <!-- /.box-body -->
 
-                                <!-- textarea -->
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <div class="editable Description" style="border:1px solid #d2d6de" contenteditable="true">
-                                        <ul style="list-style: decimal;padding-left: 20px;">
-                                            <li></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                        <div class="box-footer">
+                            <Paginate
+                              v-model="page"
+                              :page-count="totalPage"
+                              :prev-text="'Prev'"
+                              :next-text="'Next'"
+                              :page-range="3"
+                              :margin-pages="2"
+                              :container-class="'pagination'"
+                              :page-class="'page-item'"
+                              :prev-class="'page-item'"
+                              :next-class="'page-item'"
+                              :page-link-class="'page-link'"
+                              :prev-link-class="'page-link'"
+                              :next-link-class="'page-link'"
+                              :click-handler="changePage"
+                            ></Paginate>
 
-                                <!-- input states -->
-                                <div class="form-group">
-                                    <label class="control-label" for="Tag">Assign PIC</label>
-                                    <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder="Require ..."></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="Auditor">Auditor</label>
-                                    <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder="Optional ..."></textarea>
-                                </div>
-                                <!-- radio -->
-                                <div class="form-group">
-                                    <label>Due date</label>
-                                    <input autocomplete="off" type="text" class="form-control DueDate datepicker" name="datepicker" />
-                                </div>
-                                <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
-                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <span style="display:none" class="arrcompare"></span>
+                            <button id="btnCompare-kpilevel"   data-compare="" class="btn btn-primary">Compare</button>
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" class="btn btn-primary">Back to remark</a>
-                </div>
+
             </div>
             <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- endcompare -->
+
+    <div class="modal fade modal" id="modal-group-comment-data">
+      <div class="modal-dialog modal-lg" >
+          <div class="modal-content">
+              <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                  <h4 class="modal-title">
+                      <i class="fa fa-tags"></i>&#32;
+                      <span class="RemarkChart"></span>
+                  </h4>
+                  <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                      <span class="sr-only">Close</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row bootstrap snippets">
+                      <div class="col-md-12 col-sm-12">
+                          <div class="comment-wrapper">
+                              <div class="panel panel-info">
+                                  <div class="panel-body">
+                                      <span class="dataid" style="display:none"></span>
+                                      <div class="form-group">
+                                          <textarea class="form-control" id="comment" placeholder="write a comment..." rows="6"></textarea>
+                                      </div>
+
+                                      <div class="clearfix"></div>
+                                      <hr />
+                                      <button type="button" @click="addcomment" class="btn btn-info pull-right btnComment">
+                                          <i class="far fa-paper-plane"></i> Post
+                                      </button>
+                                      <hr />
+                                      <ul class="media-list" id="media-list">
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+          <!-- /.modal-content -->
       </div>
-      <!-- @RenderPage("_Modal.cshtml") -->
-    </section>
+    </div>
+
+    <div class="modal fade modal-window modal" id="modal-group-comment-data2">
+      <div class="modal-dialog modal-lg" >
+          <div class="modal-content">
+              <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                  <h4 class="modal-title">
+                    <a
+                      href="#modal-group-comment-data"
+                      data-toggle="modal"
+                      data-dismiss="modal"
+                      style="color:#fff;cursor:pointer"
+                    >
+                      <i class="fa fa-reply"></i>
+                    </a>
+                    &#32;
+                    <span class="ActionPlanChart"></span>
+                  </h4>
+                  <span class="commentid" style="display:none"></span>
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home">List</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile">Add</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent">
+                      <div class="tab-pane fade" id="pills-home">
+                          <div class="listTask">
+                              <table class="table table-condensed table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th style="width: 10px">No.</th>
+                                          <th>Task name</th>
+                                          <th>Descriptions</th>
+                                          <th>PIC</th>
+                                          <th>Due date</th>
+                                          <th>Update shedule date</th>
+                                          <th>Actual finish date</th>
+                                          <th>Status</th>
+                                          <th class="Approval" style="width: 100px">Approve</th>
+                                          <th class="Option" style="width: 50px">Option</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody class="tblActionPlan">
+                                      <tr>
+                                          
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                      <div class="tab-pane fade" id="pills-profile">
+                          <div class="addTask">
+                              <!-- text input -->
+                              <div class="form-group">
+                                  <label>Task name</label>
+                                  <input type="text" class="form-control Title" autocomplete="off" placeholder="Enter ..." />
+                              </div>
+
+                              <!-- textarea -->
+                              <div class="form-group">
+                                  <label>Description</label>
+                                  <div class="editable Description" style="border:1px solid #d2d6de" contenteditable="true">
+                                      <ul style="list-style: decimal;padding-left: 20px;">
+                                          <li></li>
+                                      </ul>
+                                  </div>
+                              </div>
+
+                              <!-- input states -->
+                              <div class="form-group">
+                                  <label class="control-label" for="Tag">Assign PIC</label>
+                                  <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder="Require ..."></textarea>
+                              </div>
+                              <div class="form-group">
+                                  <label class="control-label" for="Auditor">Auditor</label>
+                                  
+                                  <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder="Optional ..."></textarea>
+                              </div>
+                              <!-- radio -->
+                              <div  class="form-group">
+                                  <label >Due date</label><br>
+                                  <!-- <input autocomplete="off" type="text" class="form-control DueDate datepicker" id="datepicker" /> -->
+                                  <!-- <date-pick @click="gettime(date)" :isDateDisabled="isFutureDate"  v-model="date"></date-pick> -->
+                                  <input id="datepicker" class="form-control DueDate datepicker" autocomplete="off"  width="276" />
+                              </div>
+                              <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" class="btn btn-primary">Back to remark</a>
+              </div>
+          </div>
+          <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
   </div>
 </template>
 <script>
@@ -680,9 +674,12 @@ import planetChartData from "../../plugins/Chartjs2/Demo";
 import Comment from "../ChartPeriod/Modal";
 import VueJwtDecode from 'vue-jwt-decode'
 import Paginate from "vuejs-paginate";
+// import DatePick from 'vue-date-pick';
+// import 'vue-date-pick/dist/vueDatePick.css';
 export default {
   data() {
     return {
+      date: '',
       data2:[],
       totalPage: 0,
       page: 1,
@@ -797,20 +794,31 @@ export default {
   components: {
     LineChart,
     Comment,
-    Paginate
+    Paginate,
+
   },
   mounted() {
+    $('#datepicker').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
     let seft = this
     // seft.createChart("planet-chart");
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
   },
   created() {
+    $('#datepicker').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
     let seft = this;
     seft.period = seft.$route.params.period;
     seft.start = seft.$route.params.start;
     seft.end = seft.$route.params.end;
     seft.Loadchart();
-    
+    seft.getAllNotifications();
   },
   watch: {
     searchyear: function(newOld, oldVal) {
@@ -833,6 +841,107 @@ export default {
     }
   },
   methods: {
+    dateNow() {
+      var date = new Date();
+      var day = date.getDate();       // yields date
+      var month = date.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
+      var year = date.getFullYear();  // yields year
+      var hour = date.getHours();     // yields hours
+      var minute = date.getMinutes(); // yields minutes
+      var second = date.getSeconds(); // yields seconds
+
+      // After this construct a string with the above results as below
+      var time = day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
+      return time;
+      },
+    isFutureDate(date) {
+      const currentDate = new Date();
+      return date > currentDate;
+    },
+    getAllNotifications(){
+      let seft = this ;
+      HTTP.get("Home/GetNotifications")
+      .then(r=>{
+        seft.arrayID = r.data.arrayID
+        //console.log(seft.arrayID)
+        seft.data = r.data.data
+        console.log(seft.data)
+        seft.listdata = r.data
+        console.log(seft.listdata)
+        seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+        // console.log(user)
+      })
+    },
+    addNotification() {
+      var phrases = new Array();
+        $('.Description').each(function () {
+          $(this).find('li').each(function () {
+            var current = $(this);
+            if (current.children().length > 0) { return true; }
+            phrases.push($(this).text().trim());
+          });
+        });
+        var Description = phrases.join(';');
+
+        var Tag = $('#Tag').val().trim();
+        if (Tag !== null || Tag !== "" || Tag !== undefined)
+          Tag = Tag.replace(/\@/g, '').replace(/\ /g, ',');
+        var notification = {
+          ID: 0,
+          UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+          KPIName: this.kpiname,
+          Period: this.$route.params.period,
+          Seen: false,
+          Link: window.location.href,
+          Tag: Tag,
+          Content: Description,
+          Title: $('.ActionPlanChart').text(),
+          CreateTime: new Date()
+          };
+
+      HTTP.post('https://localhost:44309/ChartPeriod/AddNotification', {notification:notification})
+        .then(function (response) {
+          console.log("done notification")
+      });
+    },
+    addNotificationComment() {
+      var CommentMsg = $('#comment').val();
+
+        var Tag = [],obj;
+        if (CommentMsg !== "") {
+          obj = CommentMsg.match(/@.+\f/g);
+          if (obj === undefined || obj === null) {
+            obj = "";
+          }
+          if (obj.toString().indexOf("@") === -1) {
+            Tag = CommentMsg;
+          } else {
+            var arr = obj.toString().split(' ');
+              for (let item of arr) {
+                Tag.push(item.replace('@', ' ').trim());
+              }
+            Tag = Tag.join();
+          }
+
+        }
+        var notification = {
+          ID: 0,
+          UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+          KPIName: this.kpiname,
+          Period: this.$route.params.period,
+          Seen: false,
+          Link: window.location.href,
+          Tag: Tag,
+          Title: $('.RemarkChart').text(),
+          Content: CommentMsg,
+          CreateTime:this.dateNow()
+          };
+
+        HTTP.post('https://localhost:44309/ChartPeriod/AddNotification', {notification:notification})
+          .then(function (response) {
+              console.log("done notification")
+        });
+    },
     btnCompare(){
       let seft = this
       $('#btnCompare-kpilevel').off('click').on('click', function () {
@@ -930,15 +1039,14 @@ export default {
     deleteActionPlan(id) {
       let seft = this
       if (Number(id) > 0) {
-        $.post('https://localhost:44309/ChartPeriod/Delete', { id: id }, function (res) {
+        HTTP.get(`ChartPeriod/Delete/${id}`).then(res =>{
           if (res) {
             var commentid = Number($('.commentid').text());
             var dataid = Number($('.dataid').text());
             seft.LoadDataActionPlan(dataid, commentid);
             success("Successfully!");
           }
-        });
-
+        })
       }
     },
     approval(id) {
@@ -976,12 +1084,6 @@ export default {
         // chartperiodController.resetForm();
       })
     },
-    btnSaveActionPlan(){
-      let seft = this
-       $('.btnSaveActionPlan').unbind('click').on('click', function () {
-            seft.addActionPlan();
-        });
-    },
     validate(){
        var isValid = true;
       if ($('.Title').val().trim() === "") {
@@ -991,13 +1093,7 @@ export default {
       else {
         $('.Title').css('border-color', 'lightgrey');
       }
-      //if ($('.Description').val().trim() === "") {
-      //    $('.Description').css('border-color', 'Red');
-      //    isValid = false;
-      //}
-      //else {
-      //    $('.Description').css('border-color', 'lightgrey');
-      //}
+      
       if ($('.DueDate').val().trim() === "") {
         $('.DueDate').css('border-color', 'Red');
         isValid = false;
@@ -1027,9 +1123,9 @@ export default {
         var Description = phrases.join(';');
         var Tag = $('#Tag').val().trim();
         if (Tag !== null || Tag !== "" || Tag !== undefined)
-          Tag = Tag.replace(/\@@/g, '').replace(/\ /g, ',');
+          Tag = Tag.replace(/\@/g, '').replace(/\ /g, ',');
 
-        var Auditor = $('#Auditor').val().replace("@@","").trim();
+        var Auditor = $('#Auditor').val().replace("@","").trim();
         var obj = {
           // ID: id,
           UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
@@ -1048,22 +1144,15 @@ export default {
           KPILevelCode: seft.$route.params.kpilevelcode,
         };
         
-        $.post('https://localhost:44309/ChartPeriod/Add', { obj: obj }, function (res) {
+        HTTP.post('ChartPeriod/Add', obj ).then(res=>{
+        console.log("res");
         console.log(res);
-        if (res.status === true && res.isSendmail === true) {
+        if (res.data.status === true ) {
           var commentid = Number($('.commentid').text());
           var dataid = Number($('.dataid').text());
           seft.LoadDataActionPlan(dataid, commentid);
           // chartperiodController.resetForm();
           activaTab('pills-home');
-        }
-        else if (res.status === true && res.isSendmail === false) {
-          var commentid = Number($('.commentid').text());
-          var dataid = Number($('.dataid').text());
-          seft.LoadDataActionPlan(dataid, commentid);
-          // chartperiodController.resetForm();
-          activaTab('pills-home');
-          console.log("Can not send email")
         }
         else {
           if (res.message !== "") {
@@ -1076,18 +1165,15 @@ export default {
             error( "Failed");
           }
         }
-      });
+        });
        $("#modal-group-comment-data").on("shown.bs.modal", function (){
             activaTab('pills-home');
         });
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this
-     HTTP.post("ChartPeriod/getall",{
-       DataID: dataid,
-       CommentID: commentid,
-       UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-     }).then(res => {
+     HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
+     .then(res => {
        console.log(res)
       //  var res = res.data;
        if (res.data.status) {
@@ -1104,7 +1190,7 @@ export default {
                 {
                     html += '<tr data-id="' + item.ID + '">';
                     html += '<td>' + (i + 1) + '</td>';
-                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="https://localhost:44309/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate/" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
                     html += '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'" data-userid ="'+ item.CreatedBy +'" > ' + item.Description + '</div> ';
                     html += '</td>';
                     html += '<td>';
@@ -1232,10 +1318,18 @@ export default {
                     html += '</tr>';
                 }
             });
-
+            $('#datepicker').datepicker({
+              autoclose: true, 
+              uiLibrary: 'bootstrap4',
+              format: 'mm-dd-yyyy'
+            });
+            
             $('.tblActionPlan').empty();
+
             $('.tblActionPlan').append(html);
-            seft.btnSaveActionPlan();
+            $('.btnSaveActionPlan').unbind('click').on('click', function () {
+                seft.addActionPlan();
+            });
 
             $('.updateStatus').unbind('click').on('click', function () {
               var id = $(this).closest("tr").data('id');
@@ -1253,6 +1347,8 @@ export default {
             });
 
             $('#modal-group-comment-data2 .datepickerEdit').datepicker({
+              autoclose: true, 
+              uiLibrary: 'bootstrap4',
               dateFormat: "mm-dd-yy"
             });
             $('#modal-group-comment-data2 .datepickerEdit').off('change').on('change', function () {
@@ -1312,7 +1408,7 @@ export default {
               placement: "right",
               type: "text",
               // pk: $(this).data("item-id"),
-              url: 'https://localhost:44309/ChartPeriod/UpdateSheduleDate/' + $(this).params,
+              url: 'http://10.4.4.224:91/ChartPeriod/UpdateSheduleDate/' + $(this).params,
               params: function(params) {
                          var data = {};
                          data['name'] = params.name;
@@ -1395,15 +1491,16 @@ export default {
       });
     },
     loadDataComment() {
-      let seft = this 
+      let seft = this
+      
       $.ajax({
-          url: 'https://localhost:44309/ChartPeriod/LoadDataComment',
+          url: `http://10.4.4.224:98/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
           //url: '/ChartPeriod/GetAllComments',
           type: "GET",
-          data: {
-              dataid: Number($(".dataid").text()),
-              userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-          },
+          // data: {
+          //     dataid: Number($(".dataid").text()),
+          //     userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+          // },
           dataType: "json",
           success: function (res) {
             var data = res.data;
@@ -1418,22 +1515,22 @@ export default {
               var date = new Date(nowDate);
               var result = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
               html += ' <li class="media">';
-              html += '<a href="#" class="pull-left">';
+              html += '<a href="#" class="float-left">';
               html += '    <img src="src/img/user-icon.png" alt="" class="img-circle">';
               html += '</a>';
               html += '<div class="media-body">';
-              html += '<span class="text-muted pull-right">';
+              html += '<strong class="text-success">' + item.FullName + '</strong>';
+              html += '<span class="text-muted float-right">';
               html += '    <small class="text-muted">' + JSONDateWithTime(item.CommentedDate) + '</small>';
               html += '</span>';
-              html += '<strong class="text-success">' + item.FullName + '</strong>';
               if (item.Read) {
                   html += '<span class="label bg-green"> new</span>';
               }
               if (item.Task) {
-                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-xs btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
+                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-sm btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
               }
               else {
-                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" title="There are no task." data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-xs btn-success text-bold btnTask tooltip-ui"><i class="fa fa-tags"></i> Task</a> </p>';
+                  html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" title="There are no task." data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-sm btn-success text-bold btnTask tooltip-ui"><i class="fa fa-tags"></i> Task</a> </p>';
               }
               html += '<p>';
               html += item.CommentMsg;
@@ -1465,8 +1562,37 @@ export default {
             fullname: item.FullName
           });
         });
-        
-        console.log(userid);
+
+        $('#Tag').suggest('@', {
+            data: users,
+            map: function (user) {
+              return {
+                value: user.username,
+                text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
+              }
+            }
+
+        })
+        $('#Auditor').suggest('@', {
+            data: users,
+            map: function (user) {
+              return {
+                value: user.username,
+                text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
+              }
+            }
+
+        })
+        console.log("users");
+        $('#comment').suggest('@', {
+            data: users,
+            map: function (user) {
+                return {
+                  value: user.username+'\f',
+                  text: '<strong>' + user.username + '  </strong> <small>' + user.fullname + '</small>'
+                }
+            }
+        })
         console.log(users);
         console.log(result);
       })
@@ -1481,12 +1607,12 @@ export default {
 
       var list = [];
       for (let item of CommentMsg.split(" ")) {
-        let x = item.match(/[@@].+[\f]/g);
+        let x = item.match(/[@].+[\f]/g);
         if (x !== null)
           list.push(
             x
               .toString()
-              .replace("@@", " ")
+              .replace("@", " ")
               .trim()
           );
       }
@@ -1503,16 +1629,18 @@ export default {
         CategoryID: Number(this.$route.params.catid)
       };
       
-       HTTP.post("ChartPeriod/AddComment",mObj)
+       HTTP.post("http://10.4.4.224:98/ChartPeriod/AddComment",mObj)
         .then(data => {
           
           var res = data.data;
-          // console.log(res.status);
+          console.log(res);
 
           if (res.status == true && res.isSendmail == true) {
             $("#comment").val("");
             success("success!");
             this.loadDataComment();
+            this.addNotification();
+            this.addNotificationComment();
           }
            else if (res.status === true && res.isSendmail === false) {
             $("#comment").val("");
@@ -1524,11 +1652,6 @@ export default {
             console.log("Loi roi");
           }
         })
-        .catch(error => {
-          // console.log(error)
-          //error("error!");
-          console.log("Loi comment");
-        });
     },
     opencomment(e) {
       console.log(e);

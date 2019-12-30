@@ -10,6 +10,7 @@
           <button type="button" class="btn btn-info btn-sm fancy-expand">
             <i class="fa fa-expand"></i> Expand
           </button>
+          
         </div>
       </div>
 </template>

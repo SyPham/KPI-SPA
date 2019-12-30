@@ -48,56 +48,54 @@
               listdata.total
             }}</span>
           </a>
-          <div  class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span class="dropdown-item dropdown-header"
-              >{{ listdata.total }} Notifications</span
-              >
-            <div class="dropdown-divider"></div>
+          <div style="overflow: scroll;"  class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <span class="dropdown-item dropdown-header">{{ listdata.total }} Notifications</span>
+            <div  class="dropdown-divider"></div>
 
-            <div  v-for="(item, key, index) in data" :key="index">
+            <div   v-for="(item, key, index) in data" :key="index">
 
             <a v-if="item.Action == 'Comment' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h4><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fa fa-comment fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h4>
+              <h4><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fa fa-comment fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h4>
               <p>The account {{item.SenderID === sessionUserID ? "you" : item.Sender}} mentioned {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} in {{item.Title}}</p>
               <p>{{item.Content}}</p>
             </a>
 
             <a v-if="item.Action == 'Task' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>The account {{item.Sender}} assigned  {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} the task {{item.TaskName}} </p>
               <p>{{item.Title}}</p>
               <p>KPI - {{item.KPIName}}</p>
             </a>
 
             <a v-if="item.Action == 'Done' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
               <p>{{item.Title}}</p>
               <p>KPI - {{item.KPIName}}</p>
             </a>
 
             <a v-if="item.Action == 'Approval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-             <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+            <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
             </a>
 
             <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
             </a>
 
             <a v-if="item.Action == 'LateOnTask' " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>Some of task are overdue. Please check your email</p>
             </a>
 
             <a v-if="item.Action == 'LateOnUploadData' " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>There are some KPIs that haven't uploaded their data on time. Please check your email</p>
             </a>
 
             <a v-if="item.Action == 'Upload' || item.SenderID === userid || item.RecipientID === userid || item.UserID === userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="pull-right"><i class="fa fa-clock-o"></i> </small></h6>
+              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
               <p>{{item.SenderID == userid ? "You" : "The account " + item.Sender}} has uploaded KPIs data successfully!</p>
             </a>
 
@@ -108,17 +106,17 @@
             <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            User
+        <li  class="nav-item dropdown">
+          <a  class="nav-link" data-toggle="dropdown" href="#">
+            {{username}}
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-envelope mr-2"></i> Change Password
+            <a  style="cursor:pointer" data-toggle="modal" data-target="#modal-group-change-password" class="dropdown-item">
+              <i class="fas fa-key"></i> Change Password
             </a>
             <div class="dropdown-divider"></div>
             <a href="#" @click.prevent="logout" class="dropdown-item">
-              <i class="fas fa-users mr-2"></i> Logout
+              <i class="fas fa-sign-out-alt"></i> Logout
             </a>
             <div class="dropdown-divider"></div>
           </div>
@@ -136,6 +134,43 @@
       </ul>
     </nav>
     <!-- /.navbar -->
+    <!-- @* ChangePassword *@ -->
+    <div class="modal fade" id="modal-group-change-password" style="display: none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change password </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="box-body" id="ChangePassword">
+                            <div class="form-group">
+                                <label for="username">Username </label>
+                                <input type="text"  v-model="username" class="form-control username disabled" placeholder="username" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password </label>
+                                <input type="password" v-model="password" class="form-control password" placeholder="Enter password">
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button id="btnChangePassword" @click="changepassword" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
   </div>
 </template>
 
@@ -149,6 +184,9 @@ export default {
   data: function() {
     return {
       userid: 0,
+      username: null,
+      password : null,
+      time: 0,
       arrayID: [],
       data: [],
       listdata: [],
@@ -160,11 +198,11 @@ export default {
     };
   },
   created: function() {
+
     let seft = this;
+    seft.username  =  localStorage.getItem("User")
     seft.getAllNotifications();
     // Listen to score changes coming from SignalR events
-
-
     const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://10.4.4.224:98/henry-hub")
     .configureLogging(signalR.LogLevel.Information)
@@ -178,15 +216,96 @@ export default {
     seft.getAllNotifications();
     });
   },
-
-  computed: {
-    user: function() {
-      return this.$store.state.currentUser;
-    }
-  },
   methods: {
+    changepassword(){
+      // debugger
+      HTTP.post("https://localhost:44309/AdminUser/ChangePassword",{
+        id: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        username: this.username ,
+        password: this.password
+      }).then(r=>{
+        success("ChangePass successfully!");
+        $("#modal-group-change-password").modal("hide");
+      })
+    },
+    JSONDateWithTime(dateStr){
+      var d = new Date(dateStr);
+      var m, day;
+      m = d.getMonth() + 1;
+      if (m < 10)
+          month = '0' + m;
+      else
+          month = m;
+      if (d.getDate() < 10)
+          day = '0' + d.getDate();
+      else
+          day = d.getDate();
+
+      var year = d.getFullYear();
+      var formattedDate = day + "/" + month + "/" + year;
+      var hours = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
+      var minutes = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+      var seconds = d.getSeconds();
+      var formattedTime = hours + ":" + minutes;
+      formattedDate = formattedTime + " - " + formattedDate;
+
+      //Ngày giờ hiện tại
+      var dateObj = new Date();
+      var dayNow = dateObj.getDate();
+      var monthNow = dateObj.getMonth() + 1;
+      var yearNow = dateObj.getFullYear();
+      var hoursNow = dateObj.getHours();
+      var minutesNow = dateObj.getMinutes();
+      var secondsNow = dateObj.getSeconds();
+
+      dateObj = formattedDate;
+
+      if (hoursNow - hours === 0 && minutesNow - minutes === 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+          if (secondsNow - seconds === 0)
+              dateObj = "just recently";
+          else if (secondsNow - seconds === 1)
+              dateObj = secondsNow - seconds + " second ago";
+          else
+              dateObj = secondsNow - seconds + " seconds ago";
+      }
+
+      if (hoursNow - hours === 0 && minutesNow - minutes > 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+
+
+          if (minutesNow - minutes === 1)
+              dateObj = minutesNow - minutes + " minute ago";
+          else
+              dateObj = minutesNow - minutes + " minutes ago";
+      }
+
+      if (hoursNow - hours > 0 && yearNow - year === 0 && monthNow - month === 0 && dayNow - day === 0) {
+          if (hoursNow - hours === 1)
+              dateObj = hoursNow - hours + " hour ago";
+          else
+              dateObj = hoursNow - hours + " hours ago";
+      }
+
+      if (yearNow - year === 0 && monthNow - month === 0 && dayNow - day > 0 && dayNow - day <= 7) {
+          if (dayNow - day === 1)
+              dateObj = dayNow - day + " day ago";
+          else
+              dateObj = dayNow - day + " days ago";
+      }
+
+      if (yearNow - year === 0 && monthNow !== month) {
+          day = dayNow - day;
+          var month = monthNow - month;
+          day = month * 30 + day;
+          if (0 < day && day <= 7) {
+              dateObj = day + " days ago";
+          }
+
+      }
+
+      return dateObj;
+    },
     onScoreChanged({ user, message }) {
-      console.log(user);
+      //console.log(user);
     },
     changeLocale(locale) {
       i18n.locale = locale;
@@ -195,12 +314,11 @@ export default {
       let seft = this;
       HTTP.get("Home/GetNotifications").then(r => {
         seft.arrayID = r.data.arrayID;
-        console.log(seft.arrayID);
+        //console.log(seft.arrayID);
         seft.data = r.data.data;
-        console.log(seft.data);
         seft.listdata = r.data;
         seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-        console.log(seft.listdata);
+        // console.log(seft.listdata);
       });
     },
     logout: function() {

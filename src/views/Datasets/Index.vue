@@ -565,7 +565,7 @@ export default {
     },
     opencomment(e) {
       console.log(e);
-      if (e.toElement.classList[2] === "active-td2" && "active-td") {
+      if (e.toElement.classList[2] == "active-td" && "active-td2") {
         $("#modal-group-comment-data").modal("show");
         var id = e.toElement.dataset.id;
         // var kpiname = $(this).closest('tr').children('td:nth-child(3)').text();
@@ -1230,49 +1230,76 @@ export default {
     },
     LoadDataset() {
       let seft = this;
-      $.ajax({
-        url: `http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`,
-        type: "GET",
-        // data: {
-        //   kpilevelcode: seft.$route.params.kpilevelcode,
-        //   catid: seft.$route.params.catid,
-        //   period: seft.$route.params.period,
-        //   year: seft.$route.params.year,
-        //   start: seft.$route.params.start,
-        //   end: seft.$route.params.end
-        // },
-        dataType: "json",
-        success: function(response) {
-          seft.data = response;
-          seft.data2 = response[0].Datasets;
-          console.log(response);
-          //   console.log(seft.period);
-          //   console.log(seft.data2);
+      HTTP.get(`http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`)
+      .then(response => {
+        seft.data = response.data;
+        seft.data2 = response.data[0].Datasets;
+        seft.categoryname = response.data[0].CategoryName;
+        seft.kpiname = response.data[0].KPIName;
+        seft.KPILevelCode = response.data[0].KPILevelCode;
 
-          seft.categoryname = response[0].CategoryName;
-          seft.kpiname = response[0].KPIName;
-          seft.KPILevelCode = response[0].KPILevelCode;
-          console.log(seft.KPILevelCode);
+        seft.statusfavorite = response.data.statusfavorite;
+        seft.unit = response.data.Unit;
+        seft.datasets = response.data[0].Datasets;
+        //   console.log(seft.datasets)
+        seft.labels = response.data.labels;
+        seft.label = response.data.label;
+        seft.PIC = response.data.PIC;
+        seft.Owner = response.data.Owner;
+        seft.OwnerManagerment = response.data.OwnerManagerment;
+        seft.Sponsor = response.data.Sponsor;
+        seft.Participant = response.data.Participant;
+        seft.dataremarks = response.data.Dataremarks;
+        seft.targets = response.data.targets;
+        $("#editBugModal").modal("show");
+        $(".btnShowData").hide();
+        // console.log(seft.chart.data);
+        seft.LoadTitle();
+        console.log(response.data);
+      })
+      // $.ajax({
+      //   url: `http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`,
+      //   type: "GET",
+      //   // data: {
+      //   //   kpilevelcode: seft.$route.params.kpilevelcode,
+      //   //   catid: seft.$route.params.catid,
+      //   //   period: seft.$route.params.period,
+      //   //   year: seft.$route.params.year,
+      //   //   start: seft.$route.params.start,
+      //   //   end: seft.$route.params.end
+      //   // },
+      //   dataType: "json",
+      //   success: function(response) {
+      //     seft.data = response;
+      //     seft.data2 = response[0].Datasets;
+      //     console.log(response);
+      //     //   console.log(seft.period);
+      //     //   console.log(seft.data2);
 
-          seft.statusfavorite = response.statusfavorite;
-          seft.unit = response.Unit;
-          seft.datasets = response[0].Datasets;
-          //   console.log(seft.datasets)
-          seft.labels = response.labels;
-          seft.label = response.label;
-          seft.PIC = response.PIC;
-          seft.Owner = response.Owner;
-          seft.OwnerManagerment = response.OwnerManagerment;
-          seft.Sponsor = response.Sponsor;
-          seft.Participant = response.Participant;
-          seft.dataremarks = response.Dataremarks;
-          seft.targets = response.targets;
-          $("#editBugModal").modal("show");
-          $(".btnShowData").hide();
-          // console.log(seft.chart.data);
-          seft.LoadTitle();
-        }
-      });
+      //     seft.categoryname = response[0].CategoryName;
+      //     seft.kpiname = response[0].KPIName;
+      //     seft.KPILevelCode = response[0].KPILevelCode;
+      //     console.log(seft.KPILevelCode);
+
+      //     seft.statusfavorite = response.statusfavorite;
+      //     seft.unit = response.Unit;
+      //     seft.datasets = response[0].Datasets;
+      //     //   console.log(seft.datasets)
+      //     seft.labels = response.labels;
+      //     seft.label = response.label;
+      //     seft.PIC = response.PIC;
+      //     seft.Owner = response.Owner;
+      //     seft.OwnerManagerment = response.OwnerManagerment;
+      //     seft.Sponsor = response.Sponsor;
+      //     seft.Participant = response.Participant;
+      //     seft.dataremarks = response.Dataremarks;
+      //     seft.targets = response.targets;
+      //     $("#editBugModal").modal("show");
+      //     $(".btnShowData").hide();
+      //     // console.log(seft.chart.data);
+      //     seft.LoadTitle();
+      //   }
+      // });
     }
   }
 };

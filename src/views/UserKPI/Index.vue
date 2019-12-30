@@ -11,7 +11,10 @@
     <div class="col-md-4">
       <div class="card">
         <div class="card-header">
-          <hierarchy></hierarchy>
+          <hierarchy>
+
+          </hierarchy>
+         
         </div>
         <div class="card-body">
           <table
@@ -82,6 +85,7 @@ export default {
   created() {
     let self = this;
     self.initialTree();
+
   },
   mounted() {
     let self = this;
@@ -111,10 +115,10 @@ export default {
         self.ocID = Number(data.node.key);
         console.log(self.level);
         console.log(self.ocID);
-
         //self.getAllCategories();
         //self.getAllKPILevelByCategory(true, 0);
       });
+      
       $(".fancy-collapse")
         .off("click")
         .on("click", function() {

@@ -1,6 +1,6 @@
 //Common
 //"use strict";
-
+ 
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -255,8 +255,7 @@ function convertDateJson(d) {
     return mm + '/' + dd + '/' + yyyy;
 }
 function JSONDateWithTime(dateStr) {
-    jsonDate = dateStr;
-    var d = new Date(parseInt(jsonDate.substr(6)));
+    var d = new Date(dateStr);
     var m, day;
     m = d.getMonth() + 1;
     if (m < 10)

@@ -1,9 +1,12 @@
 var AuthPlugin = {
 
-    setToken: function (token, expiration,Menus) {
+    setToken: function (token, expiration,Menus,user) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('authTokenExpiration', expiration);
         localStorage.setItem('Menus', Menus);
+        localStorage.setItem('User', user);
+        //localStorage.setItem('Pass', pass);
+
         // localStorage.setItem('Username', Username);
     },
 
@@ -11,6 +14,9 @@ var AuthPlugin = {
         localStorage.removeItem('authToken');
         localStorage.removeItem('authTokenExpiration');
         localStorage.removeItem('Menus');
+        localStorage.removeItem('User');
+        //localStorage.removeItem('Pass');
+
         // localStorage.removeItem('Username');
     },
 
@@ -18,8 +24,10 @@ var AuthPlugin = {
         var token = localStorage.getItem('authToken');
         var expiration = localStorage.getItem('authTokenExpiration');
         var Menus = localStorage.getItem('Menus');
-        // var Username = localStorage.getItem('Username');
-        if (!token || !expiration || !Menus )
+        var User = localStorage.getItem('User');
+        // var User = localStorage.getItem('Pass');
+
+        if (!token || !expiration || !Menus || !User )
             return null;
 
         if (Date.now() > parseInt(expiration)) {

@@ -4,6 +4,7 @@ import Router from "./routes";
 import i18n from './lang/i18n'
 import VueResource from 'vue-resource';
 import Auth from './plugins/Auth.js';
+import store from './store';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
@@ -74,7 +75,7 @@ new Vue({
   // el: "#app",
   router: Router,
   i18n,
-  // store,
+  store: store,
   template: "<App/>",
   components: { App },
   render: h => h(App)

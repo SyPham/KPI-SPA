@@ -731,7 +731,6 @@ export default {
             // ...
           }
         });
-
         $(".fancy-collapse")
           .off("click")
           .on("click", function() {

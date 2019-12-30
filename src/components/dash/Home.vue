@@ -41,11 +41,14 @@
 <script>
 import { HTTP } from "../../http-constants";
 import VueJwtDecode from "vue-jwt-decode";
+import i18n from "../../lang/i18n";
+import signal from "../../hub";
 export default {
   name: "home",
  data() {
     return {
      menus: [],
+     loggedIn: this.$auth.loggedIn(),
      arrayID: [],
      data: [],
      listdata: [],
@@ -56,9 +59,14 @@ export default {
   created(){
     let seft = this;
     seft.loadmenu();
-    
-     seft.getAllNotifications();
+    seft.getAllNotifications();
   }, 
+   computed: {
+    user: function() {
+      return this.$store.state.currentUser;
+    }
+    
+  },
 
   methods: {
     getAllNotifications(){
@@ -66,7 +74,7 @@ export default {
       HTTP.get("Home/GetNotifications")
       .then(r=>{
         seft.arrayID = r.data.arrayID
-        console.log(seft.arrayID)
+        //console.log(seft.arrayID)
         seft.data = r.data.data
         console.log(seft.data)
         seft.listdata = r.data

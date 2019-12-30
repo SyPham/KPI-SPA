@@ -79,22 +79,22 @@ export default {
       user: {
         username: '',
         password: ''
-      }
+      },
+      loggedIn: this.$auth.loggedIn(),
     }
   },
   created(){
-
+    console.log(this.loggedIn)
   },
   methods: {
     
     login(){
-      this.$http.post("http://10.4.4.224:98/api/auth/login", this.user , this.user.username)
+      this.$http.post("http://10.4.4.224:98/api/auth/login", this.user )
         .then(function(res) {
           console.log(res)
-           console.log(this.user.username)
           // localStorage.setItem('menus', res.user.menus);
           // console.log( localStorage.getItem('menus'));
-          this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.Menus  ); // + 4 hours
+          this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.Menus ,res.body.user.User.Alias); // + 4 hours
           this.$router.push("/home");
           const Toast = Swal.mixin({
               toast: true,
