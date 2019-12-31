@@ -184,7 +184,6 @@ export default {
     searchname: function(newOld, oldVal) {
       console.log(newOld)
       console.log(oldVal)
-
       this.name = newOld;
       this.LoadData();
     }

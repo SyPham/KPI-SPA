@@ -798,21 +798,21 @@ export default {
 
   },
   mounted() {
-    $('#datepicker').datepicker({
-      autoclose: true, 
-      uiLibrary: 'bootstrap4',
-      format: 'mm-dd-yyyy'
-    });
+    // $('#datepicker').datepicker({
+    //   autoclose: true, 
+    //   uiLibrary: 'bootstrap4',
+    //   format: 'mm-dd-yyyy'
+    // });
     let seft = this
     // seft.createChart("planet-chart");
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
   },
   created() {
-    $('#datepicker').datepicker({
-      autoclose: true, 
-      uiLibrary: 'bootstrap4',
-      format: 'mm-dd-yyyy'
-    });
+    // $('#datepicker').datepicker({
+    //   autoclose: true, 
+    //   uiLibrary: 'bootstrap4',
+    //   format: 'mm-dd-yyyy'
+    // });
     let seft = this;
     seft.period = seft.$route.params.period;
     seft.start = seft.$route.params.start;
@@ -1019,17 +1019,6 @@ export default {
         // chartperiodController.registerEvent();
         seft.clickcompare();
         seft.btnCompare();
-        //Gửi chuỗi ở trên lên server
-        // $('#btnCompare-kpilevel').off('click').on('click', function () {
-        //   // debugger
-        //     console.log('aaa')
-        //     var value = $('.arrcompare').text().toString();
-        //     var obj = value.substring(value.length - 1, 0);
-        //     var kpilevelcode = seft.$route.params.kpilevelcode;
-        //     var period = seft.$route.params.period;
-        //     obj = obj + '-' + kpilevelcode + ',' + period;
-        //     seft.$router.push(`/compare/${obj}`) ;
-        // })
       })
      
     },
@@ -1057,8 +1046,8 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       }
-      var promise = $post("https://localhost:44309/ChartPeriod/Approval", JSON.stringify(data));
-      promise.then(res => {
+      HTTP.post("ChartPeriod/Approval",JSON.stringify(data))
+      .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
@@ -1074,15 +1063,21 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       };
-
-      let promise = $post("https://localhost:44309/ChartPeriod/Done", JSON.stringify(data))
-      promise.then(data => {
+      HTTP.post("ChartPeriod/Done",JSON.stringify(data))
+      .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
         seft.LoadDataActionPlan(dataid, commentid);
-        // chartperiodController.resetForm();
       })
+      // let promise = HTTP.post("http://10.4.4.224:98/ChartPeriod/Done", JSON.stringify(data))
+      // promise.then(data => {
+      //   success("Successfully!")
+      //   var commentid = Number($('.commentid').text());
+      //   var dataid = Number($('.dataid').text());
+      //   seft.LoadDataActionPlan(dataid, commentid);
+      //   // chartperiodController.resetForm();
+      // })
     },
     validate(){
        var isValid = true;
@@ -1172,303 +1167,304 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this
-     HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
+      HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
      .then(res => {
        console.log(res)
       //  var res = res.data;
        if (res.data.status) {
-            var data = res.data.data;
-            console.log(data)
-            var html = '';
-            // debugger
-            $.each(data, function (i, item) {
-                $('.listTask .Approval').hide();
-                $('.listTask .Option').hide();
-                console.log(item)
+          var data = res.data.data;
+          console.log(data)
+          var html = '';
+          // debugger
+          $.each(data, function (i, item) {
+            $('.listTask .Approval').hide();
+            $('.listTask .Option').hide();
+            console.log(item)
 
-                if (item.CreatedBy  || item.Auditor )
+            if (item.CreatedBy  || item.Auditor )
+            {
+                html += '<tr data-id="' + item.ID + '">';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                html += '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'" data-userid ="'+ item.CreatedBy +'" > ' + item.Description + '</div> ';
+                html += '</td>';
+                html += '<td>';
+
+                if (item.Tag !== null)
                 {
-                    html += '<tr data-id="' + item.ID + '">';
-                    html += '<td>' + (i + 1) + '</td>';
-                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate/" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                    html += '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'" data-userid ="'+ item.CreatedBy +'" > ' + item.Description + '</div> ';
-                    html += '</td>';
-                    html += '<td>';
+                    var array2 = item.Tag.split(',');
 
-                    if (item.Tag !== null)
+                    $.each(array2, function (i, item2)
                     {
-                        var array2 = item.Tag.split(',');
+                        if (item2.length > 1) {
+                            html += '<span class="badge bg-navy text-bold ">' + item2 + '</span> ';
+                        }
+                    });
+                }
 
-                        $.each(array2, function (i, item2)
-                        {
-                            if (item2.length > 1) {
-                                html += '<span class="badge bg-navy text-bold ">' + item2 + '</span> ';
-                            }
-                        });
-                    }
+                html += '</td>';
+                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
+                html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
+                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
+                html += '<td > ';
+                html += '<div class="pretty p-icon p-round p-pulse">';
 
-                    html += '</td>';
-                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
-                    html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
-                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
-                    html += '<td > ';
-                    html += '<div class="pretty p-icon p-round p-pulse">';
-
-                    if (item.Status)
-                    {
-                        html += '<input type="checkbox" class="updateStatus" checked  />';
-                        html += '<div class="state p-success">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label>Finished</label>';
-                    }
-                    else
-                    {
-                        html += '<input type="checkbox" class="updateStatus" />';
-                        html += '<div class="state p-danger">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label>Not finished</label>';
-                    }
-
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</td > ';
-
-                    $('.listTask .Approval').show();
-                    $('.listTask .Option').show();
-                    html += '<td> ';
-
-                    if (item.ApprovedStatus)
-                    {
-                        html += '<div class="pretty p-icon p-round p-jelly">';
-                        html += '<input type="checkbox" checked class="btnApproveActionPlan" />';
-                        html += '<div class="state p-success">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label class="black">Approved</label>';
-                        html += '</div>';
-                        html += '</div >';
-                    }
-                    else
-                    {
-                        html += '<div class="pretty p-icon p-round p-jelly">';
-                        html += '<input type="checkbox" class="btnApproveActionPlan" />';
-                        html += '<div class="state p-danger">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label class="black">Not approved</label>';
-                        html += '</div>';
-                        html += '</div >';
-                    }
-
-                    html += '</td > ';
-                    html += '<td>';
-                    html += '<div class="btn-group">';
-                    html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash-alt"></i></button>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</td>';
-                    html += '</tr>';
+                if (item.Status)
+                {
+                    html += '<input type="checkbox" class="updateStatus" checked  />';
+                    html += '<div class="state p-success">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label>Finished</label>';
                 }
                 else
                 {
-                    if(item.ListUserIDs[0] !== -1)
-                    
-                        html += '<tr data-id="' + item.ID + '">';
-                    else
-                        html += '<tr style="pointer-events: none;" data-id="' + item.ID + '">';
-                    console.log(item.ListUserIDs)
-                    html += '<td>' + (i + 1) + '</td>';
-                    html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                    html += '<td><div class="DescriptionEdit" data-userid ="'+ item.CreatedBy +'" style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
-                    html += '</td>';
-                    html += '<td>';
-
-                    if (item.Tag !== null)
-                    {
-                        var array2 = item.Tag.split(',');
-                        $.each(array2, function (i, item2) {
-                            if (item2.length > 1) {
-                                html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
-                            }
-                        });
-                    }
-
-                    html += '</td>';
-                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
-                    html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
-                    html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
-                    html += '<td > ';
-                    html += '<div class="pretty p-icon p-round p-pulse">';
-
-                    if (item.Status)
-                    {
-                        html += '<input type="checkbox" class="updateStatus" checked />';
-                        html += '<div class="state p-success">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label>Finished</label>';
-                    }
-                    else
-                    {
-                        html += '<input type="checkbox" class="updateStatus" />';
-                        html += '<div class="state p-danger">';
-                        html += '<i class="icon fa fa-check"></i>';
-                        html += '<label>Not finished</label>';
-                    }
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</td > ';
-                    html += '</tr>';
+                    html += '<input type="checkbox" class="updateStatus" />';
+                    html += '<div class="state p-danger">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label>Not finished</label>';
                 }
-            });
-            $('#datepicker').datepicker({
-              autoclose: true, 
-              uiLibrary: 'bootstrap4',
-              format: 'mm-dd-yyyy'
-            });
-            
-            $('.tblActionPlan').empty();
 
-            $('.tblActionPlan').append(html);
-            $('.btnSaveActionPlan').unbind('click').on('click', function () {
-                seft.addActionPlan();
-            });
+                html += '</div>';
+                html += '</div>';
+                html += '</td > ';
 
-            $('.updateStatus').unbind('click').on('click', function () {
-              var id = $(this).closest("tr").data('id');
-              seft.done(id);
-            });
+                $('.listTask .Approval').show();
+                $('.listTask .Option').show();
+                html += '<td> ';
 
-            $('.btnApproveActionPlan').off('click').on('click', function () {
-              var id = $(this).closest("tr").data('id');
-              seft.approval(id);
-            });
+                if (item.ApprovedStatus)
+                {
+                    html += '<div class="pretty p-icon p-round p-jelly">';
+                    html += '<input type="checkbox" checked class="btnApproveActionPlan" />';
+                    html += '<div class="state p-success">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label class="black">Approved</label>';
+                    html += '</div>';
+                    html += '</div >';
+                }
+                else
+                {
+                    html += '<div class="pretty p-icon p-round p-jelly">';
+                    html += '<input type="checkbox" class="btnApproveActionPlan" />';
+                    html += '<div class="state p-danger">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label class="black">Not approved</label>';
+                    html += '</div>';
+                    html += '</div >';
+                }
 
-            $('.btnDeleteActionPlan').off('click').on('click', function () {
-              var id = $(this).closest("tr").data('id');
-              seft.deleteActionPlan(id);
-            });
+                html += '</td > ';
+                html += '<td>';
+                html += '<div class="btn-group">';
+                html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash-alt"></i></button>';
+                html += '</div>';
+                html += '</div>';
+                html += '</td>';
+                html += '</tr>';
+            }
+            else
+            {
+                if(item.ListUserIDs[0] !== -1)
+                
+                    html += '<tr data-id="' + item.ID + '">';
+                else
+                    html += '<tr style="pointer-events: none;" data-id="' + item.ID + '">';
+                console.log(item.ListUserIDs)
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:91/ChartPeriod/UpdateSheduleDate/" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
+                html += '<td><div class="DescriptionEdit" data-userid ="'+ item.CreatedBy +'" style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
+                html += '</td>';
+                html += '<td>';
 
-            $('#modal-group-comment-data2 .datepickerEdit').datepicker({
-              autoclose: true, 
-              uiLibrary: 'bootstrap4',
-              dateFormat: "mm-dd-yy"
-            });
-            $('#modal-group-comment-data2 .datepickerEdit').off('change').on('change', function () {
-              var id = $(this).data('id'),
-                  value = $(this).val();
+                if (item.Tag !== null)
+                {
+                    var array2 = item.Tag.split(',');
+                    $.each(array2, function (i, item2) {
+                        if (item2.length > 1) {
+                            html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
+                        }
+                    });
+                }
 
-                $.ajax({
-                  type: "Post",
-                  url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
-                  data: {
-                    name:"DeadLine",
-                    value:value,
-                    pk:id,
-                    userid : VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-                  },
-                  success: function(res)
-                  {
-                    console.log(res);
-                    success('Successfully!')
-                    var commentid = Number($('.commentid').text()),
-                    dataid = Number($('.dataid').text());
+                html += '</td>';
+                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
+                html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
+                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
+                html += '<td > ';
+                html += '<div class="pretty p-icon p-round p-pulse">';
 
-                    seft.LoadDataActionPlan(dataid, commentid);
-                  },
-                  error: function (error) {
-                    console.log(error)
-                  }
-              });
+                if (item.Status)
+                {
+                    html += '<input type="checkbox" class="updateStatus" checked />';
+                    html += '<div class="state p-success">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label>Finished</label>';
+                }
+                else
+                {
+                    html += '<input type="checkbox" class="updateStatus" />';
+                    html += '<div class="state p-danger">';
+                    html += '<i class="icon fa fa-check"></i>';
+                    html += '<label>Not finished</label>';
+                }
+                html += '</div>';
+                html += '</div>';
+                html += '</td > ';
+                html += '</tr>';
+              }
+          });
+          $('#datepicker').datepicker({
+            autoclose: true, 
+            uiLibrary: 'bootstrap4',
+            format: 'mm-dd-yyyy'
+          });
+          
+          $('.tblActionPlan').empty();
 
-            });
-            $.fn.editable.defaults.mode = 'inline';
+          $('.tblActionPlan').append(html);
 
-            $('#modal-group-comment-data2 input[name=UpdateSheduleDate]').off('change').on('change', function () {
-              var id = $(this).data('id'),
-                  value = $(this).val(),
-                  userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-                  name = $(this).attr("name");
+          $('.btnSaveActionPlan').unbind('click').on('click', function () {
+            seft.addActionPlan();
+          });
+
+          $('.updateStatus').unbind('click').on('click', function () {
+            var id = $(this).closest("tr").data('id');
+            seft.done(id);
+          });
+
+          $('.btnApproveActionPlan').off('click').on('click', function () {
+            var id = $(this).closest("tr").data('id');
+            seft.approval(id);
+          });
+
+          $('.btnDeleteActionPlan').off('click').on('click', function () {
+            var id = $(this).closest("tr").data('id');
+            seft.deleteActionPlan(id);
+          });
+
+          $('#modal-group-comment-data2 .datepickerEdit').datepicker({
+            autoclose: true, 
+            uiLibrary: 'bootstrap4',
+            dateFormat: "mm-dd-yy"
+          });
+          $('#modal-group-comment-data2 .datepickerEdit').off('change').on('change', function () {
+            var id = $(this).data('id'),
+                value = $(this).val();
+
               $.ajax({
                 type: "Post",
-                url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
-                data:
-                {
-                  name: name, value: value, pk: id, userid: userid
+                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+                data: {
+                  name:"DeadLine",
+                  value:value,
+                  pk:id,
+                  userid : VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
                 },
-                success: function (res) {
+                success: function(res)
+                {
+                  console.log(res);
                   success('Successfully!')
-                  var commentid = Number($('.commentid').text());
-
-                  var dataid = Number($('.dataid').text());
+                  var commentid = Number($('.commentid').text()),
+                  dataid = Number($('.dataid').text());
 
                   seft.LoadDataActionPlan(dataid, commentid);
+                },
+                error: function (error) {
+                  console.log(error)
                 }
-              });
             });
 
-            $('#modal-group-comment-data2 .TitleEdit').editable({
-              placement: "right",
-              type: "text",
-              // pk: $(this).data("item-id"),
-              url: 'http://10.4.4.224:91/ChartPeriod/UpdateSheduleDate/' + $(this).params,
-              params: function(params) {
-                         var data = {};
-                         data['name'] = params.name;
-                         data['value'] = params.value;
-                         data['pk'] = params.pk;
-                         data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-                        //  abc=params; 
-                         data.item = { value: data.value,}
-                         console.log(data)
-                return data;
+          });
+          $.fn.editable.defaults.mode = 'inline';
+
+          $('#modal-group-comment-data2 input[name=UpdateSheduleDate]').off('change').on('change', function () {
+            var id = $(this).data('id'),
+              value = $(this).val(),
+              userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+              name = $(this).attr("name");
+            $.ajax({
+              type: "Post",
+              url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+              data:
+              {
+                name: name, value: value, pk: id, userid: userid
               },
-              display: function (value, response) {
-                if (response) {
-                var commentid = Number($('.commentid').text()),
-                  dataid = Number($('.dataid').text());
+              success: function (res) {
+                success('Successfully!')
+                var commentid = Number($('.commentid').text());
+
+                var dataid = Number($('.dataid').text());
+
                 seft.LoadDataActionPlan(dataid, commentid);
-                $(this).attr("data-value", value);
-                
-              }
-              },
-              ajaxOptions: {
-                type: "POST",
-                dataType: "json"
               }
             });
+          });
 
-            $('#modal-group-comment-data2 .DescriptionEdit').editable({
-                    type: "text",
-                    //pk: $(this).data("item-id"),
-                    url: 'https://localhost:44309/ChartPeriod/UpdateSheduleDate/' + $(this).params,
-                    params: function (params) {
-                      // debugger
-                         var data = {};
-                         data['name'] = params.name;
-                         data['value'] = params.value;
-                         data['pk'] = params.pk;
-                         data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-                        //  abc=params; 
-                         data.item = { value: data.value,}
-                    console.log(data)
-                        return data;
-                        
-                    },
-                    display: function (value, response) {
-                        if (response) {
-                            success('Successfully!')
-                            var commentid = Number($('.commentid').text()),
-                            dataid = Number($('.dataid').text());
+          $('#modal-group-comment-data2 .TitleEdit').editable({
+            placement: "right",
+            type: "text",
+            // pk: $(this).data("item-id"),
+            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            params: function(params) {
+              var data = {};
+              data['name'] = params.name;
+              data['value'] = params.value;
+              data['pk'] = params.pk;
+              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+            //  abc=params; 
+              data.item = { value: data.value,}
+              console.log(data)
+              return data;
+            },
+            display: function (value, response) {
+              if (response) {
+              var commentid = Number($('.commentid').text()),
+                dataid = Number($('.dataid').text());
+              seft.LoadDataActionPlan(dataid, commentid);
+              $(this).attr("data-value", value);
+              
+            }
+            },
+            ajaxOptions: {
+              type: "POST",
+              // 'contentType': 'application/json',
+              dataType: "json"
+            }
+          });
 
-                            seft.LoadDataActionPlan(dataid, commentid);
+          $('#modal-group-comment-data2 .DescriptionEdit').editable({
+            type: "text",
+            //pk: $(this).data("item-id"),
+            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            params: function (params) {
+              // debugger
+              var data = {};
+              data['name'] = params.name;
+              data['value'] = params.value;
+              data['pk'] = params.pk;
+              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+            //  abc=params; 
+              data.item = { value: data.value,}
+              console.log(data)
+              return data;
+                
+            },
+            display: function (value, response) {
+            if (response) {
+              success('Successfully!')
+              var commentid = Number($('.commentid').text()),
+              dataid = Number($('.dataid').text());
 
-                            $(this).attr("data-value", value);
-                        }
-                    },
-                        ajaxOptions: {
-                            type: "POST",
-                            dataType: "json"
-                          }
-                });
-            
+              seft.LoadDataActionPlan(dataid, commentid);
+
+              $(this).attr("data-value", value);
+            }
+            },
+            ajaxOptions: {
+              type: "POST",
+              dataType: "json"
+            }
+          });
         }
      });
        
@@ -1492,7 +1488,6 @@ export default {
     },
     loadDataComment() {
       let seft = this
-      
       $.ajax({
           url: `http://10.4.4.224:98/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
           //url: '/ChartPeriod/GetAllComments',
@@ -1564,34 +1559,32 @@ export default {
         });
 
         $('#Tag').suggest('@', {
-            data: users,
-            map: function (user) {
-              return {
-                value: user.username,
-                text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
-              }
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username,
+              text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
             }
-
+          }
         })
         $('#Auditor').suggest('@', {
-            data: users,
-            map: function (user) {
-              return {
-                value: user.username,
-                text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
-              }
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username,
+              text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
             }
-
+          }
         })
         console.log("users");
         $('#comment').suggest('@', {
-            data: users,
-            map: function (user) {
-                return {
-                  value: user.username+'\f',
-                  text: '<strong>' + user.username + '  </strong> <small>' + user.fullname + '</small>'
-                }
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username+'\f',
+              text: '<strong>' + user.username + '  </strong> <small>' + user.fullname + '</small>'
             }
+          }
         })
         console.log(users);
         console.log(result);

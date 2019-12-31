@@ -53,6 +53,7 @@
 // import listoc from "../../components/adminOC/List"
 import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/adminOC/Modal";
+import { HTTP } from '../../http-constants';
 export default {
   name: "IndexKpi",
   data() {
@@ -156,7 +157,7 @@ export default {
                   //console.log(obj)
                   // Save data.input.val() or return false to keep the editor open
                   $.ajax({
-                    url: "https://localhost:44309/AdminLevel/Rename",
+                    url: "http://10.4.4.224:98/AdminLevel/Rename",
                     data: obj
                   }).done(function (result) {
                   }).fail(function (result) {
@@ -172,9 +173,7 @@ export default {
                 },
                 close: function (event, data) {
                   //console.log(data)
-
                   if (data.isNew) {
-
                     // Quick-enter: add new nodes until we hit [enter] on an empty title
                     $("#tree").trigger("nodeCommand", {
                       cmd: "addSibling",
@@ -546,26 +545,16 @@ export default {
             LevelNumber: obj.levelnumber,
             ParentID: obj.parentid
           };
-
-          $.ajax({
-            url: "https://localhost:44309/AdminLevel/Add",
-            data: JSON.stringify(mObj),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              if (result) {
+          HTTP.post("http://10.4.4.224:98/AdminLevel/Add",JSON.stringify(mObj))
+          .then(result=>{
+            if (result) {
                 success('Add successfully!');
                 levelAdminController.loadData();
               }
               else {
                 error('This code has already existed!');
               }
-            },
-            error: function (errormessage) {
-              console.log(errormessage);
-            }
-          });
+          })
         },
         addOrUpdateData() {
           var res = levelAdminController.validate();

@@ -97,9 +97,9 @@ export default {
       totalPage: 0,
       page: 1,
       skip: 0,
-      name: "",
-      pageSize: 5,
-      searchname: "",
+      name: " ",
+      pageSize: 10,
+      searchname: " ",
     };
   },
   components: {
@@ -120,28 +120,19 @@ export default {
   methods: {
     LoadData() {
       let seft = this;
-      HTTP.get(`Admincategory/LoadData/${seft.name}/${seft.page}/${seft.pageSize}`).then(res => {
-        //console.log(res.data);
+      HTTP.post(`Admincategory/LoadData2/${seft.page}/${seft.pageSize}/${seft.name}`)
+      .then(res => {
+        console.log(res);
         seft.skip = res.data.skip;
-        seft.totalPage = res.data.totalPage;
-        seft.page = res.data.CurrentPage;
+        seft.totalPage = res.data.pageCount;
+        seft.page = res.data.page;
         seft.data = res.data.data;
+        seft.pageSize = res.data.pageSize;
       });
     },
-
     changePage(pageNum) {
       this.LoadData( this.name, pageNum);
     },
-    // getAll() {
-    //   HTTP.get("Admincategory/getall")
-    //     .then(r => {
-    //       this.data = r.data;
-    //       console.log(r);
-    //     })
-    //     .catch(r => {
-    //       console.log(r);
-    //     });
-    // },
     remove(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {

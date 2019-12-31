@@ -311,20 +311,7 @@
                       </thead>
                       <tbody class="tblActionPlan">
                         <tr>
-                          <td>1.</td>
-                          <td>To do list</td>
-                          <td>
-                            <ul>
-                              <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                              <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                              <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                              <li>Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum.</li>
-                            </ul>
-                          </td>
-                          <td>swook, peter, henry</td>
-                          <td></td>
-                          <td></td>
-                          <td>20-10-2019</td>
+                          
                         </tr>
                       </tbody>
                     </table>
@@ -382,12 +369,7 @@
                     <!-- radio -->
                     <div class="form-group">
                       <label>Due date</label>
-                      <input
-                        autocomplete="off"
-                        type="text"
-                        class="form-control DueDate datepicker"
-                        name="datepicker"
-                      />
+                      <input id="datepicker" class="form-control DueDate datepicker" autocomplete="off"  width="276" />
                     </div>
                     <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
                   </div>
@@ -461,14 +443,14 @@ export default {
     deleteActionPlan(id) {
       let seft = this
       if (Number(id) > 0) {
-        $.post('https://localhost:44309/ChartPeriod/Delete', { id: id }, function (res) {
+        HTTP.get(`ChartPeriod/Delete/${id}`).then(res =>{
           if (res) {
             var commentid = Number($('.commentid').text());
             var dataid = Number($('.dataid').text());
             seft.LoadDataActionPlan(dataid, commentid);
             success("Successfully!");
           }
-        });
+        })
       }
     },  
     approval(id) {
@@ -479,8 +461,8 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       }
-      var promise = $post("https://localhost:44309/ChartPeriod/Approval", JSON.stringify(data));
-      promise.then(res => {
+      HTTP.post("ChartPeriod/Approval",JSON.stringify(data))
+      .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
@@ -497,13 +479,12 @@ export default {
         CategoryID: Number(seft.$route.params.catid)
       };
 
-      let promise = $post("https://localhost:44309/ChartPeriod/Done", JSON.stringify(data))
-      promise.then(data => {
+      HTTP.post("ChartPeriod/Done",JSON.stringify(data))
+      .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
         seft.LoadDataActionPlan(dataid, commentid);
-        // chartperiodController.resetForm();
       })
     }, 
     addcomment() {
@@ -574,19 +555,16 @@ export default {
         $(".RemarkChart").text(
           "Remark - " + this.categoryname + " - " + this.period
         );
-        // this.remark(id);
+        this.remark(id);
         //Khi tao ra table roi thi moi load data
         this.loadDataComment();
       }
     },
     remark(id) {
-      HTTP.post("ChartPeriod/Remark", {
-        dataid: id
-      }).then(r => {
+     HTTP.get(`ChartPeriod/Remark/${id}`).then(r => {
         console.log(r);
         let result = r.data.model;
-        var userid = VueJwtDecode.decode(localStorage.getItem("authToken"))
-          .nameid;
+        var userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
         var users = [],
           username,
           fullname;
@@ -597,7 +575,35 @@ export default {
             fullname: item.FullName
           });
         });
+        $('#Tag').suggest('@', {
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username,
+              text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
+            }
+          }
+        })
 
+        $('#Auditor').suggest('@', {
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username,
+              text: '<strong>'+user.username + '  </strong> <small>' + user.fullname + '</small>'
+            }
+          }
+        })
+        console.log("users");
+        $('#comment').suggest('@', {
+          data: users,
+          map: function (user) {
+            return {
+              value: user.username+'\f',
+              text: '<strong>' + user.username + '  </strong> <small>' + user.fullname + '</small>'
+            }
+          }
+        })
         console.log(userid);
         console.log(users);
         console.log(result);
@@ -605,11 +611,8 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this;
-      HTTP.post("ChartPeriod/getall", {
-        DataID: dataid,
-        CommentID: commentid,
-        UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-      }).then(res => {
+      HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
+      .then(res => {
         console.log(res);
         //  var res = res.data;
         if (res.data.status) {
@@ -626,7 +629,7 @@ export default {
               html += '<tr data-id="' + item.ID + '">';
               html += "<td>" + (i + 1) + "</td>";
               html +=
-                '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="https://localhost:44309/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="' +
+                '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="text" data-name="Title" data-pk="' +
                 item.ID +
                 '" data-value="' +
                 item.Title +
@@ -815,7 +818,14 @@ export default {
             }
           });
 
+          $('#datepicker').datepicker({
+            autoclose: true, 
+            uiLibrary: 'bootstrap4',
+            format: 'mm-dd-yyyy'
+          });
+
           $(".tblActionPlan").empty();
+
           $(".tblActionPlan").append(html);
           seft.btnSaveActionPlan();
 
@@ -849,15 +859,13 @@ export default {
           $("#modal-group-comment-data2 .datepickerEdit").datepicker({
             dateFormat: "mm-dd-yy"
           });
-          $("#modal-group-comment-data2 .datepickerEdit")
-            .off("change")
-            .on("change", function() {
+          $("#modal-group-comment-data2 .datepickerEdit").off("change").on("change", function() {
               var id = $(this).data("id"),
                 value = $(this).val();
 
               $.ajax({
                 type: "Post",
-                url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
+                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
                 data: {
                   name: "DeadLine",
                   value: value,
@@ -890,7 +898,7 @@ export default {
               name = $(this).attr("name");
               $.ajax({
                 type: "Post",
-                url: "https://localhost:44309/ChartPeriod/UpdateSheduleDate/",
+                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
                 data: {
                   name: name,
                   value: value,
@@ -913,8 +921,7 @@ export default {
                 type: "text",
                 // pk: $(this).data("item-id"),
                 url:
-              "https://localhost:44309/ChartPeriod/UpdateSheduleDate/" +
-              $(this).params,
+              "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" ,
             params: function(params) {
               var data = {};
               data["name"] = params.name;
@@ -946,8 +953,7 @@ export default {
             type: "text",
             //pk: $(this).data("item-id"),
             url:
-              "https://localhost:44309/ChartPeriod/UpdateSheduleDate/" +
-              $(this).params,
+              "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
             params: function(params) {
               // debugger
               var data = {};
@@ -1014,77 +1020,69 @@ export default {
     },
     addActionPlan(){
       // debugger
-        let seft = this
-        var res = seft.validate();
-        if (res === false) {
-          return false;
-        }
-        var KPILevelCodeAndPeriod = seft.$route.params.kpilevelcode + seft.$route.params.period;
-        var phrases = new Array();
+      let seft = this
+      var res = seft.validate();
+      if (res === false) {
+        return false;
+      }
+      var KPILevelCodeAndPeriod = seft.$route.params.kpilevelcode + seft.$route.params.period;
+      var phrases = new Array();
 
-        $('.Description').each(function () {
-          $(this).find('li').each(function () {
-            var current = $(this);
-            if (current.children().length > 0) { return true; }
-            phrases.push($(this).text().trim());
-          });
+      $('.Description').each(function () {
+        $(this).find('li').each(function () {
+          var current = $(this);
+          if (current.children().length > 0) { return true; }
+          phrases.push($(this).text().trim());
         });
-        var Description = phrases.join(';');
-        var Tag = $('#Tag').val().trim();
-        if (Tag !== null || Tag !== "" || Tag !== undefined)
-          Tag = Tag.replace(/\@@/g, '').replace(/\ /g, ',');
-
-        var Auditor = $('#Auditor').val().replace("@@","").trim();
-        var obj = {
-          // ID: id,
-          UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
-          DataID: Number($('.dataid').text()),
-          CommentID: Number($('.commentid').text()),
-          Title: $('.addTask .Title').val(),
-          Tag: Tag,
-          KPILevelCodeAndPeriod: KPILevelCodeAndPeriod,
-          Description: Description,
-          Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
-          SubmitDate: convertDate(new Date),
-          Link: window.location.href,
-          Subject: $('.ActionPlanChart').text(),
-          Auditor: Auditor,
-          CategoryID: Number(seft.$route.params.catid),
-          KPILevelCode: seft.KPILevelCode,
-        };
-        
-        $.post('https://localhost:44309/ChartPeriod/Add', { obj: obj }, function (res) {
-        console.log(res);
-        if (res.status === true && res.isSendmail === true) {
-          var commentid = Number($('.commentid').text());
-          var dataid = Number($('.dataid').text());
-          seft.LoadDataActionPlan(dataid, commentid);
-          // chartperiodController.resetForm();
-          activaTab('pills-home');
-        }
-        else if (res.status === true && res.isSendmail === false) {
-          var commentid = Number($('.commentid').text());
-          var dataid = Number($('.dataid').text());
-          seft.LoadDataActionPlan(dataid, commentid);
-          // chartperiodController.resetForm();
-          activaTab('pills-home');
-          console.log("Can not send email")
-        }
-        else {
-          if (res.message !== "") {
-            Toast.fire({
-              type: 'warning',
-              title: res.message
-            })
-
-          } else {
-            error( "Failed");
-          }
-        }
       });
-       $("#modal-group-comment-data").on("shown.bs.modal", function (){
-            activaTab('pills-home');
-        });
+      var Description = phrases.join(';');
+      var Tag = $('#Tag').val().trim();
+      if (Tag !== null || Tag !== "" || Tag !== undefined)
+        Tag = Tag.replace(/\@/g, '').replace(/\ /g, ',');
+
+      var Auditor = $('#Auditor').val().replace("@","").trim();
+      var obj = {
+        // ID: id,
+        UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        DataID: Number($('.dataid').text()),
+        CommentID: Number($('.commentid').text()),
+        Title: $('.addTask .Title').val(),
+        Tag: Tag,
+        KPILevelCodeAndPeriod: KPILevelCodeAndPeriod,
+        Description: Description,
+        Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
+        SubmitDate: convertDate(new Date),
+        Link: window.location.href,
+        Subject: $('.ActionPlanChart').text(),
+        Auditor: Auditor,
+        CategoryID: Number(seft.$route.params.catid),
+        KPILevelCode: seft.KPILevelCode,
+      };
+      HTTP.post('ChartPeriod/Add', obj ).then(res=>{
+        console.log(res);
+      if (res.data.status === true ) {
+        var commentid = Number($('.commentid').text());
+        var dataid = Number($('.dataid').text());
+        seft.LoadDataActionPlan(dataid, commentid);
+        // chartperiodController.resetForm();
+        activaTab('pills-home');
+      }
+      else {
+        if (res.message !== "") {
+          Toast.fire({
+            type: 'warning',
+            title: res.message
+          })
+
+        } else {
+          error( "Failed");
+        }
+      }
+      })
+        
+      $("#modal-group-comment-data").on("shown.bs.modal", function (){
+          activaTab('pills-home');
+      });
     },
     btntabload() {
       let seft = this;
@@ -1105,13 +1103,13 @@ export default {
     loadDataComment() {
       let seft = this;
       $.ajax({
-        url: "https://localhost:44309/ChartPeriod/LoadDataComment",
+        url: `http://10.4.4.224:98/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
         //url: '/ChartPeriod/GetAllComments',
         type: "GET",
-        data: {
-          dataid: Number($(".dataid").text()),
-          userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-        },
+        // data: {
+        //   dataid: Number($(".dataid").text()),
+        //   userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+        // },
         dataType: "json",
         success: function(res) {
           var data = res.data;
@@ -1257,49 +1255,6 @@ export default {
         seft.LoadTitle();
         console.log(response.data);
       })
-      // $.ajax({
-      //   url: `http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`,
-      //   type: "GET",
-      //   // data: {
-      //   //   kpilevelcode: seft.$route.params.kpilevelcode,
-      //   //   catid: seft.$route.params.catid,
-      //   //   period: seft.$route.params.period,
-      //   //   year: seft.$route.params.year,
-      //   //   start: seft.$route.params.start,
-      //   //   end: seft.$route.params.end
-      //   // },
-      //   dataType: "json",
-      //   success: function(response) {
-      //     seft.data = response;
-      //     seft.data2 = response[0].Datasets;
-      //     console.log(response);
-      //     //   console.log(seft.period);
-      //     //   console.log(seft.data2);
-
-      //     seft.categoryname = response[0].CategoryName;
-      //     seft.kpiname = response[0].KPIName;
-      //     seft.KPILevelCode = response[0].KPILevelCode;
-      //     console.log(seft.KPILevelCode);
-
-      //     seft.statusfavorite = response.statusfavorite;
-      //     seft.unit = response.Unit;
-      //     seft.datasets = response[0].Datasets;
-      //     //   console.log(seft.datasets)
-      //     seft.labels = response.labels;
-      //     seft.label = response.label;
-      //     seft.PIC = response.PIC;
-      //     seft.Owner = response.Owner;
-      //     seft.OwnerManagerment = response.OwnerManagerment;
-      //     seft.Sponsor = response.Sponsor;
-      //     seft.Participant = response.Participant;
-      //     seft.dataremarks = response.Dataremarks;
-      //     seft.targets = response.targets;
-      //     $("#editBugModal").modal("show");
-      //     $(".btnShowData").hide();
-      //     // console.log(seft.chart.data);
-      //     seft.LoadTitle();
-      //   }
-      // });
     }
   }
 };

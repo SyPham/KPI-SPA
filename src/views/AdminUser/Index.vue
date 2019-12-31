@@ -158,7 +158,7 @@ export default {
       Id: 1,
       searchname: "",
       pageSize: 5,
-      search:""
+      search:" "
     };
   },
   components: {
@@ -181,11 +181,11 @@ export default {
     LoadData() {
       // debugger
       let seft = this;
-      HTTP.get(`AdminUser/LoadData/${seft.search}/${seft.page}/${seft.pageSize}`).then(res => {
+      HTTP.post(`AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
         // console.log(res);
         seft.skip = res.data.skip;
-        seft.totalPage = res.data.totalPage;
-        seft.page = res.data.CurrentPage;
+        seft.totalPage = res.data.pageCount;
+        seft.page = res.data.page;
         seft.data = res.data.data;
       });
     },
