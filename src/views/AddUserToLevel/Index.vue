@@ -139,7 +139,7 @@ export default {
       page: 1,
       skip: 0,
       pageSize: 6,
-      code: ""
+      code: " "
     };
   },
   components: {
@@ -249,6 +249,7 @@ export default {
 
       });
       let config = {
+        code: " ",
         pageSize: 6,
         pageIndex: 1
       };
@@ -284,58 +285,28 @@ export default {
           });
         },
         LoadDataUser: function (changePageSize, code, levelID) {
-           let seft = this;
           //  debugger
-            // HTTP.post("AddUserToLevel/LoadDataUser", {
-            //   levelid: levelID,
-            //   code: code,
-            //   page: page,
-            //   pageSize: pageSize
-            // }).then(res => {
-            //   // console.log(res)
-            //   if(res.status) {
-            //   seft.skip = res.data.skip;
-            //   seft.totalPage = res.data.totalPage;
-            //   seft.page = res.data.page;
-            //   seft.events = res.data;
-            //   // console.log(seft.page);
-            //   console.log(seft.events);
-            //   AddUserToLevelController.registerEvent();
-            //   }
-            // });
-          $.ajax({
-            url: 'https://localhost:44309/AddUserToLevel/LoadDataUser',
-            type: "GET",
-            data: {
-              levelid: levelID,
-              code: code,
-              page: config.pageIndex,
-              pageSize: config.pageSize
-            },
-            dataType: "json",
-            success: function (response) {
-              // console.log(response)
-              if (response.status) {
+            HTTP.get(`AddUserToLevel/LoadDataUser/${levelID}/${self.code}/${config.pageIndex}/${config.pageSize}`)
+            .then(response => {
+              console.log(response)
+              if (response.data.status) {
                 var count;
-                var data = response.data;
-                var page = response.page;
-                var pageSize = response.pageSize;
+                var data = response.data.data;
+                var page = response.data.page;
+                var pageSize = response.data.pageSize;
                 if (page === 1)
                 count = page;
                 else count = (page - 1) * pageSize + 1;
-                self.events = response.data;
+                self.events = response.data.data;
                 // console.log(self.events)
 
-                AddUserToLevelController.pagingKPILevel(response.total, function () {
+                AddUserToLevelController.pagingKPILevel(response.data.total, function () {
                   AddUserToLevelController.LoadDataUser("", code, levelID);
                 }, changePageSize);
                 AddUserToLevelController.registerEvent();
               }
-            },
-            error: function (err) {
-              // console.log(err);
-            }
-          });
+            })
+          
         },
         pagingKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
@@ -363,43 +334,12 @@ export default {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
         updateUser: function(id = 0,levelid = 0) {
-          
-          // var mObj = {
-          //   id: id,
-          //   levelid: levelid,
-          // };
-          HTTP.post("AddUserToLevel/AddUserToLevel", {
-            id: id,
-            levelid: levelid
-          }).then(r => {
+          HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`).then(r => {
             console.log(r);
             if (r) {
-              swal.fire({
-                title: "Success!",
-                text: "Update successfully!",
-                type: "success"
-              });
+              success("success!");
             }
           });
-          // $.ajax({
-          //   url: "https://localhost:44309/AddUserToLevel/AddUserToLevel",
-          //   data: JSON.stringify(mObj),
-          //   type: "POST",
-          //   contentType: "application/json;charset=utf-8",
-          //   dataType: "json",
-          //   success: function (result) {
-          //     if (result) {
-          //       swal.fire({
-          //         title: "Success!",
-          //         text: "Update successfully!",
-          //         type: "success"
-          //       });
-          //     }
-          //   },
-          //   error: function (errormessage) {
-          //     // console.log(errormessage);
-          //   }
-          // });
         },
       }
     }

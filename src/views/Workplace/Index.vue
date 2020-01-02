@@ -577,13 +577,14 @@ export default {
       debugger;
       console.log("client on");
       console.log(message);
-
+      seft.LoadAll();
       //seft.getAllNotifications();
     });
   },
   created() {
     let seft = this;
     seft.LoadAll();
+    
   },
   methods: {
     uploadData(e) {
@@ -666,7 +667,7 @@ export default {
           glyph: glyph_opts,
           source: {
             url:
-              "http://10.4.4.224:98/KPI/GetListTreeClient/" +
+              "https://localhost:44309/KPI/GetListTreeClient/" +
               VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
             debugDelay: 1000
           },
@@ -700,8 +701,7 @@ export default {
           },
           lazyLoad: function(event, data) {
             data.result = {
-              url:
-                "http://10.4.4.224:98/KPI/GetListTreeClient/" +
+              url:"http://10.4.4.224:98/KPI/GetListTreeClient/" +
                 VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
               debugDelay: 1000
             };
@@ -776,13 +776,6 @@ export default {
                 workplaceController.LoadDataUser(true, code, "");
               }
             });
-
-          //-----------------------------------------------------------------------------------------------------------------
-          ////show list kpilevel
-          //$('#box select').off('change').on('change', function (e) {
-          //    var code = $(this).parent().children('.code').text();
-          //    workplaceController.LoadDataUser(true, code);
-          //});
 
           $("#tbluser tr td:nth-child(2) input").change(function() {
             var id = $(this)
@@ -901,8 +894,7 @@ export default {
           });
         },
         listKPIUpload(changePageSize) {
-          HTTP.get(
-            `Workplace/ListKPIUpload/${config.pageIndex}/${config.pageSize}`
+          HTTP.get(`Workplace/ListKPIUpload/${config.pageIndex}/${config.pageSize}`
           ).then(res => {
             if (res.data.status) {
               if (!res.data.isUpdater) {
@@ -934,7 +926,6 @@ export default {
         listKPIUploadPaging(totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
 
-          //Unbind pagination if it existed or click change pagesize
           if (
             $("paginationKPIUpload a").length === 0 ||
             changePageSize === true
@@ -943,7 +934,7 @@ export default {
             $("paginationKPIUpload").removeData("twbs-pagination");
             $("paginationKPIUpload").unbind("page");
           }
-
+          
           $("#paginationKPIUpload").twbsPagination({
             totalPages: totalPage === 0 ? 1 : totalPage,
             first: "First",

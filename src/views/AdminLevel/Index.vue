@@ -156,16 +156,23 @@ export default {
                   }
                   //console.log(obj)
                   // Save data.input.val() or return false to keep the editor open
-                  $.ajax({
-                    url: "http://10.4.4.224:98/AdminLevel/Rename",
-                    data: obj
-                  }).done(function (result) {
-                  }).fail(function (result) {
-                    // Ajax error: reset title (and maybe issue a warning)
-                    node.setTitle(data.orgTitle);
-                  }).always(function () {
-                    //data.input.removeClass("pending");
-                  });
+                  HTTP.post("http://10.4.4.224:98/AdminLevel/Rename",obj)
+                  .then(result =>{
+
+                  })
+                  .catch(result =>{
+                      node.setTitle(data.orgTitle);
+                  })
+                  // $.ajax({
+                  //   url: "http://10.4.4.224:98/AdminLevel/Rename",
+                  //   data: obj
+                  // }).done(function (result) {
+                  // }).fail(function (result) {
+                  //   // Ajax error: reset title (and maybe issue a warning)
+                  //   node.setTitle(data.orgTitle);
+                  // }).always(function () {
+                  //   //data.input.removeClass("pending");
+                  // });
                   // }
 
                   // Optimistically assume that save will succeed. Accept the user input
@@ -189,7 +196,7 @@ export default {
                 handleCursorKeys: true,
               },
               lazyLoad: function (event, data) {
-                data.result = { url: "https://localhost:44309/AdminLevel/GetListTree" };
+                data.result = { url: "http://10.4.4.224:98/AdminLevel/GetListTree" };
               },
               createNode: function (event, data) {
 
@@ -222,107 +229,104 @@ export default {
               // Custom event handler that is triggered by keydown-handler and
               // context menu:
               var refNode, moveMode,
-                  tree = $(this).fancytree("getTree"),
-                  node = tree.getActiveNode();
+                tree = $(this).fancytree("getTree"),
+                node = tree.getActiveNode();
 
               switch (data.cmd) {
-                  case "moveUp":
-                      refNode = node.getPrevSibling();
-                      if (refNode) {
-                          node.moveTo(refNode, "before");
-                          node.setActive();
-                      }
-                      break;
-                  case "moveDown":
-                      refNode = node.getNextSibling();
-                      if (refNode) {
-                          node.moveTo(refNode, "after");
-                          node.setActive();
-                      }
-                      break;
-                  case "indent":
-                      refNode = node.getPrevSibling();
-                      if (refNode) {
-                          node.moveTo(refNode, "child");
-                          refNode.setExpanded();
-                          node.setActive();
-                      }
-                      break;
-                  case "outdent":
-                      if (!node.isTopLevel()) {
-                          node.moveTo(node.getParent(), "after");
-                          node.setActive();
-                      }
-                      break;
-                  case "rename":
-                      node.editStart();
-                      break;
-                  case "remove":
-                      refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
+                case "moveUp":
+                  refNode = node.getPrevSibling();
+                  if (refNode) {
+                    node.moveTo(refNode, "before");
+                    node.setActive();
+                  }
+                  break;
+                case "moveDown":
+                  refNode = node.getNextSibling();
+                  if (refNode) {
+                    node.moveTo(refNode, "after");
+                    node.setActive();
+                  }
+                  break;
+                case "indent":
+                  refNode = node.getPrevSibling();
+                  if (refNode) {
+                    node.moveTo(refNode, "child");
+                    refNode.setExpanded();
+                    node.setActive();
+                  }
+                  break;
+                case "outdent":
+                  if (!node.isTopLevel()) {
+                    node.moveTo(node.getParent(), "after");
+                    node.setActive();
+                  }
+                  break;
+                case "rename":
+                  node.editStart();
+                  break;
+                case "remove":
+                  refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
+                  if (refNode) {
+                    node.remove();
+                    refNode.setActive();
+                  }
+                  levelAdminController.remove(Number(node.key))
+                  break;
+                case "addChild":
+                  refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
+                  node.editCreateNode("child", {
+                    title: "#N/A"
+                  });
+                  console.log(refNode)
+                  var newData = {
+                    key: "0",
+                    code: genarateCode(5),
+                    title: "#N/A",
+                    levelnumber: Number(node.data.levelnumber) + 1,
+                    parentid: Number(node.key),
+                  };
+                  console.log(newData);
+                  levelAdminController.add(newData);
 
-
-
-                      if (refNode) {
-                          node.remove();
-                          refNode.setActive();
-                      }
-                      levelAdminController.remove(Number(node.key))
-                      break;
-                  case "addChild":
-                      refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
-                      node.editCreateNode("child", {
-                          title: "#N/A"
-                      });
-                      console.log(refNode)
-                      var newData = {
-                          key: "0",
-                          code: genarateCode(5),
-                          title: "#N/A",
-                          levelnumber: Number(node.data.levelnumber) + 1,
-                          parentid: Number(node.key),
-                      };
-                      console.log(newData);
-                      levelAdminController.add(newData);
-
-                      break;
-                  case "addSibling":
-                      refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
-                      node.editCreateNode("after");
-                      var newData = {
-                          key: "0",
-                          code: genarateCode(5),
-                          title: "#N/A",
-                          levelnumber: Number(node.data.levelnumber),
-                          parentid: Number(node.data.parentid),
-                      };
-                      levelAdminController.add(newData);
-                      break;
-                  case "cut":
-                      CLIPBOARD = { mode: data.cmd, data: node };
-                      break;
-                  case "copy":
-                      CLIPBOARD = {
-                          mode: data.cmd,
-                          data: node.toDict(function (n) {
-                              delete n.key;
-                          })
-                      };
-                      break;
-                  case "clear":
-                      CLIPBOARD = null;
-                      break;
-                  case "paste":
-                      if (CLIPBOARD.mode === "cut") {
-                          // refNode = node.getPrevSibling();
-                          CLIPBOARD.data.moveTo(node, "child");
-                          CLIPBOARD.data.setActive();
-                      } else if (CLIPBOARD.mode === "copy") {
-                          node.addChildren(CLIPBOARD.data).setActive();
-                      }
-                      break;
-                  default:
-                      alert("Unhandled command: " + data.cmd);
-                      return;
+                  break;
+                case "addSibling":
+                  refNode = node.getNextSibling() || node.getPrevSibling() || node.getParent();
+                  node.editCreateNode("after");
+                  var newData = {
+                    key: "0",
+                    code: genarateCode(5),
+                    title: "#N/A",
+                    levelnumber: Number(node.data.levelnumber),
+                    parentid: Number(node.data.parentid),
+                  };
+                  levelAdminController.add(newData);
+                  break;
+                case "cut":
+                  CLIPBOARD = { mode: data.cmd, data: node };
+                  break;
+                case "copy":
+                  CLIPBOARD = {
+                    mode: data.cmd,
+                    data: node.toDict(function (n) {
+                        delete n.key;
+                    })
+                  };
+                  break;
+                case "clear":
+                  CLIPBOARD = null;
+                  break;
+                case "paste":
+                  if (CLIPBOARD.mode === "cut") {
+                    // refNode = node.getPrevSibling();
+                    CLIPBOARD.data.moveTo(node, "child");
+                    CLIPBOARD.data.setActive();
+                  } else if (CLIPBOARD.mode === "copy") {
+                    node.addChildren(CLIPBOARD.data).setActive();
+                  }
+                  break;
+                default:
+                  alert("Unhandled command: " + data.cmd);
+                  return;
               }
           })
           .on("keydown", function (e) {
@@ -465,13 +469,11 @@ export default {
           levelAdminController.registerEvent();
         },
         registerEvent() {
-
-
           $('#btnSave').off('click').on('click', function () {
-              levelAdminController.addOrUpdateData();
+            levelAdminController.addOrUpdateData();
           });
           $('.btnAddLevel').off('click').on('click', function () {
-              levelAdminController.resetForm();
+            levelAdminController.resetForm();
           })
         },
         rename(obj) {
@@ -482,26 +484,38 @@ export default {
             levelnumber: obj.levelnumber,
             parentid: obj.parentid,
           };
-          $.ajax({
-            url: "https://localhost:44309/AdminLevel/Rename",
-            data: JSON.stringify(level),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              if (result) {
+          HTTP.post("http://10.4.4.224:98/AdminLevel/Rename",JSON.stringify(level))
+          .then(result=>{
+            if (result) {
                 success('Edit successfully!');
                 levelAdminController.loadData(true);
-
               }
               else {
                 error('his code has already existed!');
               }
-            },
-            error: function (errormessage) {
-              console.log(errormessage);
-            }
-          });
+          }).catch(err =>{
+              console.log("err");
+          })
+          // $.ajax({
+          //   url: "http://10.4.4.224:98/AdminLevel/Rename",
+          //   data: JSON.stringify(level),
+          //   type: "POST",
+          //   contentType: "application/json;charset=utf-8",
+          //   dataType: "json",
+          //   success: function (result) {
+          //     if (result) {
+          //       success('Edit successfully!');
+          //       levelAdminController.loadData(true);
+
+          //     }
+          //     else {
+          //       error('his code has already existed!');
+          //     }
+          //   },
+          //   error: function (errormessage) {
+          //     console.log(errormessage);
+          //   }
+          // });
         },
         remove(id) {
           var value = id;
@@ -515,20 +529,13 @@ export default {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.value) {
-              $.ajax({
-                url: "https://localhost:44309/AdminLevel/Remove",
-                data: { id: JSON.stringify(value) },
-                type: "GET",
-                contentType: "application/json;charset=UTF-8",
-                dataType: "json",
-                success: function (result) {
-                  success('Delete successfully.');
-                  levelAdminController.loadData();
-                },
-                error: function (errormessage) {
-                  console.log(errormessage);
-                }
-              });
+              HTTP.get(`http://10.4.4.224:98/AdminLevel/Remove/${JSON.stringify(value)}`)
+              .then(result =>{
+                success('Delete successfully.');
+                levelAdminController.loadData();
+              }).catch(errormessage =>{
+                console.log(errormessage);
+              })
               success('Reacord has been deleted.');
               }
               else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -568,14 +575,8 @@ export default {
             LevelNumber: $('#addKPI .LevelID').val(),
             ParentID: $('#addKPI .ParentID').val()
           };
-          $.ajax({
-            url: "https://localhost:44309/AdminLevel/AddOrUpdate",
-            data: JSON.stringify(mObj),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              if (result) {
+          HTTP.post("http://10.4.4.224:98/AdminLevel/AddOrUpdate",JSON.stringify(mObj)).then(result =>{
+            if (result) {
                 success('Add successfully!');
                 levelAdminController.loadData();
                 levelAdminController.resetForm();
@@ -583,11 +584,29 @@ export default {
               else {
                 error('This code has already existed!');
               }
-            },
-            error: function (errormessage) {
-              console.log(errormessage);
-            }
-          });
+          }).catch(err =>{
+            console.log(err);
+          })
+          // $.ajax({
+          //   url: "http://10.4.4.224:98/AdminLevel/AddOrUpdate",
+          //   data: JSON.stringify(mObj),
+          //   type: "POST",
+          //   contentType: "application/json;charset=utf-8",
+          //   dataType: "json",
+          //   success: function (result) {
+          //     if (result) {
+          //       success('Add successfully!');
+          //       levelAdminController.loadData();
+          //       levelAdminController.resetForm();
+          //     }
+          //     else {
+          //       error('This code has already existed!');
+          //     }
+          //   },
+          //   error: function (errormessage) {
+          //     console.log(errormessage);
+          //   }
+          // });
         },
         loadData() {
           $.ui.fancytree.getTree("#tree").reload().done(x => {
@@ -597,7 +616,7 @@ export default {
         loadDetail(id) {
           var value = id;
           $.ajax({
-            url: 'https://localhost:44309/AdminLevel/GetByID',
+            url: 'http://10.4.4.224:98/AdminLevel/GetByID',
             data: {
               id: Number(value)
             },

@@ -183,7 +183,8 @@ const router = new VueRouter({
       path: "/Favourite",
       component: Dash,
       children: [
-        { path: "/Favourite",component: UserFavourite}
+        { path: "/Favourite",component: UserFavourite  }
+        
       ]
     },
 

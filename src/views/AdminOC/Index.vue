@@ -205,6 +205,7 @@
 // import listoc from "../../components/adminOC/List"
 import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/adminOC/Modal";
+import { HTTP } from '../../http-constants';
 export default {
   name: "IndexKpi",
   data() {
@@ -224,13 +225,11 @@ export default {
   methods: {
     loadAll() {
       let self = this;
-
       let glyph_opts = {
         preset: "bootstrap3",
         map: {}
       };
       function logEvent(event, data, msg) {
-        // var args = $.isArray(args) ? args.join(", ") :
         msg = msg ? ": " + msg : "";
         $.ui.fancytree.info(
           "Event('" + event.type + "', node=" + data.node + ")" + msg
@@ -468,7 +467,7 @@ export default {
             );
           });
           //----------------------------------------------------------------------------------------------
-
+          
           //update weeklychecked kpilevel
           $("#tblkpilevel .weekly")
             .off("click")
@@ -1068,54 +1067,38 @@ export default {
           });
         },
         loadDataKPILevel: function(changePageSize, level) {
-          //data onto an array
 
+          //data onto an array
           let category = $("#box select")
             .find(":selected")
             .val();
           if (category === undefined || category === "") category = 0;
-          $.ajax({
-            url: "https://localhost:44309/AdminKPILevel/LoadDataKPILevel",
-            type: "POST",
-            data: {
-              level: level,
-              category: category,
-              page: kpiLevelConfig.pageIndex,
-              pageSize: kpiLevelConfig.pageSize
-            },
+          HTTP.get(`http://10.4.4.224:98/AdminKPILevel/LoadDataKPILevel/${level}/${category}/${kpiLevelConfig.pageIndex}/${kpiLevelConfig.pageSize}`)
+          .then(r => {
+            console.log(r)
+            if (r.data.status) {
+              let count,
+                data = r.data.data,
+                page = r.data.page,
+                pageSize = r.data.pageSize;
+              if (page === 1) count = 1;
+              else count = (page - 1) * pageSize + 1;
+              self.events = r.data.data;
+              //  debugger
+              console.log(self.events);
 
-            dataType: "json",
-            success: function(r) {
-              // var events = r;
-              // events.events = events;
-              //this.events = events;
-              // console.log(events)
-              if (r.status) {
-                let count,
-                  data = r.data,
-                  page = r.page,
-                  pageSize = r.pageSize;
-                if (page === 1) count = 1;
-                else count = (page - 1) * pageSize + 1;
-                self.events = r.data;
-                //  debugger
-                console.log(self.events);
-
-                kpiController.pagingKPILevel(
-                  r.total,
-                  function() {
-                    console.log("change pageSize");
-                    kpiController.loadDataKPILevel("", level);
-                  },
-                  changePageSize
-                );
-                kpiController.registerEvent();
-              }
-            },
-            error: function(err) {
-              console.log(err);
+              kpiController.pagingKPILevel(
+                r.data.total,
+                function() {
+                  console.log("change pageSize");
+                  kpiController.loadDataKPILevel("", level);
+                },
+                changePageSize
+              );
+              kpiController.registerEvent();
             }
-          });
+          })
+          
         },
         pagingKPILevel: function(totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / kpiLevelConfig.pageSize);

@@ -103,6 +103,7 @@
 // import listoc from "../../components/adminOC/List"
 import Hierarchy from "../../components/adminOC/Hierarchy"
 import listoc from "../../components/adminOC/Modal"
+import { HTTP } from '../../http-constants';
 export default {
   name: "IndexKpi",
   data() {
@@ -253,39 +254,25 @@ export default {
         },
         getCategoryByOC: function (changePageSize, level, ocID) {
           console.log("GetCategoryByOC")
-
-          $.ajax({
-              url: 'https://localhost:44309/OCCategories/GetCategoryByOC',
-              type: "GET",
-              data: {
-                level: level,
-                ocID: ocID,
-                page: config.pageIndex,
-                pageSize: config.pageSize
-              },
-              dataType: "json",
-              success: function (response) {
-                console.log(response)
-                if (response.status) {
-                  var count = 1;
-                  var data = response.data;
-                  var page = response.page;
-                  var pageSize = response.pageSize;
-                  if (page === 1)
-                      count = page;
-                  else count = (page - 1) * pageSize + 1;
-                  self.OCCategory = response.data;
-                  console.log(self.OCCategory)
-                  ocCategoryAdmin.pagingCategoryKPILevel(response.total, function () {
-                      ocCategoryAdmin.getCategoryByOC("", level,ocID);
-                  }, changePageSize);
-                  ocCategoryAdmin.registerEvent();
-                }
-              },
-              error: function (err) {
-                  console.log(err);
-              }
-          });
+          HTTP.get(`http://10.4.4.224:98/OCCategories/GetCategoryByOC/${level}/${ocID}/${config.pageIndex}/${config.pageSize}`)
+          .then(response =>{
+            console.log(response)
+            if (response.data.status) {
+              var count = 1;
+              var data = response.data.data;
+              var page = response.data.page;
+              var pageSize = response.data.pageSize;
+              if (page === 1)
+                count = page;
+              else count = (page - 1) * pageSize + 1;
+              self.OCCategory = response.data.data;
+              console.log(self.OCCategory)
+              ocCategoryAdmin.pagingCategoryKPILevel(response.data.total, function () {
+                ocCategoryAdmin.getCategoryByOC("", level,ocID);
+              }, changePageSize);
+              ocCategoryAdmin.registerEvent();
+            }
+          })
         },
         pagingCategoryKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
@@ -312,28 +299,16 @@ export default {
         },
         addOCCategory: function (ocId, catId) {
           //debugger
-          var mObj = {
-            OCID: ocId,
-            CategoryID: catId,
-          };
-          $.ajax({
-              url: "https://localhost:44309/OCCategories/AddOCCategory",
-              data: JSON.stringify(mObj),
-              type: "POST",
-              contentType: "application/json;charset=utf-8",
-              dataType: "json",
-              success: function (result) {
-                if (result) {
-                  swal.fire({
-                    title: "Success!",
-                    text: "Update successfully!",
-                    type: "success"
-                  });
-                }
-              },
-              error: function (errormessage) {
-              }
-          });
+          // var mObj = {
+          //   OCID: ocId,
+          //   CategoryID: catId,
+          // };
+          HTTP.get(`http://10.4.4.224:98/OCCategories/AddOCCategory/${ocId}/${catId}`)
+          .then(result =>{
+            if (result) {
+              success("success!");
+            }
+          })
         },
         loadTree: function () {
           $.ui.fancytree.getTree("#treetable").reload().done();

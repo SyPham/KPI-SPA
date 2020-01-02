@@ -85,7 +85,7 @@ export default {
   created() {
     let self = this;
     self.initialTree();
-
+    
   },
   mounted() {
     let self = this;

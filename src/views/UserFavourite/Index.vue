@@ -147,7 +147,6 @@ export default {
     // console.log(seft.ID);
   },
   methods: {
-    
     LoadData() {
       // debugger
       let seft = this;
@@ -162,9 +161,6 @@ export default {
         
       });
     },
-    // FilterTable: function() {
-    //   this.LoadData(this.name, 1);
-    // },
     changePage(pageNum) {
       this.LoadData(this.catID, this.name, pageNum);
     },

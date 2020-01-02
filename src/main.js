@@ -14,8 +14,11 @@ import FlagIcon from 'vue-flag-icon'
 // import store from './store'
 import HenryHub from './hub'
 import VueJwtDecode from 'vue-jwt-decode'
+import VuePageTransition from 'vue-page-transition'
 
 import VueApexCharts from 'vue-apexcharts'
+Vue.use(VuePageTransition)
+
 Vue.use(HenryHub)
 Vue.use(FlagIcon)
 // Vue.use(QuestionHub)

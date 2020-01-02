@@ -1622,7 +1622,7 @@ export default {
         CategoryID: Number(this.$route.params.catid)
       };
       
-       HTTP.post("http://10.4.4.224:98/ChartPeriod/AddComment",mObj)
+       HTTP.post("ChartPeriod/AddComment",mObj)
         .then(data => {
           
           var res = data.data;
