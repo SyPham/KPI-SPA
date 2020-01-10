@@ -1,24 +1,28 @@
 <template>
   <div class="row">
+    <div class="col-md-12 my3">
+      <button @click="$router.push(`/adminUser/create`)" class="btn btn-success float-right">
+        <i class="fa fa-plus"></i> Add  
+      </button>
+    </div>
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">List Users</h3>
-        </div>
-        <div class="card-header">
-          <button @click="$router.push(`/adminUser/create`)" class="btn btn-success pull-right">
-            <i class="fa fa-plus"></i> Add  
-          </button>
-        </div>
-        <div class="card-header">
-          <input
-            v-model="searchname"
-            type="text"
-            class="form-control"
-            placeholder="Search name"
-          />
-          <br>
-          <button class="btn btn-success btn-sm" @click="searchname = ''">Cancel Search</button>
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="card-title">List Users</h3>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <input v-model="searchname" type="text" class="form-control" placeholder="Search name"/>
+                  <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                    <button class="input-group-text btn-success" @click="searchname = ' '"> <i class="fas fa-remove"></i> Clear</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -140,6 +144,7 @@
           ></Paginate>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -182,7 +187,7 @@ export default {
       // debugger
       let seft = this;
       HTTP.post(`AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
-        // console.log(res);
+        console.log(res);
         seft.skip = res.data.skip;
         seft.totalPage = res.data.pageCount;
         seft.page = res.data.page;
@@ -192,7 +197,7 @@ export default {
     LockUser(Id=1){
       HTTP.get(`AdminUser/LockUser/${Id}`)
         .then(r => {
-          success('Successfully');
+          // success('Successfully');
           this.LoadData();
           console.log('success')
         })

@@ -89,18 +89,22 @@ export default {
   },
   mounted() {
     let self = this;
-    self.initialTree();
+    setTimeout(function(){
+      self.initialTree();
+    },300)
+    // self.initialTree();
   },
 
   methods: {
+
     initialTree() {
       let self = this;
       initTree("http://10.4.4.224:98/AdminKPILevel/GetListTree", function(
         event,
         data
-      ) {
+        ) {
         var node = data.node,
-          $tdList = $(node.tr).find(">td");
+        $tdList = $(node.tr).find(">td");
         var level = Number($tdList.eq(0).text());
         var name = $tdList.eq(1).text();
 
@@ -111,28 +115,20 @@ export default {
         $("#box").fadeOut();
         $("#box .periodAll").hide();
 
+
         self.level = level;
         self.ocID = Number(data.node.key);
         console.log(self.level);
         console.log(self.ocID);
-        //self.getAllCategories();
-        //self.getAllKPILevelByCategory(true, 0);
       });
-      
-      $(".fancy-collapse")
-        .off("click")
-        .on("click", function() {
-          $("#treetable")
-            .fancytree("getTree")
-            .expandAll(false);
-        });
-      $(".fancy-expand")
-        .off("click")
-        .on("click", function() {
-          $("#treetable")
-            .fancytree("getTree")
-            .expandAll();
-        });
+      $(".fancy-collapse").off("click").on("click", function() {
+        $("#treetable").fancytree("getTree").expandAll(false);
+      });
+      $(".fancy-expand").off("click").on("click", function() {
+        $("#treetable")
+          .fancytree("getTree")
+          .expandAll();
+      });
     },
     pagingCategoryKPILevel(totalRow, callback, changePageSize) {
       let self = this;
@@ -200,11 +196,11 @@ export default {
       let startYear = year - 5;
 
       if (period.toLowerCase() === "w")
-        self.$router.push(`/dataset/${catid}/w/1/${week}/${year}`);
+        self.$router.push(`/dataset/${catid}/w/1/53/${year}`);
       if (period.toLowerCase() === "m")
-        self.$router.push(`/dataset/${catid}/m/1/${month}/${year}`);
+        self.$router.push(`/dataset/${catid}/m/1/11/${year}`);
       if (period.toLowerCase() === "q")
-        self.$router.push(`/dataset/${catid}/q/1/${quarter}/${year}`);
+        self.$router.push(`/dataset/${catid}/q/1/4/${year}`);
       if (period.toLowerCase() === "y")
         self.$router.push(`/dataset/${catid}/y/${startYear}/${year}/${year}`);
     },

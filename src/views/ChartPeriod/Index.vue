@@ -8,57 +8,36 @@
           <!-- LINE CHART -->
           <div class="box box-widget">
             <div class="box-header with-border">
-              <h3
-                v-if="period == 'W'"
-                class="box-title"
-                style="font-weight:bold"
-              >KPI Chart - {{kpiname}} - Weekly</h3>
-              <h3
-                v-if="period == 'M'"
-                class="box-title"
-                style="font-weight:bold"
-              >KPI Chart - {{kpiname}} - Monthly</h3>
-              <h3
-                v-if="period == 'Q'"
-                class="box-title"
-                style="font-weight:bold"
-              >KPI Chart - {{kpiname}} - Quarterly</h3>
-              <h3
-                v-if="period == 'Y'"
-                class="box-title"
-                style="font-weight:bold"
-              >KPI Chart - {{kpiname}} - Yearly</h3>
+              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Weekly</h3>
+              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Monthly</h3>
+              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Quarterly</h3>
+              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Yearly</h3>
             </div>
             <div class="box-body">
+
               <!-- month  -->
-              <div class="row">
+              <div class="row" :style="period ==  'M' ? '':'display:none'">
                 <div class="col-md-7">
                   <div class="row">
                     <div class="col-md">
                       <div class="form-group">
                         <label class="my-1 mr-2" for="startMonth">Year</label>
-                        <select
-                          v-model="searchyear"
-                          class="custom-select form-control year my-1 mr-sm-2"
-                          id="monthOfYear"
-                        >
+                        <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="monthOfYear">
                           <option value="0" selected>Choose...</option>
                           <option
-                            v-for="(n, key, index) in 100"
-                            :key="index"
-                            :value="2000 + n"
-                          >Year {{2000 + n}}</option>
+                           v-for="(n, key, index) in 100" 
+                           :key="index" 
+                           :value="2000 + n"
+                           > 
+                           Year {{2000 + n}}
+                           </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md">
                       <div class="form-group">
                         <label class="my-1 mr-2" for="startMonth">Start</label>
-                        <select
-                          v-model="vstart"
-                          class="custom-select form-control my-1 mr-sm-2"
-                          id="startMonth"
-                        >
+                        <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startMonth">
                           <option value="0" selected>Choose...</option>
                           <option value="1">Jan</option>
                           <option value="2">Feb</option>
@@ -78,11 +57,7 @@
                     <div class="col-md">
                       <div class="form-group">
                         <label class="my-1 mr-2" for="endMonth">End</label>
-                        <select
-                          v-model="vend"
-                          class="custom-select form-control my-1 mr-sm-2"
-                          id="endMonth"
-                        >
+                        <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endMonth">
                           <option value="0" selected>Choose...</option>
                           <option value="1">Jan</option>
                           <option value="2">Feb</option>
@@ -102,176 +77,217 @@
                     <div class="col-md">
                       <div class="form-group">
                         <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
-                        <button
-                          type="button"
-                          @click="searchyear='', vstart='',vend=''"
-                          class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch"
-                        >
+                        <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
                           <i class="fa fa-remove"></i> Reset
                         </button>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="form-inline"
-                    :style="period ==  'M' ? 'display:block':'display:none'"
-                    id="searchMonth"
-                  ></div>
+                  <div class="form-inline" :style="period ==  'M' ? 'display:block':'display:none'" id="searchMonth"></div>
                 </div>
+                
                 <div class="col-md-5">
                   <div class="float-right mt-5">
-                    <button
-                      type="button"
-                      data-toggle="modal"
-                      data-target="#modal-group"
-                      class="btn btn-danger margin btnLike pull-right"
-                      id="btnCompare"
-                      @click="compare"
-                    >
+                    <button type="button" data-toggle="modal" data-target="#modal-group" class="btn btn-danger margin btnLike pull-right" id="btnCompare" @click="compare">
                       <i class="fa fa-adjust"></i> Compare
                     </button>
 
-                    <button
-                      v-if="statusfavorite == false"
-                      type="button"
-                      class="btn margin btnLike bg-navy pull-right"
-                      id="btnLike"
-                      @click="btnLike"
-                    >
+                    <button v-if="statusfavorite == false" type="button" class="btn margin btnLike bg-navy pull-right" id="btnLike" @click="btnLike">
                       <i class="fa fa-heart"></i> Add Favourite
                     </button>
 
-                    <button
-                      v-else
-                      type="button"
-                      class="btn btn-default margin btnLike pull-right disabled"
-                      disabled
-                      id="btnLike"
-                    >
+                    <button v-else type="button" class="btn btn-default margin btnLike pull-right disabled" disabled id="btnLike">
                       <i class="fa fa-heart"></i> Added Favourite
                     </button>
                   </div>
                 </div>
               </div>
 
-              <!-- week  -->
-              <div
-                class="form-inline"
-                :style="period ==  'W' ? 'display:block':'display:none'"
-                id="searchWeek"
-                >
-                <label class="my-1 mr-2" for="startMonth">Year</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index) in 100"
-                    :key="index"
-                    :value="2000 + n"
-                  >Year {{2000 + n}}</option>
-                </select>
-                <label class="my-1 mr-2" for="startWeek">Week Start</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="startWeek">
-                  <option value="0" selected>Choose...</option>
-                  <option v-for="(n, key, index) in 53" :key="index" :value="n">Week {{n}}</option>
-                </select>
+               <!-- week  -->
+              <div class="row" :style="period ==  'W' ? '':'display:none'">
+                <div class="col-md-7">
+                  <div class="row">
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="startMonth">Year</label>
+                        <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> Year {{2000 + n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="startWeek">Week Start</label>
+                        <select v-model="vstart" class="custom-select form-control year my-1 mr-sm-2" id="startWeek">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 53" :key="index" :value="n">Week {{n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="endWeek">Week End</label>
+                        <select v-model="vend" class="custom-select form-control year my-1 mr-sm-2" id="endWeek">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 53" :key="index" :value=" n">Week {{ n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
+                        <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
+                          <i class="fa fa-remove"></i> Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-inline" :style="period ==  'M' ? 'display:block':'display:none'" id="searchMonth"></div>
+                </div>
+                
+                <div class="col-md-5">
+                  <div class="float-right mt-5">
+                    <button type="button" data-toggle="modal" data-target="#modal-group" class="btn btn-danger margin btnLike pull-right" id="btnCompare" @click="compare">
+                      <i class="fa fa-adjust"></i> Compare
+                    </button>
 
-                <label class="my-1 mr-2" for="endWeek">Week End</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="endWeek">
-                  <option value="0" selected>Choose...</option>
-                  <option v-for="(n, key, index) in 53" :key="index" :value=" n">Week {{ n}}</option>
-                </select>
+                    <button v-if="statusfavorite == false" type="button" class="btn margin btnLike bg-navy pull-right" id="btnLike" @click="btnLike">
+                      <i class="fa fa-heart"></i> Add Favourite
+                    </button>
 
-                <button type="button" class="btn bg-teal margin btnClearSearch">
-                  <i class="fa fa-remove"></i> Reset search
-                </button>
+                    <button v-else type="button" class="btn btn-default margin btnLike pull-right disabled" disabled id="btnLike">
+                      <i class="fa fa-heart"></i> Added Favourite
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <!-- @* Quarter *@ -->
-              <div
-                class="form-inline"
-                :style="period ==  'Q' ? 'display:block':'display:none'"
-                id="searchQuarter"
-                >
-                <label class="my-1 mr-2" for="startMonth">Year</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index) in 100"
-                    :key="index"
-                    :value="2000 + n"
-                  >Year {{2000 + n}}</option>
-                </select>
-                <label class="my-1 mr-2" for="startMonth">Start</label>
-                <select class="custom-select form-control my-1 mr-sm-2" id="startQuarter">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index)  in 4"
-                    :selected="start == n ? true : false"
-                    :key="index"
-                    :value=" n"
-                  >Quarter {{n}}</option>
-                </select>
-                <label class="my-1 mr-2" for="endMonth">End</label>
-                <select class="custom-select form-control my-1 mr-sm-2" id="endQuarter">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index)  in 4"
-                    :selected="end == n ? true : false"
-                    :key="index"
-                    :value=" n"
-                  >Quarter {{n}}</option>
-                </select>
-                <button type="button" class="btn bg-teal margin btnClearSearch">
-                  <i class="fa fa-remove"></i> Reset search
-                </button>
+               <!-- quater  -->
+              <div class="row" :style="period ==  'Q' ? '':'display:none'">
+                <div class="col-md-7">
+                  <div class="row">
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="startMonth">Year</label>
+                        <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="startMonth">Start</label>
+                        <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startQuarter">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index)  in 4" :selected="start == n ? true : false" :key="index" :value=" n">Quarter {{n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="endMonth">End</label>
+                        <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endQuarter">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index)  in 4" :selected="end == n ? true : false" :key="index" :value=" n">Quarter {{n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
+                        <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
+                          <i class="fa fa-remove"></i> Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-inline" :style="period ==  'M' ? 'display:block':'display:none'" id="searchMonth"></div>
+                </div>
+                
+                <div class="col-md-5">
+                  <div class="float-right mt-5">
+                    <button type="button" data-toggle="modal" data-target="#modal-group" class="btn btn-danger margin btnLike pull-right" id="btnCompare" @click="compare">
+                      <i class="fa fa-adjust"></i> Compare
+                    </button>
+
+                    <button v-if="statusfavorite == false" type="button" class="btn margin btnLike bg-navy pull-right" id="btnLike" @click="btnLike">
+                      <i class="fa fa-heart"></i> Add Favourite
+                    </button>
+
+                    <button v-else type="button" class="btn btn-default margin btnLike pull-right disabled" disabled id="btnLike">
+                      <i class="fa fa-heart"></i> Added Favourite
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <!-- @* Year *@ -->
-              <div
-                class="form-inline"
-                :style="period ==  'Y' ? 'display:block':'display:none'"
-                id="searchYear"
-                >
-                <label class="my-1 mr-2" for="YearOfYear">Year</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="YearOfYear">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index) in 100"
-                    :key="index"
-                    :value="2000 + n"
-                  >Year {{2000 + n}}</option>
-                </select>
-                <label class="my-1 mr-2" for="startMonth">Start</label>
+               <!-- year  -->
+              <div class="row" :style="period ==  'Y' ? '':'display:none'">
+                <div class="col-md-7">
+                  <div class="row">
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="YearOfYear">Year</label>
+                        <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="YearOfYear">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> Year {{2000 + n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="startMonth">Start</label>
+                        <select v-model="vstart" class="custom-select form-control year my-1 mr-sm-2" id="startYear">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> Year {{2000 + n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" for="endMonth">End</label>
+                        <select v-model="vend" class="custom-select form-control year my-1 mr-sm-2" id="endYear">
+                          <option value="0" selected>Choose...</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> Year {{2000 + n}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-group">
+                        <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
+                        <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
+                          <i class="fa fa-remove"></i> Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-inline" :style="period ==  'M' ? 'display:block':'display:none'" id="searchMonth"></div>
+                </div>
+                
+                <div class="col-md-5">
+                  <div class="float-right mt-5">
+                    <button type="button" data-toggle="modal" data-target="#modal-group" class="btn btn-danger margin btnLike pull-right" id="btnCompare" @click="compare">
+                      <i class="fa fa-adjust"></i> Compare
+                    </button>
 
-                <select class="custom-select form-control year my-1 mr-sm-2" id="startYear">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index) in 100"
-                    :key="index"
-                    :value="2000 + n"
-                  >Year {{2000 + n}}</option>
-                </select>
-                <label class="my-1 mr-2" for="endMonth">End</label>
-                <select class="custom-select form-control year my-1 mr-sm-2" id="endYear">
-                  <option value="0" selected>Choose...</option>
-                  <option
-                    v-for="(n, key, index) in 100"
-                    :key="index"
-                    :value="2000 + n"
-                  >Year {{2000 + n}}</option>
-                </select>
+                    <button v-if="statusfavorite == false" type="button" class="btn margin btnLike bg-navy pull-right" id="btnLike" @click="btnLike">
+                      <i class="fa fa-heart"></i> Add Favourite
+                    </button>
 
-                <button type="button" class="btn bg-teal margin btnClearSearch">
-                  <i class="fa fa-remove"></i> Reset search
-                </button>
+                    <button v-else type="button" class="btn btn-default margin btnLike pull-right disabled" disabled id="btnLike">
+                      <i class="fa fa-heart"></i> Added Favourite
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-inline">
                     <label class="my-1 mr-2" for="startMonth">Step</label>
-                    <input
-                      type="number"
+                    <input type="number"
                       class="form-control"
                       min="0"
                       step="0"
@@ -292,16 +308,8 @@
                       style="width:70px"
                     />
 
-                    <button
-                      type="button"
-                      @click="hiddenData()"
-                      class="btn btn-sm bg-navy margin btnHiddenData"
-                    >Hide Data</button>
-                    <button
-                      type="button"
-                      @click="showData()"
-                      class="btn btn-sm bg-success margin btnShowData"
-                    >Show Data</button>
+                    <button type="button" @click="hiddenData()" class="btn btn-sm bg-navy margin btnHiddenData">Hide Data</button>
+                    <button type="button" @click="showData()" class="btn btn-sm bg-success margin btnShowData">Show Data</button>
                   </div>
                 </div>
                 <div class="col-md-8">
@@ -327,6 +335,7 @@
                   </button>
                 </div>
               </div>
+
               <!-- Chartjs -->
               <div class="chart">
                 <canvas id="planet-chart" style="height:500px"></canvas>
@@ -334,27 +343,15 @@
               </div>
             </div>
             <div class="box-footer">
-              <p
-                class="text-bold"
-                style="font-size:16px;color:green;display:none"
-                id="fromDateEndDate"
-              >
+              <p class="text-bold" style="font-size:16px;color:green;display:none" id="fromDateEndDate">
                 <span class="fromDayOfWeek"></span>
                 <span class="endDayOfWeek"></span>
               </p>
-              <p
-                class="text-bold"
-                style="font-size:16px;color:green;display:none"
-                id="fromDateEndDateM"
-              >
+              <p class="text-bold" style="font-size:16px;color:green;display:none" id="fromDateEndDateM">
                 <span class="fromDayOfMonth"></span>
                 <span class="endDayOfMonth"></span>
               </p>
-              <p
-                class="text-bold"
-                style="font-size:16px;color:green;display:none"
-                id="fromDateEndDateQ"
-              >
+              <p class="text-bold" style="font-size:16px;color:green;display:none" id="fromDateEndDateQ">
                 <span class="fromDayOfQuarter"></span>
                 <span class="endDayOfQuarter"></span>
               </p>
@@ -364,26 +361,10 @@
         <div class="col-md-12">
           <div class="box box-widget">
             <div class="box-header with-border">
-              <h3
-                v-if="period == 'W'"
-                class="box-title"
-                style="font-weight:bold"
-              >Data - {{kpiname}} - Weekly</h3>
-              <h3
-                v-if="period == 'M'"
-                class="box-title"
-                style="font-weight:bold"
-              >Data - {{kpiname}} - Monthly</h3>
-              <h3
-                v-if="period == 'Q'"
-                class="box-title"
-                style="font-weight:bold"
-              >Data - {{kpiname}} - Quarterly</h3>
-              <h3
-                v-if="period == 'Y'"
-                class="box-title"
-                style="font-weight:bold"
-              >Data - {{kpiname}} - Yearly</h3>
+              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Weekly</h3>
+              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Monthly</h3>
+              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Quarterly</h3>
+              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Yearly</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -395,21 +376,11 @@
                       <th v-if="period == 'M'" class="text-center" width="5%">Month</th>
                       <th v-if="period == 'Q'" class="text-center" width="5%">Quater</th>
                       <th v-if="period == 'Y'" class="text-center" width="5%">Year</th>
-                      <th
-                        v-for="(item,key,index) in labels "
-                        :key="index"
-                        class="text-center"
-                      >{{item}}</th>
+                      <th v-for="(item,key,index) in labels " :key="index" class="text-center">{{item}}</th>
                     </tr>
                     <tr>
                       <th class="text-center" width="5%">Target</th>
-                      <td
-                        v-for="(item,key,index) in dataremarks "
-                        :key="index"
-                        :class="item.Value == 0 ? ' text-center active-td' : 'active-td2 text-center'"
-                        :data-id="item.ID"
-                        @click="opencomment"
-                      >{{item.Value}}</td>
+                      <td v-for="(item,key,index) in dataremarks " :key="index" :class="item.Value == 0 ? ' text-center active-td' : 'active-td2 text-center'" :data-id="item.ID" @click="opencomment">{{item.Value}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -532,6 +503,7 @@
                               <div class="panel panel-info">
                                   <div class="panel-body">
                                       <span class="dataid" style="display:none"></span>
+
                                       <div class="form-group">
                                           <textarea class="form-control" id="comment" placeholder="write a comment..." rows="6"></textarea>
                                       </div>
@@ -551,24 +523,20 @@
                   </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
           </div>
           <!-- /.modal-content -->
       </div>
     </div>
 
+
     <div class="modal fade modal-window modal" id="modal-group-comment-data2">
       <div class="modal-dialog modal-lg" >
           <div class="modal-content">
               <div class="modal-header" style="background-color:#00a65a;color:#fff">
                   <h4 class="modal-title">
-                    <a
-                      href="#modal-group-comment-data"
-                      data-toggle="modal"
-                      data-dismiss="modal"
-                      style="color:#fff;cursor:pointer"
-                    >
+                    <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" style="color:#fff;cursor:pointer" >
                       <i class="fa fa-reply"></i>
                     </a>
                     &#32;
@@ -588,9 +556,11 @@
                       <li class="nav-item">
                           <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile">Add</a>
                       </li>
+                        <input v-model="seachActionPlan" class="search" style=""  type="text" placeholder="Search.." name="search2">
+                        <button class="btn btn-dark btn-sm"  @click="seachActionPlan = ' '" type="submit"><i class="fas fa-search-minus search2"></i></button>
                   </ul>
                   <div class="tab-content" id="pills-tabContent">
-                      <div class="tab-pane fade" id="pills-home">
+                      <div class="tab-pane fade" id="pills-home" style="overflow-x:scroll;">
                           <div class="listTask">
                               <table class="table table-condensed table-bordered">
                                   <thead>
@@ -614,49 +584,65 @@
                                   </tbody>
                               </table>
                           </div>
+                          <div class="card-footer clearfix">
+                          <Paginate
+                            v-model="page"
+                            :page-count="totalPage "
+                            :prev-text="'Prev'"
+                            :next-text="'Next'"
+                            :page-range="3"
+                            :margin-pages="2"
+                            :container-class="'pagination'"
+                            :page-class="'page-item'"
+                            :prev-class="'page-item'"
+                            :next-class="'page-item'"
+                            :page-link-class="'page-link'"
+                            :prev-link-class="'page-link'"
+                            :next-link-class="'page-link'"
+                            :click-handler="changePage"
+                          ></Paginate>
+                        </div>
                       </div>
                       <div class="tab-pane fade" id="pills-profile">
                           <div class="addTask">
                               <!-- text input -->
                               <div class="form-group">
-                                  <label>Task name</label>
-                                  <input type="text" class="form-control Title" autocomplete="off" placeholder="Enter ..." />
+                                  <label>Task name<b class="text-danger"> (*) </b></label>
+                                  <input type="text" class="form-control Title" autocomplete="off" placeholder="">
                               </div>
 
                               <!-- textarea -->
                               <div class="form-group">
-                                  <label>Description</label>
-                                  <div class="editable Description" style="border:1px solid #d2d6de" contenteditable="true">
-                                      <ul style="list-style: decimal;padding-left: 20px;">
-                                          <li></li>
-                                      </ul>
-                                  </div>
+                                  <label>Description<b class="text-danger"> (*) </b></label>
+                                  <textarea type="text" class="form-control Description" rows="3" placeholder=""></textarea>
                               </div>
 
                               <!-- input states -->
-                              <div class="form-group">
-                                  <label class="control-label" for="Tag">Assign PIC</label>
-                                  <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder="Require ..."></textarea>
+                              <div class="form-group" tooltip-position="top" data-c-tooltip='Enter a character "@@" inside the textarea and you will see the dropdown list populated with suggestions.'>
+                                <label class="control-label" for="Tag">Assign PIC<b class="text-danger"> (*) </b></label>
+                                <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder=""></textarea>
                               </div>
-                              <div class="form-group">
-                                  <label class="control-label" for="Auditor">Auditor</label>
-                                  
-                                  <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder="Optional ..."></textarea>
+                              <div class="form-group" tooltip-position="top" data-c-tooltip='Enter a character "@@" inside the textarea and you will see the dropdown list populated with suggestions.'>
+                                <label class="control-label" for="Auditor">Auditor<b class="text-danger"> (*) </b></label>
+                                <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder=""></textarea>
                               </div>
                               <!-- radio -->
                               <div  class="form-group">
-                                  <label >Due date</label><br>
+                                   <label>Due date<b class="text-danger"> (*) </b></label><br>
                                   <!-- <input autocomplete="off" type="text" class="form-control DueDate datepicker" id="datepicker" /> -->
                                   <!-- <date-pick @click="gettime(date)" :isDateDisabled="isFutureDate"  v-model="date"></date-pick> -->
                                   <input id="datepicker" class="form-control DueDate datepicker" autocomplete="off"  width="276" />
                               </div>
                               <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
+                              <div class="form-group">
+                                <b class="text-danger">(*) Require fields not to be blank. </b>
+                              </div>
                           </div>
                       </div>
                   </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" class="btn btn-primary">Back to remark</a>
               </div>
           </div>
@@ -674,11 +660,14 @@ import planetChartData from "../../plugins/Chartjs2/Demo";
 import Comment from "../ChartPeriod/Modal";
 import VueJwtDecode from 'vue-jwt-decode'
 import Paginate from "vuejs-paginate";
+import EventBus from "../../utils/EventBus.js";
 // import DatePick from 'vue-date-pick';
 // import 'vue-date-pick/dist/vueDatePick.css';
 export default {
   data() {
     return {
+      comID: 0,
+      seachActionPlan: "",
       date: '',
       data2:[],
       totalPage: 0,
@@ -788,7 +777,10 @@ export default {
           ]
         }
       },
-      searchyear: 0
+      searchyear: 0,
+      currentUser: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+      keyword: ' ',
+      URL: ''
     };
   },
   components: {
@@ -798,27 +790,98 @@ export default {
 
   },
   mounted() {
-    // $('#datepicker').datepicker({
-    //   autoclose: true, 
-    //   uiLibrary: 'bootstrap4',
-    //   format: 'mm-dd-yyyy'
-    // });
     let seft = this
     // seft.createChart("planet-chart");
+    
+    seft.Loadchart();
+    
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
+
+    let comID = Number(seft.$route.params.comID);
+    
+    let dataID = Number(seft.$route.params.dataID);
+   
+    let title = seft.$route.params.title;
+  
+    let type = seft.$route.params.type;
+  
+    EventBus.$on('hello', URL =>{
+      seft.URL = URL
+      console.log('self.URL')
+      console.log(seft.URL)
+      let currentUrl = seft.$router.currentRoute;
+      let comID = Number(seft.$route.params.comID);
+      let dataID = Number(seft.$route.params.dataID);
+      let title = seft.$route.params.title;
+      let type = seft.$route.params.type;
+     
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+        $("#modal-group-comment-data2").modal("show");
+            seft.remark(dataID);
+
+        seft.loadDataComment(true);
+        seft.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+              seft.remark(dataID);
+              seft.LoadDataActionPlan(dataID, comID);
+              seft.loadDataComment(true);
+        }
+    });
+
+    if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+      let boxTitle = $(".box-title").text();
+      $('.dataid').text(dataID);
+      $('.commentid').text(comID)
+      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+      $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+      $("#modal-group-comment-data2").modal("show");
+          seft.remark(dataID);
+
+      seft.loadDataComment(true);
+      seft.LoadDataActionPlan(dataID, comID);
+      activaTab('pills-home');
+    }
+
+    if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+     let boxTitle = $(".box-title").text();
+      $('.dataid').text(dataID);
+      $('.commentid').text(comID)
+      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+      $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+      $("#modal-group-comment-data").modal("show");
+          seft.remark(dataID);
+          seft.LoadDataActionPlan(dataID, comID);
+          seft.loadDataComment(true);
+    }
   },
   created() {
-    // $('#datepicker').datepicker({
-    //   autoclose: true, 
-    //   uiLibrary: 'bootstrap4',
-    //   format: 'mm-dd-yyyy'
-    // });
     let seft = this;
     seft.period = seft.$route.params.period;
-    seft.start = seft.$route.params.start;
-    seft.end = seft.$route.params.end;
+    seft.vstart = seft.$route.params.start;
+    seft.vend = seft.$route.params.end;
+    seft.searchyear = seft.$route.params.year;
     seft.Loadchart();
     seft.getAllNotifications();
+    let currentUrl = seft.$router.currentRoute;
+
+    console.log(currentUrl);
   },
   watch: {
     searchyear: function(newOld, oldVal) {
@@ -838,9 +901,62 @@ export default {
       let seft = this;
       this.$router.replace({ name: "chart", params: { end: seft.vend } });
       seft.Loadchart();
-    }
+    },
+    seachActionPlan: function(newOld,oldVal){
+      let seft = this
+      console.log(newOld)
+      console.log(oldVal)
+      let dataid = $('.dataid').text();
+      let commentid = $('.commentid').text()
+      console.log(dataid)
+      seft.keyword = newOld;
+      seft.LoadDataActionPlan(dataid, commentid);
+    },
+    URL: function(newOld,oldVal){
+      let self = this;
+      this.$router.replace({
+        name: "chart2" ,
+      });
+      self.LoadDataActionPlan();
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+        $("#modal-group-comment-data2").modal("show");
+            self.remark(dataID);
+
+        self.loadDataComment(true);
+        self.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+              self.remark(dataID);
+              self.LoadDataActionPlan(dataID, comID);
+              self.loadDataComment(true);
+        }
+      }
+    
   },
   methods: {
+    
     dateNow() {
       var date = new Date();
       var day = date.getDate();       // yields date
@@ -899,7 +1015,7 @@ export default {
           CreateTime: new Date()
           };
 
-      HTTP.post('https://localhost:44309/ChartPeriod/AddNotification', {notification:notification})
+      HTTP.post('https://localhost:44371/ChartPeriod/AddNotification', {notification:notification})
         .then(function (response) {
           console.log("done notification")
       });
@@ -937,7 +1053,7 @@ export default {
           CreateTime:this.dateNow()
           };
 
-        HTTP.post('https://localhost:44309/ChartPeriod/AddNotification', {notification:notification})
+        HTTP.post('https://localhost:44371/ChartPeriod/AddNotification', {notification:notification})
           .then(function (response) {
               console.log("done notification")
         });
@@ -1048,6 +1164,7 @@ export default {
       }
       HTTP.post("ChartPeriod/Approval",JSON.stringify(data))
       .then(data => {
+        console.log(data)
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
@@ -1061,7 +1178,8 @@ export default {
         id: id,
         userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
         KPILevelCode: seft.$route.params.kpilevelcode,
-        CategoryID: Number(seft.$route.params.catid)
+        CategoryID: Number(seft.$route.params.catid),
+        url: window.location.href
       };
       HTTP.post("ChartPeriod/Done",JSON.stringify(data))
       .then(data => {
@@ -1106,30 +1224,25 @@ export default {
           return false;
         }
         var KPILevelCodeAndPeriod = seft.$route.params.kpilevelcode + seft.$route.params.period;
-        var phrases = new Array();
-
-        $('.Description').each(function () {
-          $(this).find('li').each(function () {
-            var current = $(this);
-            if (current.children().length > 0) { return true; }
-            phrases.push($(this).text().trim());
-          });
-        });
-        var Description = phrases.join(';');
-        var Tag = $('#Tag').val().trim();
+        
+        let Tag = $('#Tag').val().trim();
         if (Tag !== null || Tag !== "" || Tag !== undefined)
-          Tag = Tag.replace(/\@/g, '').replace(/\ /g, ',');
+            Tag = Tag.replace(/\@/g, '').replace(/ +/g, ',');
 
-        var Auditor = $('#Auditor').val().replace("@","").trim();
+
+        let Auditor = $('#Auditor').val().trim();
+        if (Auditor !== null || Auditor !== "" || Auditor !== undefined)
+            Auditor = Auditor.replace(/\@/g, '').replace(/ +/g, ',');
+
         var obj = {
           // ID: id,
-          UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+          UserID: Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
           DataID: Number($('.dataid').text()),
           CommentID: Number($('.commentid').text()),
           Title: $('.addTask .Title').val(),
           Tag: Tag,
           KPILevelCodeAndPeriod: KPILevelCodeAndPeriod,
-          Description: Description,
+          Description: $('.Description').val(),
           Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
           SubmitDate: convertDate(new Date),
           Link: window.location.href,
@@ -1146,18 +1259,16 @@ export default {
           var commentid = Number($('.commentid').text());
           var dataid = Number($('.dataid').text());
           seft.LoadDataActionPlan(dataid, commentid);
+          success("success!");
           // chartperiodController.resetForm();
           activaTab('pills-home');
         }
         else {
           if (res.message !== "") {
-            Toast.fire({
-              type: 'warning',
-              title: res.message
-            })
+             warning("You're not Owner this KPI !")
 
           } else {
-            error( "Failed");
+            warning("You're not Owner this KPI !")
           }
         }
         });
@@ -1167,152 +1278,110 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this
-      HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
+      HTTP.post(`ChartPeriod/getallpaging/${dataid}/${commentid}/${Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid)}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
      .then(res => {
        console.log(res)
       //  var res = res.data;
        if (res.data.status) {
           var data = res.data.data;
+          seft.totalPage = res.data.totalPage;
+          seft.page = res.data.page;
+          seft.pageSize = res.data.pageSize;
           console.log(data)
           var html = '';
+          var content='';
           // debugger
+          
           $.each(data, function (i, item) {
-            $('.listTask .Approval').hide();
-            $('.listTask .Option').hide();
-            console.log(item)
+            let currentUser = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
+                tagContent = '',
+                statusContent = '',
+                aprovedContent = '';
 
-            if (item.CreatedBy  || item.Auditor )
-            {
-                html += '<tr data-id="' + item.ID + '">';
-                html += '<td>' + (i + 1) + '</td>';
-                html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                html += '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'" data-userid ="'+ item.CreatedBy +'" > ' + item.Description + '</div> ';
-                html += '</td>';
-                html += '<td>';
-
-                if (item.Tag !== null)
+            //Kiểm tra tag, nếu tag nhiều người thi render ra nhiều
+            if (item.Tag !== null)
                 {
-                    var array2 = item.Tag.split(',');
+                    let array2 = item.Tag.split(',');
 
                     $.each(array2, function (i, item2)
                     {
                         if (item2.length > 1) {
-                            html += '<span class="badge bg-navy text-bold ">' + item2 + '</span> ';
+                            tagContent += `<span class="badge badge-danger text-bold ">${item2}</span> `;
                         }
                     });
-                }
-
-                html += '</td>';
-                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
-                html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
-                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
-                html += '<td > ';
-                html += '<div class="pretty p-icon p-round p-pulse">';
-
-                if (item.Status)
-                {
-                    html += '<input type="checkbox" class="updateStatus" checked  />';
-                    html += '<div class="state p-success">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label>Finished</label>';
-                }
-                else
-                {
-                    html += '<input type="checkbox" class="updateStatus" />';
-                    html += '<div class="state p-danger">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label>Not finished</label>';
-                }
-
-                html += '</div>';
-                html += '</div>';
-                html += '</td > ';
-
-                $('.listTask .Approval').show();
-                $('.listTask .Option').show();
-                html += '<td> ';
-
-                if (item.ApprovedStatus)
-                {
-                    html += '<div class="pretty p-icon p-round p-jelly">';
-                    html += '<input type="checkbox" checked class="btnApproveActionPlan" />';
-                    html += '<div class="state p-success">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label class="black">Approved</label>';
-                    html += '</div>';
-                    html += '</div >';
-                }
-                else
-                {
-                    html += '<div class="pretty p-icon p-round p-jelly">';
-                    html += '<input type="checkbox" class="btnApproveActionPlan" />';
-                    html += '<div class="state p-danger">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label class="black">Not approved</label>';
-                    html += '</div>';
-                    html += '</div >';
-                }
-
-                html += '</td > ';
-                html += '<td>';
-                html += '<div class="btn-group">';
-                html += '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash-alt"></i></button>';
-                html += '</div>';
-                html += '</div>';
-                html += '</td>';
-                html += '</tr>';
             }
-            else
-            {
-                if(item.ListUserIDs[0] !== -1)
-                
-                    html += '<tr data-id="' + item.ID + '">';
-                else
-                    html += '<tr style="pointer-events: none;" data-id="' + item.ID + '">';
-                console.log(item.ListUserIDs)
-                html += '<td>' + (i + 1) + '</td>';
-                html += '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:91/ChartPeriod/UpdateSheduleDate/" data-type="text" data-name="Title" data-pk="'+item.ID+'" data-value="' + item.Title + '" data-title="Enter your title">' + item.Title + '</span></td>';
-                html += '<td><div class="DescriptionEdit" data-userid ="'+ item.CreatedBy +'" style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' + item.Description + '" data-pk="'+item.ID+'"> ' + item.Description + '</div> ';
-                html += '</td>';
-                html += '<td>';
 
-                if (item.Tag !== null)
-                {
-                    var array2 = item.Tag.split(',');
-                    $.each(array2, function (i, item2) {
-                        if (item2.length > 1) {
-                            html += '<span class="badge bg-default text-bold ">' + item2 + '</span> ';
-                        }
-                    });
-                }
+            //Kiểm tra Finish Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
+            if (item.Status) {
+                statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                        <input type="checkbox" class="updateStatus" checked>
+                                        <div class="state p-success"><i class="icon fa fa-check"></i>
+                                            <label>Finished</label>
+                                        </div>
+                                    </div>`;
+            }
+            else {
+                  statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                        <input type="checkbox" class="updateStatus">
+                                        <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                            <label>Not Finished</label>
+                                        </div>
+                                    </div>`;
+            }
+            //Kiểm tra Approved Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
 
-                html += '</td>';
-                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.Deadline + '"></td>';
-                html += '<td><input autocomplete="off" data-id="' + item.ID + '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.UpdateSheduleDate + '"></td>';
-                html += '<td><input autocomplete="off" data-id="'+item.ID+'" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' + item.ActualFinishDate + '"></td>';
-                html += '<td > ';
-                html += '<div class="pretty p-icon p-round p-pulse">';
+            if (item.ApprovedStatus) {
+                aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                        <input type="checkbox" class="btnApproveActionPlan" checked>
+                                        <div class="state p-success"><i class="icon fa fa-check"></i>
+                                            <label>Approved</label>
+                                        </div>
+                                    </div>`;
+            }
+            else {
+                  aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                        <input type="checkbox" class="btnApproveActionPlan">
+                                        <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                            <label>Not Approved</label>
+                                        </div>
+                                    </div>`;
+            }
+            console.log(item.ListUserIDs.indexOf(12))
+            //Nếu người nào tạo tag hoặc được chỉ định trong tag thì mới được click vào tag đó
+              content += `<tr data-id="${item.ID}" style="${item.CreatedBy == currentUser || item.Auditor == currentUser || item.ListUserIDs.indexOf(currentUser) != -1 ? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                                <td>${(i + 1)}</td>
+                                <td class="text-bold" style="padding-left:15px;">
+                                    <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
+                                </td>
+                                <td>
+                                    <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
+                                </td>
+                                <td>${tagContent}</td>
+                                <td>
+                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.Deadline}">
+                                </td>
+                                <td>
+                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="${item.UpdateSheduleDate}">
+                                </td>
+                                <td>
+                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
+                                </td>
+                                <td>
+                                    ${statusContent}
+                                </td>
+                                <td>
+                                    ${aprovedContent}
+                                </td>
+                                <td style="${item.CreatedBy == currentUser || item.ListAuditorIDs.indexOf(currentUser) !== -1? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>`;
 
-                if (item.Status)
-                {
-                    html += '<input type="checkbox" class="updateStatus" checked />';
-                    html += '<div class="state p-success">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label>Finished</label>';
-                }
-                else
-                {
-                    html += '<input type="checkbox" class="updateStatus" />';
-                    html += '<div class="state p-danger">';
-                    html += '<i class="icon fa fa-check"></i>';
-                    html += '<label>Not finished</label>';
-                }
-                html += '</div>';
-                html += '</div>';
-                html += '</td > ';
-                html += '</tr>';
-              }
+        
           });
+
           $('#datepicker').datepicker({
             autoclose: true, 
             uiLibrary: 'bootstrap4',
@@ -1321,7 +1390,7 @@ export default {
           
           $('.tblActionPlan').empty();
 
-          $('.tblActionPlan').append(html);
+          $('.tblActionPlan').append(content);
 
           $('.btnSaveActionPlan').unbind('click').on('click', function () {
             seft.addActionPlan();
@@ -1471,6 +1540,9 @@ export default {
     },
     btntabload(){
       let seft = this
+      $("#modal-group-comment-data").on("shown.bs.modal", function (){
+        activaTab('pills-home');
+      });
       $('.btnTask').unbind('click').on('click', function () {
       var commentid = $(this).data('commentid');
       $(".commentid").text(commentid);
@@ -1514,12 +1586,15 @@ export default {
               html += '    <img src="src/img/user-icon.png" alt="" class="img-circle">';
               html += '</a>';
               html += '<div class="media-body">';
+              html += '<span class="text-muted float-right  deleteComment"  data-commentid="' + item.CommentID + '" style="padding-left: 13px; cursor: pointer" >';
+              html += '   <p class="text-danger"></i></i> <i class="fas fa-times"></i> Delete</p>';
+              html += '</span>';
               html += '<strong class="text-success">' + item.FullName + '</strong>';
               html += '<span class="text-muted float-right">';
               html += '    <small class="text-muted">' + JSONDateWithTime(item.CommentedDate) + '</small>';
               html += '</span>';
               if (item.Read) {
-                  html += '<span class="label bg-green"> new</span>';
+                  html += '<span class="badge bg-green"> new</span>';
               }
               if (item.Task) {
                   html += '<p><a href="#modal-group-comment-data2" data-toggle="modal" data-commentid="' + item.CommentID + '" data-dismiss="modal" class="btn btn-sm btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
@@ -1535,11 +1610,41 @@ export default {
             });
             $('#media-list').empty();
             $('#media-list').append(html);
-            
+            //DeleteCommnet
+            $(".deleteComment").off('click').on('click', function () {
+                seft.deleteComment(Number($(this).data("commentid")))
+            });
             seft.btntabload();
           },
           error: function (err) {
         }
+      });
+    },
+    deleteComment(id) {
+      let self = this
+      Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+          if (result.value) {
+            HTTP.get(`https://localhost:44371/ChartPeriod/DeleteComment2/${id}`)
+            .then(res=>{
+              if(res){
+                console.log(res)
+                  if (res.status) {
+                  self.loadDataComment();
+                  success("success!");
+                  } else {
+                    warning('error');
+                }
+              }
+            })
+          }
       });
     },
     remark(id) {
@@ -1614,7 +1719,7 @@ export default {
       var mObj = {
         DataID: Number($(".dataid").text()),
         CommentMsg: CommentMsg,
-        UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+        UserID: Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
         Tag: Tag,
         Link: window.location.href,
         Title: $(".RemarkChart").text(),
@@ -1803,6 +1908,9 @@ export default {
     },
     Loadchart() {
       let seft = this;
+      // EventBus.$on('hello', URL =>{
+      //   seft.URL = URL
+      // });
       HTTP.get(`http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`)
         .then(response=>{
           console.log('respon1')
@@ -1864,3 +1972,19 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+input.search {
+    width: 50%;
+    margin-left: 5px;
+    border-radius: 5%;
+}
+i.fas.fa-search-minus.search2 {
+    width: 40px;
+    border-radius: 50%;
+}
+span.text-muted.float-right.deleteComment:hover {
+    font-size: 17px;
+}
+</style>

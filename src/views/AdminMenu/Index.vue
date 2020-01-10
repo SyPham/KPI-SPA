@@ -6,7 +6,7 @@
           <h3 class="card-title">List Menu</h3>
         </div>
         <div class="card-header">
-          <button @click="$router.push(`/Menus/create`)" class="btn btn-success pull-right">
+          <button @click="$router.push(`/Menus/create`)" class="btn btn-success float-right">
             <i class="fa fa-plus"></i> Add
           </button>
         </div>
@@ -135,8 +135,8 @@ export default {
         .then(result => {
      
           if (result.value) {
-            this.$http.get("http://10.4.4.224:98/menus/delete/" + id)
-            // HTTP.post("AdminCategory/delete/" + id)
+            // this.$http.get("http://10.4.4.224:98/menus/delete/" + id)
+            HTTP.get(`menus/delete/${id}`)
               .then(r => {
                 this.loadmenu();
                 $("#RemoveModal").modal("hide");

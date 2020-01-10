@@ -177,12 +177,18 @@ export default {
   },
   mounted() {
     let seft = this
-    // seft.createChart("planet-chart");
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
   },
   created() {
       let seft = this
       seft.LoadDataCompare();
+  },
+  mounted(){
+    let seft = this
+    setTimeout(function(){
+      seft.LoadDataCompare();
+    },300)
+    
   },
   methods: {
     convertPeriod(period) {
@@ -220,64 +226,64 @@ export default {
         let seft = this
         HTTP.get(`Compare/Compare/${seft.$route.params.obj}`)
         .then(r=>{
-            console.log(r.data)
-            seft.kpiname = r.data[0].kpiname
-            seft.period = seft.convertPeriod(r.data[0].period)
-            console.log(seft.period)
-            seft.datasets  = r.data;
-            let COLORS =  [
-                '#FF3784',
-                '#36A2EB',
-                '#4BC0C0',
-                '#F77825',
-                '#9966FF',
-                '#00A8C6',
-                '#379F7A',
-                '#CC2738',
-                '#8B628A',
-                '#8FBE00',
-                '#606060'
-            ];
-            for (var item = 0; item < seft.datasets.length; item ++) {
-               let  ListData = {
-                  label: seft.datasets[item].label,
-                  spanGaps: false, //data=undefined thi k draw line
-                  backgroundColor: COLORS[(item+1)],
-                  borderColor: COLORS[(item+1)],
-                  fill: false,
-                  data: seft.datasets[item].datasets,
-                  datalabels: {
-                      align: 'center',
-                      anchor: 'center'
-                  }
-                };
-                  seft.itemList.push(ListData);
-                  
-            }
-            console.log('itemList');
-            console.log(seft.itemList);
-            seft.label = r.data[0].label;
-            seft.labels = r.data[0].labels;
-            seft.targets = r.data[0].targets;
-            // console.log(seft.label)
+          console.log(r.data)
+          seft.kpiname = r.data[0].kpiname
+          seft.period = seft.convertPeriod(r.data[0].period)
+          console.log(seft.period)
+          seft.datasets  = r.data;
+          let COLORS =  [
+            '#FF3784',
+            '#36A2EB',
+            '#4BC0C0',
+            '#F77825',
+            '#9966FF',
+            '#00A8C6',
+            '#379F7A',
+            '#CC2738',
+            '#8B628A',
+            '#8FBE00',
+            '#606060'
+          ];
+          for (var item = 0; item < seft.datasets.length; item ++) {
+            let  ListData = {
+              label: seft.datasets[item].label,
+              spanGaps: false, //data=undefined thi k draw line
+              backgroundColor: COLORS[(item+1)],
+              borderColor: COLORS[(item+1)],
+              fill: false,
+              data: seft.datasets[item].datasets,
+              datalabels: {
+                align: 'center',
+                anchor: 'center'
+              }
+            };
+            seft.itemList.push(ListData);
+                
+          }
+          console.log('itemList');
+          console.log(seft.itemList);
+          seft.label = r.data[0].label;
+          seft.labels = r.data[0].labels;
+          seft.targets = r.data[0].targets;
+          // console.log(seft.label)
 
-            (seft.options.label = r.label),
-            (seft.options.title.text =
-              "KPI Compare Chart -" + r.data[0].kpiname + " - " + seft.convertPeriod(
-                r.data[0].period
-            )),
-            (seft.options.scales.yAxes[0].scaleLabel.labelString =
-              r.data[0].Unit);
-            seft.options.scales.xAxes[0].scaleLabel.labelString = seft.convertPeriod(
-                r.data[0].period
-            );
-            seft.createChart(
-                "planet-chart",
-                seft.datasets,
-                seft.targets,
-                seft.labels,
-                seft.label,
-                seft.unit
+          (seft.options.label = r.label),
+          (seft.options.title.text =
+            "KPI Compare Chart -" + r.data[0].kpiname + " - " + seft.convertPeriod(
+            r.data[0].period
+          )),
+          (seft.options.scales.yAxes[0].scaleLabel.labelString =
+            r.data[0].Unit);
+          seft.options.scales.xAxes[0].scaleLabel.labelString = seft.convertPeriod(
+            r.data[0].period
+          );
+          seft.createChart(
+            "planet-chart",
+            seft.datasets,
+            seft.targets,
+            seft.labels,
+            seft.label,
+            seft.unit
           );
         })
     }

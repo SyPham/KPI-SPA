@@ -21,13 +21,13 @@
     </div>
     <div class="col-md-12">
       <!-- <hierarchy></hierarchy> -->
-      <div class="pull-right box-tools">
+      <div class="float-right box-tools">
         <!-- button with a dropdown -->
         <button type="button" class="btn btn-warning btn-sm fancy-collapse">
-          <i class="fa fa-compress"></i> Collapse
+          <i class="fas fa-compress-arrows-alt"></i> Collapse
         </button>
         <button type="button" class="btn btn-info btn-sm fancy-expand">
-          <i class="fa fa-expand"></i> Expand
+          <i class="fas fa-expand-arrows-alt"></i> Expand
         </button>
       </div>
       <table id="tree"  class="table table-condensed table-hover table-striped fancytree-fade-expander fancytree-colorize-selected"  >

@@ -1,21 +1,25 @@
 <template>
-  <div id="appHeader">
+  <div id="appHeader" >
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav  class="main-header navbar navbar-expand navbar-white navbar-light">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#"
             ><i class="fas fa-bars"></i
           ></a>
         </li>
+        
       </ul>
+      
       <!-- Right navbar links -->
-      <ul class="navbar-nav ml-auto">
+      <ul  class="navbar-nav ml-auto">
         <!-- Messages Dropdown Menu -->
         <!-- <button v-for="entry in languages" :key="entry.title" >
           <flag :iso="entry.flag" v-bind:squared=false />
             {{entry.title}}
         </button> -->
+        <!-- language -->
+
         <li>
           <div class="henry-pham">
             <ul>
@@ -35,77 +39,93 @@
             </ul>
           </div>
         </li>
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link"
-            data-toggle="dropdown"
-            href="#"
-            aria-expanded="false"
-            data-id="123"
-          >
+
+        <!-- notification -->
+        <li  class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false" data-id="123">
             <i class="far fa-bell"></i>
-            <span class="badge badge-warning navbar-badge">{{
-              listdata.total
-            }}</span>
+            <span class="badge badge-warning navbar-badge">{{listdata.total}}</span>
           </a>
-          <div style="overflow: scroll;"  class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span class="dropdown-item dropdown-header">{{ listdata.total }} Notifications</span>
+          <ul class="dropdown-menu dropdown-menu-lg2 dropdown-menu-right" style="border-radius: 11px" >
+            <span class="dropdown-item dropdown-header">You have {{ listdata.total }} Notifications</span>
             <div  class="dropdown-divider"></div>
 
-            <div   v-for="(item, key, index) in data" :key="index">
+            <li>
+              <ul style="list-style: none ; padding: 0 ; margin: 0 ; overflow-x: scroll ; height:240px"  class="box-scrollbar"> 
+                <li v-for="(item, key, index) in data" :key="index">
 
-            <a v-if="item.Action == 'Comment' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h4><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fa fa-comment fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h4>
-              <p>The account {{item.SenderID === sessionUserID ? "you" : item.Sender}} mentioned {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} in {{item.Title}}</p>
-              <p>{{item.Content}}</p>
-            </a>
+                    <!-- comment -->
+                    <a v-if="item.Action == 'Comment' && item.SenderID !== userid "  :href="item.Link" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fas fa-comment"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">The account {{item.SenderID == userid ? "you" : item.Sender}} mentioned {{item.RecipientID == userid ? "you" : item.Recipient}} in {{item.Title}}</p>
+                      <p>{{item.Content}}</p>
+                    </a>
 
-            <a v-if="item.Action == 'Task' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>The account {{item.Sender}} assigned  {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} the task {{item.TaskName}} </p>
-              <p>{{item.Title}}</p>
-              <p>KPI - {{item.KPIName}}</p>
-            </a>
+                    <div  class="dropdown-divider"></div>
 
-            <a v-if="item.Action == 'Done' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
-              <p>{{item.Title}}</p>
-              <p>KPI - {{item.KPIName}}</p>
-            </a>
+                    <!-- Task -->
+                    <a v-if="item.Action == 'Task' && item.SenderID !== userid " @click="gettask(item.URL)"   class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">The account {{item.Sender}} assigned  {{item.RecipientID == userid ? "you" : item.Recipient}} the task {{item.TaskName}} </p>
+                      <p>{{item.Title}}</p>
+                      <p>KPI - {{item.KPIName}}</p>
+                    </a>
 
-            <a v-if="item.Action == 'Approval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-            <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
-            </a>
+                     <!-- Task-Auditor -->
+                    <a v-if="item.Action == 'Task-Auditor' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p class="wordWrap">The account {{item.Sender}} created the task "{{item.TaskName}}", assigned to {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} are Auditor. </p>
+                      <p class="wordWrap">{{item.Title}}</p>
+                      <p class="wordWrap">KPI Name "{{item.KPIName}}"</p>
+                    </a>
 
-            <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
-            </a>
+                    <!-- Done -->
+                    <a v-if="item.Action == 'Done' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
+                      <p>{{item.Title}}</p>
+                      <p>KPI - {{item.KPIName}}</p>
+                    </a>
 
-            <a v-if="item.Action == 'LateOnTask' " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>Some of task are overdue. Please check your email</p>
-            </a>
+                    <!-- Approval -->
+                    <a v-if="item.Action == 'Approval' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
+                    </a>
 
-            <a v-if="item.Action == 'LateOnUploadData' " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fa fa-tasks fa-fw"></i><small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>There are some KPIs that haven't uploaded their data on time. Please check your email</p>
-            </a>
+                    <!-- UpdateApproval -->
+                    <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
+                    </a>
 
-            <a v-if="item.Action == 'Upload' || item.SenderID === userid || item.RecipientID === userid || item.UserID === userid " href="#" class="dropdown-item" :data-id="item.ID" >
-              <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="pull-right"><i class="fa fa-clock-o"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-              <p>{{item.SenderID == userid ? "You" : "The account " + item.Sender}} has uploaded KPIs data successfully!</p>
-            </a>
+                    <!-- LateOnTask -->
+                    <a v-if="item.Action == 'LateOnTask' " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">Some of task are overdue. Please check your email</p>
+                    </a>
 
-            </div>
+                    <!-- LateOnUploadData -->
+                    <a v-if="item.Action == 'LateOnUploadData' " @click="getnotifi(item.NotificationID)"  style="cursor: pointer" class="dropdown-item" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">There are some KPIs that haven't uploaded their data on time. Please check your email</p>
+                    </a>
 
+                    <!-- Upload -->
+                    <a v-if="item.Action == 'Upload' || item.SenderID === userid || item.RecipientID === userid || item.UserID === userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <p style="font-size:14px">{{item.SenderID == userid ? "You" : "The account " + item.Sender}} has uploaded KPIs data successfully!</p>
+                    </a>
+                </li>
+              </ul>
+            </li>
             <div class="dropdown-divider"></div>
 
-            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-          </div>
+            <a href="#/ListHistoryNotification" style="text-align: center" class="dropdown-item dropdown-footer">See All Notifications</a>
+          </ul>
         </li>
+
+        <!-- changepassword -->
         <li  class="nav-item dropdown">
           <a  class="nav-link" data-toggle="dropdown" href="#">
             {{username}}
@@ -121,18 +141,19 @@
             <div class="dropdown-divider"></div>
           </div>
         </li>
+
+        <!-- logout -->
         <li class="nav-item">
-          <a
-            class="nav-link"
-            data-widget="control-sidebar"
-            data-slide="true"
-            href="#"
-          >
+          <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
             <i class="fas fa-th-large"></i>
           </a>
         </li>
+
       </ul>
+      
     </nav>
+
+    
     <!-- /.navbar -->
     <!-- @* ChangePassword *@ -->
     <div class="modal fade" id="modal-group-change-password" style="display: none">
@@ -172,6 +193,7 @@
         <!-- /.modal-dialog -->
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -179,6 +201,7 @@ import { HTTP } from "../../http-constants";
 import VueJwtDecode from "vue-jwt-decode";
 import i18n from "../../lang/i18n";
 import signal from "../../hub";
+import EventBus from "../../utils/EventBus.js";
 export default {
   name: "appHeader",
   data: function() {
@@ -217,6 +240,15 @@ export default {
     });
   },
   methods: {
+    gettask(URL){
+      EventBus.$emit('hello', URL);
+      window.location.href = URL
+      
+    },
+    getnotifi(NotificationID){
+      EventBus.$emit('hello', NotificationID);
+      return this.$router.push(`/LateOnUpload/${NotificationID}`)
+    },
     changepassword(){
       // debugger
       HTTP.post("https://localhost:44309/AdminUser/ChangePassword",{
@@ -318,24 +350,83 @@ export default {
         seft.data = r.data.data;
         seft.listdata = r.data;
         seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-        // console.log(seft.listdata);
+        console.log(seft.userid);
       });
     },
     logout: function() {
       this.$auth.destroyToken();
       // this.user = {};
       this.$router.push("/login");
-      swal.fire({
-        title: "Success!",
-        text: "Logout successfully!",
-        type: "success"
-      });
+      success("success!");
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.box-scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 5px
+}
+
+.box-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+    border-radius: 5px;
+}
+
+.box-scrollbar::-webkit-scrollbar-thumb {
+    background-color: black;
+    border: 2px solid black;
+    border-radius: 5px
+}
+
+.box-notification {
+    -webkit-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+    box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+    background-color: #F4F4F4;
+    border-radius: 10px;
+}
+
+
+.boxdataset-scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 5px
+}
+
+.boxdataset-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+    border-radius: 5px
+}
+
+.boxdataset-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #808080;
+    border: 2px solid #808080;
+    border-radius: 5px
+}
+
+.textOverflow {
+    white-space: nowrap;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.labelOverflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+a.dropdown-item:hover {
+    background: gainsboro;
+}
+.dropdown-menu-lg2 {
+    max-width: 361px;
+    min-width: 700px;
+}
 button {
   border: 1px solid green;
   font-size: 15px;

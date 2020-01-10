@@ -85,7 +85,7 @@
                 v-model="Permission"
                 aria-hidden="true"
               >
-                <option v-for="item in data" :key="item.value" :label="item.PermissionName" :value="item.ID"></option>
+                <option v-for="item in data" :key="item.value" :label="item.Name" :value="item.ID"></option>
 
                 <!-- <option data-select2-id="61">2</option> -->
               </select>
@@ -131,9 +131,7 @@ export default {
   },
   methods: {
     GetListAllPermissions(Userid = 0) {
-      HTTP.post("AdminUser/GetListAllPermissions", {
-        userid: Userid
-      })
+      HTTP.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);
@@ -179,11 +177,7 @@ export default {
       })
         .then(r => {
           this.$router.push("/adminUser");
-          swal.fire({
-            title: "Success!",
-            text: "Update successfully!",
-            type: "success"
-          });
+          success("success!");
           // console.log(r)
         })
         .catch(e => {

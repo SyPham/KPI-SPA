@@ -44,7 +44,7 @@
 
           <div class="card-footer">
             <button  type="submit" class="btn btn-success">Save</button>
-            <button @click="resetForm" type="submit" class="btn btn-danger">Close</button>
+            <button @click="$router.go(-1)" type="submit" class="btn btn-danger">Close</button>
           </div>
         </form>
       </div>
@@ -112,15 +112,11 @@ export default {
       })
         .then(r => {
           this.$router.push("/adminKPI");
-          swal.fire({
-            title: "Success!",
-            text: "Update successfully!",
-            type: "success"
-          });
+          success("success!");
           // console.log(r)
         })
         .catch(e => {
-          alertify.error("Erro");
+          warning("error!");
         });
     }
   }

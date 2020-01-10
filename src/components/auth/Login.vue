@@ -27,44 +27,43 @@
         <p class="login-box-msg">
           Login KPI SYSTEM
         </p>
-
-     
-          <div class="input-group mb-3">
-            <input type="text" v-model="user.username" class="form-control" placeholder="Username" />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
+        <div class="input-group mb-3">
+          <input type="text" @keyup.enter="login" v-model="user.username" class="form-control" placeholder="Username" />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
             </div>
           </div>
-          <div class="input-group mb-3">
-            <input
-              type="password"
-              class="form-control"
-              v-model="user.password"
-              placeholder="password"
-            />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            @keyup.enter="login"
+            type="password"
+            class="form-control"
+            v-model="user.password"
+            placeholder="password"
+          />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
             </div>
           </div>
-          <div class="row">
-            <div class="col-8">
-              <div class="icheck-primary">
-                <input type="checkbox" id="remember" />
-                <label for="remember">
-                  remember me
-                </label>
-              </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember" />
+              <label for="remember">
+                remember me
+              </label>
             </div>
-            <!-- /.col -->
-            <div class="col-4">
-              <button @click="login" class="btn btn-primary btn-block">Login</button>
-            </div>
-            <!-- /.col -->
           </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button @click="login" @keyup.enter="login" class="btn btn-primary btn-block">Login</button>
+          </div>
+          <!-- /.col -->
+        </div>
       </div>
       <!-- /.login-card-body -->
     </div>
@@ -87,7 +86,6 @@ export default {
     console.log(this.loggedIn)
   },
   methods: {
-    
     login(){
       this.$http.post("http://10.4.4.224:98/api/auth/login", this.user )
         .then(function(res) {
@@ -96,26 +94,9 @@ export default {
           // console.log( localStorage.getItem('menus'));
           this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.Menus ,res.body.user.User.Alias); // + 4 hours
           this.$router.push("/home");
-          const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 3000,
-              customClass: {
-                  title: 'title-class',
-                  icon: 'icon-class'
-              }
-          });
-          Toast.fire({
-            icon: 'success',
-            title: 'Signed in successfully'
-          })
+          success("success!");
       }).catch((res) => {
-          swal.fire({
-            title: "Error!",
-            text: "Username or password is incorrect ! Please try again",
-            type: "Error"
-          });
+          warning("Username and password are incorrect, please try again!")
         });
     }
   }

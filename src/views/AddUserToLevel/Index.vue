@@ -43,11 +43,12 @@
       <!-- <modal-oc></modal-oc> -->
       <div class="box" id="box">
         <div class="box-header with-border kpi-name"> 
-          <h3 style="font-size:18px" class="box-title pull-left">User List</h3>
+          <h3 style="font-size:18px" class="box-title float-left">User List</h3>
           <span class="id" style="display:none"></span>
           <span class="code" style="display:none"></span>
           <span class="level" style="display:none"></span>
-          <input class="form-control pull-right searchUser" autocomplete="off" placeholder="search here..." style="width:50%" />
+          <!-- <input v-model="searchname" class="form-control float-right searchUser" placeholder="search here..." style="width:40%" /> -->
+          <input  type="text" class="form-control float-right searchUser" placeholder="Search name" style="width:40%"/>
         </div>
         <div class="box-body">
           <div class="box-body">
@@ -82,21 +83,11 @@
         </div>
         <div class="box-footer clearfix">
           <ul id="paginationKPILevel" class="pagination pagination-sm no-margin pull-right">
-            <li>
-              <a href="#">«</a>
-            </li>
-            <li>
-              <a href="#">1</a>
-            </li>
-            <li>
-              <a href="#">2</a>
-            </li>
-            <li>
-              <a href="#">3</a>
-            </li>
-            <li>
-              <a href="#">»</a>
-            </li>
+            <li><a href="#">«</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">»</a></li>
           </ul>
           <!-- <Paginate
             v-model="page"
@@ -139,7 +130,9 @@ export default {
       page: 1,
       skip: 0,
       pageSize: 6,
-      code: " "
+      code: " ",
+      levelID: 0,
+      searchname: ""
     };
   },
   components: {
@@ -147,14 +140,87 @@ export default {
     Hierarchy,
     Paginate
   },
+  watch: {
+    searchname: function(newOld, oldVal) {
+      console.log(newOld)
+      console.log(oldVal)
+      this.code = newOld;
+      this.LoadDataUser();
+    }
+  },
   created() {
+    let seft = this;
+    // seft.loadAll();
+  },
+  mounted(){
     let seft = this;
     seft.loadAll();
   },
   methods: {
+    // registerEvent() {
+    //   let self = this
+    //   $('#box .searchUser').off('keypress').on('keypress', function (e) {
+    //     if (e.which === 13) {
+    //       var code = $(this).val();
+    //       var levelid = Number($('#box .code').text());
+    //       self.LoadDataUser(true, code,levelid);
+    //     }
+    //   });
+
+    //   $('#tbluser tr td:nth-child(2) input').change(function () {
+    //     var id = $(this).closest('tr').data('id');
+    //     var levelid = Number($('#box .kpi-name .code').text());
+
+    //     if (levelid === 0) {
+    //       Toast.fire({
+    //         type: 'error',
+    //         title: 'Please choose team!',
+    //       });
+    //     }
+    //     else {
+    //       let username = $(this).next().children('label').text();
+    //       self.updateUser(id,levelid);
+    //       self.LoadDataUser("",username,levelid);
+    //       $('#box .searchUser').val(username)
+    //     }
+    //   });
+    // },
+    // changePage(pageNum) {
+    //   this.LoadDataUser(this.name, pageNum);
+    // },
+    // LoadDataUser() {
+    //   let self = this
+    //   var levelID = Number($('#box .code').text());
+    //   console.log("Id of level is " + levelID);
+    //   //  debugger
+    //   HTTP.get(`https://localhost:44371/AddUserToLevel/LoadDataUser/${levelID}/${self.code}/${self.page}/${self.pageSize}`)
+    //   .then(response => {
+    //     console.log(response)
+    //     if (response.data.status) {
+          
+    //       self.totalPage = response.data.totalPage;
+    //       self.page = response.data.page;
+    //       self.data = response.data.data;
+    //       self.pageSize = response.data.pageSize;
+          
+    //       self.events = response.data.data;
+    //       // console.log(self.events)
+    //       // self.LoadDataUser();
+    //       self.registerEvent();
+    //     }
+    //   })
+          
+    // },
+    // updateUser(id = 0,levelid = 0) {
+    //   HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`).then(r => {
+    //     console.log(r);
+    //     if (r) {
+    //       success("success!");
+    //     }
+    //   });
+    // },
     loadAll() {
       let self = this;
-
       let glyph_opts = {
         preset: "bootstrap3",
         map: {}
@@ -168,96 +234,96 @@ export default {
       }
 
       $(function () {
-
-        AddUserToLevelController.init();
-
-        $("#treetable").fancytree({
-          extensions: ["glyph", "table"],
-          checkbox: false,
-          selectMode: 2,
-          dnd5: {
-            preventVoidMoves: true,
-            preventRecursion: true,
-            autoExpandMS: 400,
-            dragStart: function (node, data) {
-                return true;
+        setTimeout(function(){
+          AddUserToLevelController.init();
+          $("#treetable").fancytree({
+            extensions: ["glyph", "table"],
+            checkbox: false,
+            selectMode: 2,
+            dnd5: {
+              preventVoidMoves: true,
+              preventRecursion: true,
+              autoExpandMS: 400,
+              dragStart: function (node, data) {
+                  return true;
+              },
+              dragEnter: function (node, data) {
+                  // return ["before", "after"];
+                  return true;
+              },
+              dragDrop: function (node, data) {
+                  data.otherNode.moveTo(node, data.hitMode);
+              }
             },
-            dragEnter: function (node, data) {
-                // return ["before", "after"];
-                return true;
+            glyph: glyph_opts,
+            source: { url: "http://10.4.4.224:98/AdminKPILevel/GetListTree", debugDelay: 1000 },
+            table: {
+              indentation: 20,
+              nodeColumnIdx: 1,
+              //checkboxColumnIdx: 0
             },
-            dragDrop: function (node, data) {
-                data.otherNode.moveTo(node, data.hitMode);
+            gridnav: {
+              autofocusInput: false,
+              handleCursorKeys: true
+            },
+            focus: function (event, data) {
+  
+              logEvent(event, data, ", targetType=" + data.targetType);
+  
+              $('#box .kpi-name h3').text('User List - ' + data.node.title);
+              $('#box .kpi-name .code').text(data.node.key);
+              //$('#tbluser tr td:nth-child(2)').data('teamid',data.node.title);
+              
+              AddUserToLevelController.LoadDataUser(true, "", Number(data.node.key),true,true);
+  
+  
+              $('html, body').animate({
+                  scrollTop: $("#box").offset().top
+              }, 500)
+              // return false to prevent default behavior (i.e. activation, ...)
+              //return false;
+            },
+            lazyLoad: function (event, data) {
+              //data.result = { url: "/GetListTree", debugDelay: 1000 };
+            },
+            renderColumns: function (event, data) {
+              var node = data.node,
+              $tdList = $(node.tr).find(">td");
+  
+              // (Index #0 is rendered by fancytree by adding the checkbox)
+              // Set column #1 info from node data:
+              // (Index #2 is rendered by fancytree)
+              // Set column #3 info from node data:
+  
+              $tdList.eq(0).addClass('text-bold').text(node.data.levelnumber);
+              $tdList.eq(1).find('span.fancytree-icon').removeClass('fancytree-icon').addClass('fa fa-book')
+              $tdList.eq(1).addClass('text-bold');
+              $tdList.eq(1).addClass('text-bold');
+              // Static markup (more efficiently defined as html row template):
+              // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
+              // ...
             }
-          },
-          glyph: glyph_opts,
-          source: { url: "https://localhost:44309/AdminKPILevel/GetListTree", debugDelay: 1000 },
-          table: {
-            indentation: 20,
-            nodeColumnIdx: 1,
-            //checkboxColumnIdx: 0
-          },
-          gridnav: {
-            autofocusInput: false,
-            handleCursorKeys: true
-          },
-          focus: function (event, data) {
-
-            logEvent(event, data, ", targetType=" + data.targetType);
-
-            $('#box .kpi-name h3').text('User List - ' + data.node.title);
-            $('#box .kpi-name .code').text(data.node.key);
-            //$('#tbluser tr td:nth-child(2)').data('teamid',data.node.title);
-            
-            AddUserToLevelController.LoadDataUser(true, "", Number(data.node.key),true,true);
-
-
-            $('html, body').animate({
-                scrollTop: $("#box").offset().top
-            }, 500)
-            // return false to prevent default behavior (i.e. activation, ...)
-            //return false;
-          },
-          lazyLoad: function (event, data) {
-            //data.result = { url: "/GetListTree", debugDelay: 1000 };
-          },
-          renderColumns: function (event, data) {
-            var node = data.node,
-            $tdList = $(node.tr).find(">td");
-
-            // (Index #0 is rendered by fancytree by adding the checkbox)
-            // Set column #1 info from node data:
-            // (Index #2 is rendered by fancytree)
-            // Set column #3 info from node data:
-
-            $tdList.eq(0).addClass('text-bold').text(node.data.levelnumber);
-            $tdList.eq(1).find('span.fancytree-icon').removeClass('fancytree-icon').addClass('fa fa-book')
-            $tdList.eq(1).addClass('text-bold');
-            $tdList.eq(1).addClass('text-bold');
-            // Static markup (more efficiently defined as html row template):
-            // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
-            // ...
-          }
-        });
+          });
+        },500)
 
         $('.fancy-collapse').off('click').on('click', function () {
             $("#treetable").fancytree("getTree").expandAll(false);
         });
+
         $('.fancy-expand').off('click').on('click', function () {
             $("#treetable").fancytree("getTree").expandAll();
         });
 
       });
-      let config = {
-        code: " ",
+      var config = {
         pageSize: 6,
         pageIndex: 1
       };
-      let AddUserToLevelController = {
-        init: function() {
+      var AddUserToLevelController = {
+        init: function () {
           AddUserToLevelController.registerEvent();
         },
-        registerEvent: function() {
+        registerEvent: function () {
           $('#box .searchUser').off('keypress').on('keypress', function (e) {
             if (e.which === 13) {
               var code = $(this).val();
@@ -271,50 +337,86 @@ export default {
             var levelid = Number($('#box .kpi-name .code').text());
 
             if (levelid === 0) {
-              Toast.fire({
-                type: 'error',
-                title: 'Please choose team!',
-              });
+              success("success!");
             }
             else {
               let username = $(this).next().children('label').text();
-              AddUserToLevelController.updateUser(id,levelid);
+              AddUserToLevelController.updateUser(id, levelid);
               AddUserToLevelController.LoadDataUser("",username,levelid);
               $('#box .searchUser').val(username)
             }
+
+          });
+
+        },
+        updateUser: function (id, levelid) {
+          var mObj = {
+            id: id,
+            levelid: levelid,
+          };
+
+          $.ajax({
+            url: "https://localhost:44309/AddUserToLevel/AddUserToLevel",
+            data: JSON.stringify(mObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+              console.log(result)
+              if (result) {
+                success("success!");
+              }
+            },
+            error: function (errormessage) {
+              console.log(errormessage.responseText);
+            }
           });
         },
+        loadTree: function () {
+          $.ui.fancytree.getTree("#treetable").reload().done();
+        },
         LoadDataUser: function (changePageSize, code, levelID) {
-          //  debugger
-            HTTP.get(`AddUserToLevel/LoadDataUser/${levelID}/${self.code}/${config.pageIndex}/${config.pageSize}`)
-            .then(response => {
+          
+          $.ajax({
+            url: 'https://localhost:44309/AddUserToLevel/LoadDataUser',
+            type: "GET",
+            data: {
+                levelid: levelID,
+                code: code,
+                page: config.pageIndex,
+                pageSize: config.pageSize
+            },
+            dataType: "json",
+            success: function (response) {
               console.log(response)
-              if (response.data.status) {
+              if (response.status) {
                 var count;
-                var data = response.data.data;
-                var page = response.data.page;
-                var pageSize = response.data.pageSize;
+                var data = response.data;
+                var page = response.page;
+                var pageSize = response.pageSize;
+                self.events = response.data;
                 if (page === 1)
-                count = page;
+                  count = page;
                 else count = (page - 1) * pageSize + 1;
-                self.events = response.data.data;
-                // console.log(self.events)
-
-                AddUserToLevelController.pagingKPILevel(response.data.total, function () {
+                AddUserToLevelController.pagingKPILevel(response.total, function () {
                   AddUserToLevelController.LoadDataUser("", code, levelID);
                 }, changePageSize);
                 AddUserToLevelController.registerEvent();
               }
-            })
-          
+            },
+            error: function (err) {
+                //console.log(err);
+            }
+          });
         },
         pagingKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
+
           //Unbind pagination if it existed or click change pagesize
           if ($('#paginationKPILevel a').length === 0 || changePageSize === true) {
-            $('#paginationKPILevel').empty();
-            $('#paginationKPILevel').removeData("twbs-pagination");
-            $('#paginationKPILevel').unbind("page");
+              $('#paginationKPILevel').empty();
+              $('#paginationKPILevel').removeData("twbs-pagination");
+              $('#paginationKPILevel').unbind("page");
           }
 
           $('#paginationKPILevel').twbsPagination({
@@ -329,18 +431,7 @@ export default {
               setTimeout(callback, 500);
             }
           });
-        },
-        loadTree: function () {
-          $.ui.fancytree.getTree("#treetable").reload().done();
-        },
-        updateUser: function(id = 0,levelid = 0) {
-          HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`).then(r => {
-            console.log(r);
-            if (r) {
-              success("success!");
-            }
-          });
-        },
+        }
       }
     }
   }

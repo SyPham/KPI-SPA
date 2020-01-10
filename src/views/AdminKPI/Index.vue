@@ -1,10 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12 my-3">
-      <button
-        @click="$router.push(`/adminKPI/create`)"
-        class="btn btn-success float-right"
-      >
+      <button @click="$router.push(`/adminKPI/create`)" class="btn btn-success float-right">
         <i class="fa fa-plus"></i> Add
       </button>
     </div>
@@ -19,18 +16,9 @@
             <div class="form-group">
 
             <div class="input-group">
-             <input
-              v-model="searchname"
-              type="text"
-              class="form-control"
-              placeholder="Search name"
-            />
-              <div
-                class="input-group-append"
-                data-target="#timepicker"
-                data-toggle="datetimepicker"
-              >
-                <button class="input-group-text btn-success" @click="searchname = null"> <i class="fa fa-remove"></i> Clear</button>
+             <input v-model="searchname" type="text" class="form-control" placeholder="Search name"/>
+              <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                <button class="input-group-text btn-success" @click="searchname = ' '"> <i class="fas fa-remove"></i> Clear</button>
               </div>
             </div>
             <!-- /.input group -->
@@ -75,59 +63,6 @@
                       >
                         <i class="fa fa-trash"></i> Delete
                       </button>
-
-                      <!-- Modal -->
-                      <div
-                        class="modal fade"
-                        id="RemoveModal"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalCenterTitle"
-                        aria-hidden="true"
-                      >
-                        <div
-                          class="modal-dialog modal-dialog-centered"
-                          role="document"
-                        >
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5
-                                class="modal-title"
-                                id="exampleModalLongTitle"
-                              >
-                                Delete KPIs
-                              </h5>
-                              <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              Are you sure delete this ?
-                            </div>
-                            <div class="modal-footer">
-                              <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                @click="remove(kpi.ID)"
-                                type="button"
-                                class="btn btn-danger"
-                              >
-                                OK
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </td>
@@ -173,7 +108,7 @@ export default {
       pageSize: 10,
       catID: 0,
       name: " ",
-      searchname: " "
+      searchname: ""
 
     };
   },
@@ -201,15 +136,13 @@ export default {
       let seft = this
       HTTP.post(`AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}`).then(res => {
         console.log(res);
+        
         seft.totalPage = res.data.pageCount;
         seft.page = res.data.page;
         seft.data = res.data.data;
         seft.pageSize = res.data.pageSize;
       });
     },
-    // FilterTable: function() {
-    //   this.LoadData(this.name, 1);
-    // },
     changePage(pageNum) {
       this.LoadData(this.name, pageNum);
     },
@@ -249,7 +182,7 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.post("AdminKPI/delete/" + id)
+            HTTP.get(`AdminKPI/delete/${id}`)
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");
@@ -276,11 +209,10 @@ export default {
         });
       // console.log(id);
     },
-
     showRemoveModal: function(kpi) {
       $("#RemoveModal").modal("show");
     }
   },
-
+  
 };
 </script>

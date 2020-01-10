@@ -26,23 +26,25 @@
           >Category - {{categoryname}} - Yearly</h3>
         </div>
         <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding" id="tblDataset">
+        <div class="box-body ">
           <div class="col-md-12">
+            
             <!-- @* month *@ -->
-            <div class="form-inline" id="searchMonth">
+            <div class="form-inline" :style="period ==  'm' ? '':'display:none'"  id="searchMonth">
               <label class="my-1 mr-2" for="startMonth">Year</label>
-              <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="monthOfYear">
-                <option value="0" selected>Choose...</option>
+              <select v-model="searchyear"  class="custom-select form-control year my-1 mr-sm-2" id="monthOfYear">
+                <option value="0" selected >Choose...</option>
                 <option
                   v-for="(n, key, index) in 100"
                   :key="index"
                   :value="2000 + n"
+                  
                 >Year {{2000 + n}}</option>
               </select>
               <label class="my-1 mr-2" for="startMonth">Start</label>
               <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startMonth">
-                <option value="0" selected>Choose...</option>
-                <option value="1">Jan</option>
+                <option value="0" >Choose...</option>
+                <option value="1" >Jan</option>
                 <option value="2">Feb</option>
                 <option value="3">Mar</option>
                 <option value="4">Apr</option>
@@ -57,7 +59,7 @@
               </select>
               <label class="my-1 mr-2" for="endMonth">End</label>
               <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endMonth">
-                <option value="0" selected>Choose...</option>
+                <option value="0" >Choose...</option>
                 <option value="1">Jan</option>
                 <option value="2">Feb</option>
                 <option value="3">Mar</option>
@@ -69,7 +71,7 @@
                 <option value="9">Sep</option>
                 <option value="10">Oct</option>
                 <option value="11">Nov</option>
-                <option value="12">Dec</option>
+                <option value="12" >Dec</option>
               </select>
               <button type="button" class="btn bg-teal margin btnClearSearch">
                 <i class="fa fa-remove"></i> Reset search
@@ -77,24 +79,24 @@
             </div>
 
             <!-- @* week *@ -->
-            <div class="form-inline" style="display:none" id="searchWeek">
+            <div class="form-inline" :style="period ==  'w' ? '':'display:none'" id="searchWeek">
               <label class="my-1 mr-2" for="startMonth">Year</label>
-              <select class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
+              <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Year</option>
+                <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n" >Year {{2000 + n}}</option>
               </select>
               <label class="my-1 mr-2" for="startWeek">Week Start</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="startWeek">
-                <option value="0" selected>Choose...</option>
+              <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startWeek">
+                <option value="0" >Choose...</option>
 
-                <option value="@i">Week</option>
+                <option v-for="(n, key, index) in 53" :key="index" :value="n" >Week {{n}}</option>
               </select>
               <label class="my-1 mr-2" for="endWeek">Week End</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="endWeek">
+              <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endWeek">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Week</option>
+                <option v-for="(n, key, index) in 53" :key="index" :value="n"  >Week {{n}}</option>
               </select>
               <button type="button" class="btn bg-teal margin btnClearSearch">
                 <i class="fa fa-remove"></i> Reset search
@@ -102,24 +104,24 @@
             </div>
 
             <!-- @* Quarter *@ -->
-            <div class="form-inline" style="display:none" id="searchQuarter">
+            <div class="form-inline" :style="period ==  'q' ? '':'display:none'" id="searchQuarter">
               <label class="my-1 mr-2" for="startMonth">Year</label>
-              <select class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
+              <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Year</option>
+                <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
               </select>
               <label class="my-1 mr-2" for="startMonth">Start</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="startQuarter">
+              <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startQuarter">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Quarter</option>
+                <option v-for="(n, key, index)  in 4"  :key="index" :value=" n">Quarter {{n}}</option>
               </select>
               <label class="my-1 mr-2" for="endMonth">End</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="endQuarter">
+              <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endQuarter">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Quarter</option>
+                <option v-for="(n, key, index)  in 4"  :key="index" :value=" n">Quarter {{n}}</option>
               </select>
               <button type="button" class="btn bg-teal margin btnClearSearch">
                 <i class="fa fa-remove"></i> Reset search
@@ -127,29 +129,31 @@
             </div>
 
             <!-- @* Year *@ -->
-            <div class="form-inline" style="display:none" id="searchYear">
+            <div class="form-inline" :style="period ==  'y' ? '':'display:none'" id="searchYear">
               <label class="my-1 mr-2" for="YearOfYear">Year</label>
-              <select class="custom-select form-control my-1 mr-sm-2 YearOfYear" id="YearOfYear">
+              <select v-model="searchyear" class="custom-select form-control my-1 mr-sm-2 YearOfYear" id="YearOfYear">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Year</option>
+                <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
               </select>
               <label class="my-1 mr-2" for="startMonth">Start</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="startYear">
+              <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startYear">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Year</option>
+                <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
               </select>
               <label class="my-1 mr-2" for="endMonth">End</label>
-              <select class="custom-select form-control my-1 mr-sm-2" id="endYear">
+              <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endYear">
                 <option value="0" selected>Choose...</option>
 
-                <option value="@i">Year</option>
+                <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
               </select>
               <button type="button" class="btn bg-teal margin btnClearSearch">
                 <i class="fa fa-remove"></i> Reset search
               </button>
             </div>
+
+
           </div>
         </div>
         <div class="box-body table-responsive no-padding" id="tblDataset">
@@ -409,7 +413,9 @@ export default {
       KPILevelCode: "",
       searchyear: 0,
       vstart: 0,
-      vend: 0
+      vend: 0,
+      start: 0,
+      end: 0,
     };
   },
   watch: {
@@ -435,8 +441,11 @@ export default {
   created() {
     let seft = this;
     seft.period = seft.$route.params.period;
-    seft.start = seft.$route.params.start;
-    seft.end = seft.$route.params.end;
+    seft.vstart = seft.$route.params.start;
+    console.log(seft.start)
+    seft.vend = seft.$route.params.end;
+    console.log(seft.end)
+    seft.searchyear = seft.$route.params.year
     seft.LoadDataset();
   },
   methods: {

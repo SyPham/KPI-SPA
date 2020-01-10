@@ -63,7 +63,14 @@ import Workplace from "./views/Workplace/Index"
 //Compare
 import Compare from "./views/Compare/Index"
 
+//LateOnUpload
+import LateOnUpload from "./views/LateOnUpload/Index"
 
+//ListHistoryNotification
+import ListHistoryNotification from "./views/ListHistoryNotification/Index"
+
+//ChartPeriod/ListTasks
+import ListTask from "./views/ListTask/Index"
 
 Vue.use(VueRouter);
 
@@ -86,7 +93,7 @@ const router = new VueRouter({
       children: [ 
         {path: "/adminKPI",component: AdminKPI , meta: { requiresAuth: true } },
         { path: "/adminKPI/create",component: CreateKPI  },
-        { path: "/adminKPI/:id/edit", component: UpdateKPI }
+        { path: "/adminKPI/:id/edit", component: UpdateKPI  }
       ]
     },
 
@@ -202,7 +209,17 @@ const router = new VueRouter({
       path: "/ChartPeriod",
       component: Dash,
       children: [
-        { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod},
+        { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod ,meta: { requiresAuth: true }},
+        { name: 'chart2', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end/:type/:comID/:dataID/:title" ,component: ChartPeriod,meta: { requiresAuth: true }},
+      ]
+    },
+
+    //ChartPeriod/ListTasks
+    {
+      path: "/ChartPeriod/ListTasks",
+      component: Dash,
+      children: [
+        {  path: "/ChartPeriod/ListTasks/:kpilevelcode",component: ListTask},
       ]
     },
 
@@ -234,7 +251,25 @@ const router = new VueRouter({
         { name: 'compare', path: "/compare/:obj",component: Compare},
       ]
     },
- 
+    
+
+    //LateOnUpload
+    {
+      path: "/LateOnUpload",
+      component: Dash,
+      children: [
+        { name: 'notification', path: "/LateOnUpload/:notification",component: LateOnUpload}
+      ]
+    },
+
+    //Workplace
+    {
+      path: "/ListHistoryNotification",
+      component: Dash,
+      children: [
+        { path: "/ListHistoryNotification",component: ListHistoryNotification}
+      ]
+    },
 
   ]
 });

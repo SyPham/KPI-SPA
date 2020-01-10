@@ -73,23 +73,22 @@
           </div>
         </div>
         <div class="box-footer clearfix">
-          <ul id="paginationCategoryKPILevel" class="pagination pagination-sm no-margin pull-right">
-            <li>
-              <a href="#">«</a>
-            </li>
-            <li>
-              <a href="#">1</a>
-            </li>
-            <li>
-              <a href="#">2</a>
-            </li>
-            <li>
-              <a href="#">3</a>
-            </li>
-            <li>
-              <a href="#">»</a>
-            </li>
-          </ul>
+          <Paginate
+            v-model="page"
+            :page-count="totalPage"
+            :prev-text="'Prev'"
+            :next-text="'Next'"
+            :page-range="3"
+            :margin-pages="2"
+            :container-class="'pagination'"
+            :page-class="'page-item'"
+            :prev-class="'page-item'"
+            :next-class="'page-item'"
+            :page-link-class="'page-link'"
+            :prev-link-class="'page-link'"
+            :next-link-class="'page-link'"
+            :click-handler="changePage"
+          ></Paginate>
         </div>
       </div>
     </div>
@@ -104,23 +103,33 @@
 import Hierarchy from "../../components/adminOC/Hierarchy"
 import listoc from "../../components/adminOC/Modal"
 import { HTTP } from '../../http-constants';
+import Paginate from "vuejs-paginate";
 export default {
   name: "IndexKpi",
   data() {
     return {
       OCCategory: [],
+      totalPage: 0,
+      page: 1,
+      skip: 0,
+      pageSize: 10,
       // test: "A"
     };
   },
   components:{
     listoc,
-    Hierarchy
+    Hierarchy,
+    Paginate
   },
   created() {
     let seft = this;
     seft.loadAll();
   },
   methods: {
+    changePage(pageNum) {
+      let self = this
+      self.getCategoryByOC(this.name, pageNum);
+    },
     loadAll() {
       let self = this;
 
@@ -138,90 +147,93 @@ export default {
       $(function() {
         let seft = this;
         ocCategoryAdmin.init();
-        $("#treetable").fancytree({
-          extensions: ["glyph", "table"],
-          checkbox: false,
-          selectMode: 2,
-          dnd5: {
-            preventVoidMoves: true,
-            preventRecursion: true,
-            autoExpandMS: 400,
-            dragStart: function(node, data) {
-              return true;
-            },
-            dragEnter: function(node, data) {
-              // return ["before", "after"];
-              return true;
-            },
-            dragDrop: function(node, data) {
-              data.otherNode.moveTo(node, data.hitMode);
-            }
-          },
-          glyph: glyph_opts,
-          source: {
-            url: "https://localhost:44309/OCCategories/GetListTree",
-            debugDelay: 1000
-          },
-          table: {
-            indentation: 20,
-            nodeColumnIdx: 1
-            //checkboxColumnIdx: 0
-          },
-          gridnav: {
-            autofocusInput: false,
-            handleCursorKeys: true
-          },
-          focus: function(event, data) {
-            $('#boxCategory tr').off('focus').on('focus', function () {
-              $('#boxCategory tr').removeClass('trfocus');
-                })
-              logEvent(event, data, ", targetType=" + data.targetType);
-              var node = data.node,
-                  $tdList = $(node.tr).find(">td");
-              var level = $tdList.eq(0).text();
-              var name = $tdList.eq(1).text();
-              $('#boxCategory .kpi-name h3').text('Category list - ' + name);
-              console.log(data.node.key)
-              ocCategoryAdmin.getCategoryByOC(true, level,data.node.key)
-              logEvent(event, data, ", targetType=" + data.targetType);
-              $('#boxCategory .ocId').val(data.node.key);
+        setTimeout(function(){
 
-            $("html, body").animate(
-              {
-                scrollTop: $("#boxCategory").offset().top
+          $("#treetable").fancytree({
+            extensions: ["glyph", "table"],
+            checkbox: false,
+            selectMode: 2,
+            dnd5: {
+              preventVoidMoves: true,
+              preventRecursion: true,
+              autoExpandMS: 400,
+              dragStart: function(node, data) {
+                return true;
               },
-              500
-            );
-            // return false to prevent default behavior (i.e. activation, ...)
-            //return false;
-          },
-          // lazyLoad: function (event, data) {
-          //     data.result = { url: "https://localhost:44309/AdminKPILevel/GetListTree", debugDelay: 1000 };
-          // },
-          renderColumns: function(event, data) {
-            var node = data.node,
-              $tdList = $(node.tr).find(">td");
-
-            // (Index #0 is rendered by fancytree by adding the checkbox)
-            // Set column #1 info from node data:
-            // (Index #2 is rendered by fancytree)
-            // Set column #3 info from node data:
-
-            $tdList
-              .eq(0)
-              .addClass("text-bold")
-              .text(node.data.levelnumber);
-            $tdList
-              .eq(1)
-              .find("span.fancytree-icon")
-              .removeClass("fancytree-icon")
-              .addClass("fa fa-book");
-            $tdList.eq(1).addClass("text-bold");
-            // Static markup (more efficiently defined as html row template):
-            // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
-            // ...
-          }
-        });
+              dragEnter: function(node, data) {
+                // return ["before", "after"];
+                return true;
+              },
+              dragDrop: function(node, data) {
+                data.otherNode.moveTo(node, data.hitMode);
+              }
+            },
+            glyph: glyph_opts,
+            source: {
+              url: "https://localhost:44371/OCCategories/GetListTree",
+              debugDelay: 1000
+            },
+            table: {
+              indentation: 20,
+              nodeColumnIdx: 1
+              //checkboxColumnIdx: 0
+            },
+            gridnav: {
+              autofocusInput: false,
+              handleCursorKeys: true
+            },
+            focus: function(event, data) {
+              $('#boxCategory tr').off('focus').on('focus', function () {
+                $('#boxCategory tr').removeClass('trfocus');
+                  })
+                logEvent(event, data, ", targetType=" + data.targetType);
+                var node = data.node,
+                    $tdList = $(node.tr).find(">td");
+                var level = $tdList.eq(0).text();
+                var name = $tdList.eq(1).text();
+                $('#boxCategory .kpi-name h3').text('Category list - ' + name);
+                console.log(data.node.key)
+                ocCategoryAdmin.getCategoryByOC(true, level,data.node.key)
+                logEvent(event, data, ", targetType=" + data.targetType);
+                $('#boxCategory .ocId').val(data.node.key);
+  
+              $("html, body").animate(
+                {
+                  scrollTop: $("#boxCategory").offset().top
+                },
+                500
+              );
+              // return false to prevent default behavior (i.e. activation, ...)
+              //return false;
+            },
+            // lazyLoad: function (event, data) {
+            //     data.result = { url: "https://localhost:44309/AdminKPILevel/GetListTree", debugDelay: 1000 };
+            // },
+            renderColumns: function(event, data) {
+              var node = data.node,
+                $tdList = $(node.tr).find(">td");
+  
+              // (Index #0 is rendered by fancytree by adding the checkbox)
+              // Set column #1 info from node data:
+              // (Index #2 is rendered by fancytree)
+              // Set column #3 info from node data:
+  
+              $tdList
+                .eq(0)
+                .addClass("text-bold")
+                .text(node.data.levelnumber);
+              $tdList
+                .eq(1)
+                .find("span.fancytree-icon")
+                .removeClass("fancytree-icon")
+                .addClass("fa fa-book");
+              $tdList.eq(1).addClass("text-bold");
+              // Static markup (more efficiently defined as html row template):
+              // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
+              // ...
+            }
+          });
+        },500)
         $(".fancy-collapse")
           .off("click")
           .on("click", function() {
@@ -237,39 +249,30 @@ export default {
               .expandAll();
           });
       });
-      let config = {
-        pageSize: 6,
-        pageIndex: 1
-      };
       let ocCategoryAdmin = {
         init: function() {
           ocCategoryAdmin.registerEvent();
         },
         registerEvent: function () {
           $('.addOCCategoryCheckbox').off('click').on('click', function () {
-              var ocId = Number($('#boxCategory .ocId').val());
-              var catId = Number($(this).closest('tr').data('id'));
-              ocCategoryAdmin.addOCCategory(ocId,catId);
+            var ocId = Number($('#boxCategory .ocId').val());
+            var catId = Number($(this).closest('tr').data('id'));
+            ocCategoryAdmin.addOCCategory(ocId,catId);
           })
         },
         getCategoryByOC: function (changePageSize, level, ocID) {
           console.log("GetCategoryByOC")
-          HTTP.get(`http://10.4.4.224:98/OCCategories/GetCategoryByOC/${level}/${ocID}/${config.pageIndex}/${config.pageSize}`)
+          HTTP.get(`https://localhost:44371/OCCategories/GetCategoryByOC/${level}/${ocID}/${self.page}/${self.pageSize}`)
           .then(response =>{
             console.log(response)
             if (response.data.status) {
               var count = 1;
-              var data = response.data.data;
-              var page = response.data.page;
-              var pageSize = response.data.pageSize;
-              if (page === 1)
-                count = page;
-              else count = (page - 1) * pageSize + 1;
+              self.totalPage = response.data.totalPage;
+              self.page = response.data.page;
+              self.data = response.data.data;
+              self.pageSize = response.data.pageSize;
               self.OCCategory = response.data.data;
               console.log(self.OCCategory)
-              ocCategoryAdmin.pagingCategoryKPILevel(response.data.total, function () {
-                ocCategoryAdmin.getCategoryByOC("", level,ocID);
-              }, changePageSize);
               ocCategoryAdmin.registerEvent();
             }
           })

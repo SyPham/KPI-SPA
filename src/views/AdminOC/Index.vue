@@ -238,85 +238,88 @@ export default {
       $(function() {
         let seft = this;
         kpiController.init();
-        $("#treetable").fancytree({
-          extensions: ["glyph", "table"],
-          checkbox: false,
-          selectMode: 2,
-          dnd5: {
-            preventVoidMoves: true,
-            preventRecursion: true,
-            autoExpandMS: 400,
-            dragStart: function(node, data) {
-              return true;
-            },
-            dragEnter: function(node, data) {
-              // return ["before", "after"];
-              return true;
-            },
-            dragDrop: function(node, data) {
-              data.otherNode.moveTo(node, data.hitMode);
-            }
-          },
-          glyph: glyph_opts,
-          source: {
-            url: "http://10.4.4.224:98/AdminKPILevel/GetListTree",
-            debugDelay: 1000
-          },
-          table: {
-            indentation: 20,
-            nodeColumnIdx: 1
-            //checkboxColumnIdx: 0
-          },
-          gridnav: {
-            autofocusInput: false,
-            handleCursorKeys: true
-          },
-          focus: function(event, data) {
-            event.preventDefault();
-            logEvent(event, data, ", targetType=" + data.targetType);
+        setTimeout(function(){
 
-            $("#box .kpi-name h3").text("KPI - " + data.node.title);
-            $("#box .kpi-name .code").text(data.node.key);
-
-            kpiController.loadDataCategory();
-            kpiController.loadDataKPILevel(true, data.node.key);
-
-            $("html, body").animate(
-              {
-                scrollTop: $("#box").offset().top
+          $("#treetable").fancytree({
+            extensions: ["glyph", "table"],
+            checkbox: false,
+            selectMode: 2,
+            dnd5: {
+              preventVoidMoves: true,
+              preventRecursion: true,
+              autoExpandMS: 400,
+              dragStart: function(node, data) {
+                return true;
               },
-              500
-            );
-            // return false to prevent default behavior (i.e. activation, ...)
-            //return false;
-          },
-          // lazyLoad: function (event, data) {
-          //     data.result = { url: "https://localhost:44309/AdminKPILevel/GetListTree", debugDelay: 1000 };
-          // },
-          renderColumns: function(event, data) {
-            var node = data.node,
-              $tdList = $(node.tr).find(">td");
-
-            // (Index #0 is rendered by fancytree by adding the checkbox)
-            // Set column #1 info from node data:
-            // (Index #2 is rendered by fancytree)
-            // Set column #3 info from node data:
-
-            $tdList
-              .eq(0)
-              .addClass("text-bold")
-              .text(node.data.levelnumber);
-            $tdList
-              .eq(1)
-              .find("span.fancytree-icon")
-              .removeClass("fancytree-icon")
-              .addClass("fa fa-book");
-            $tdList.eq(1).addClass("text-bold");
-            // Static markup (more efficiently defined as html row template):
-            // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
-            // ...
-          }
-        });
+              dragEnter: function(node, data) {
+                // return ["before", "after"];
+                return true;
+              },
+              dragDrop: function(node, data) {
+                data.otherNode.moveTo(node, data.hitMode);
+              }
+            },
+            glyph: glyph_opts,
+            source: {
+              url: "http://10.4.4.224:98/AdminKPILevel/GetListTree",
+              debugDelay: 1000
+            },
+            table: {
+              indentation: 20,
+              nodeColumnIdx: 1
+              //checkboxColumnIdx: 0
+            },
+            gridnav: {
+              autofocusInput: false,
+              handleCursorKeys: true
+            },
+            focus: function(event, data) {
+              event.preventDefault();
+              logEvent(event, data, ", targetType=" + data.targetType);
+  
+              $("#box .kpi-name h3").text("KPI - " + data.node.title);
+              $("#box .kpi-name .code").text(data.node.key);
+  
+              kpiController.loadDataCategory();
+              kpiController.loadDataKPILevel(true, data.node.key);
+  
+              $("html, body").animate(
+                {
+                  scrollTop: $("#box").offset().top
+                },
+                500
+              );
+              // return false to prevent default behavior (i.e. activation, ...)
+              //return false;
+            },
+            // lazyLoad: function (event, data) {
+            //     data.result = { url: "https://localhost:44309/AdminKPILevel/GetListTree", debugDelay: 1000 };
+            // },
+            renderColumns: function(event, data) {
+              var node = data.node,
+                $tdList = $(node.tr).find(">td");
+  
+              // (Index #0 is rendered by fancytree by adding the checkbox)
+              // Set column #1 info from node data:
+              // (Index #2 is rendered by fancytree)
+              // Set column #3 info from node data:
+  
+              $tdList
+                .eq(0)
+                .addClass("text-bold")
+                .text(node.data.levelnumber);
+              $tdList
+                .eq(1)
+                .find("span.fancytree-icon")
+                .removeClass("fancytree-icon")
+                .addClass("fa fa-book");
+              $tdList.eq(1).addClass("text-bold");
+              // Static markup (more efficiently defined as html row template):
+              // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
+              // ...
+            }
+          });
+        },500)
         $(".fancy-collapse")
           .off("click")
           .on("click", function() {

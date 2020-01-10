@@ -189,7 +189,7 @@ export default {
       periodChecked = false,
       statusUploadData = false,
       statusEmptyData = false
-    ) {
+      ) {
       let className;
       //Neu co trong bang KPIOC thi mau xanh, nguoc lai mau xam
       if (checked == true) {
@@ -235,6 +235,8 @@ export default {
       let self = this;
       EventBus.$on("CatWasEdit", categoryId => {
         self.categoryId = categoryId;
+        console.log('self.categoryId')
+        console.log(self.categoryId)
       });
 
       HTTP.get(
@@ -448,11 +450,11 @@ export default {
       let startYear = year - 5;
 
       if (period.toLowerCase() === "w")
-        self.$router.push(`/dataset/${self.categoryId}/w/1/${week}/${year}`);
+        self.$router.push(`/dataset/${self.categoryId}/w/1/53/${year}`);
       if (period.toLowerCase() === "m")
-        self.$router.push(`/dataset/${self.categoryId}/m/1/${month}/${year}`);
+        self.$router.push(`/dataset/${self.categoryId}/m/1/12/${year}`);
       if (period.toLowerCase() === "q")
-        self.$router.push(`/dataset/${self.categoryId}/q/1/${quarter}/${year}`);
+        self.$router.push(`/dataset/${self.categoryId}/q/1/4/${year}`);
       if (period.toLowerCase() === "y")
         self.$router.push(`/dataset/${self.categoryId}/y/${startYear}/${year}/${year}`);
     },

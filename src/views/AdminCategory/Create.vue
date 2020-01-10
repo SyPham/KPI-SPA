@@ -96,43 +96,25 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        HTTP.post("adminCategory/add", {
+        HTTP.post("adminCategory/add",{
           Name: this.Name,
-          LevelID: this.Level,
-          Code: this.Code
+          Code: this.Code,
+          LevelID: this.Level
         })
-          .then(response => {
-            this.$router.push("/adminCategory");
-            swal.fire({
-              title: "Success!",
-              text: "Update successfully!",
-              type: "success"
-            });
-            // console.log()
-          })
-          .catch(e => {
-            console.error(e);
-          });
+        .then(response => {
+          console.log(response)
+          this.$router.push("/adminCategory");
+          success("success!");
+          // console.log()
+        })
+        .catch(e => {
+          console.error(e);
+        });
       }
     },
     resetForm() {
       this.$router.push("/adminCategory");
     }
-    // save() {
-    //   HTTP.post("adminCategory/add", {
-    //     Name: this.Name,
-    //     LevelID: this.Level,
-    //     Code: this.Code
-    //   })
-    //     .then(response => {
-    //       this.$router.push("/adminCategory");
-    //       alertify.success("Success");
-    //       // console.log()
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //     });
-    // }
   }
 };
 </script>

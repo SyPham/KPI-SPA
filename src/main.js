@@ -11,6 +11,8 @@ import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
 import Vuelidate from 'vuelidate'
 import FlagIcon from 'vue-flag-icon'
+import Vuesax from 'vuesax'
+import 'vuesax/dist/vuesax.css' //Vuesax styles
 // import store from './store'
 import HenryHub from './hub'
 import VueJwtDecode from 'vue-jwt-decode'
@@ -18,7 +20,9 @@ import VuePageTransition from 'vue-page-transition'
 
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VuePageTransition)
-
+Vue.use(Vuesax, {
+  // options here
+})
 Vue.use(HenryHub)
 Vue.use(FlagIcon)
 // Vue.use(QuestionHub)

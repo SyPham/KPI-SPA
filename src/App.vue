@@ -1,7 +1,7 @@
 <template>
-    <transition name="fade">
+    <vue-page-transition name="fade-in-down">
         <router-view></router-view>
-    </transition>
+    </vue-page-transition>
 </template>
 
 <script>

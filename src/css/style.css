@@ -3,6 +3,10 @@
     
 }
 
+p.text-danger:hover {
+    font-size: 17px;
+}
+
 /* a.nav-link {
     color: #fff;
 } */

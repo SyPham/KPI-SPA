@@ -24,6 +24,7 @@
     "element-ui": "^2.13.0",
     "eslint-plugin-vue": "^6.0.1",
     "jquery.fancytree": "^2.33.0",
+    "material-icons": "^0.3.1",
     "moment": "^2.24.0",
     "mustache": "^3.1.0",
     "sweetalert2": "^9.4.1",
@@ -40,6 +41,7 @@
     "vuejs-datetimepicker": "^1.1.13",
     "vuejs-paginate": "^2.1.0",
     "vuelidate": "^0.7.4",
+    "vuesax": "^3.11.5",
     "vuex": "^2.5.0"
   },
   "browserslist": [

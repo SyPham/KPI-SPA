@@ -23,9 +23,6 @@ const initTree = function(url, focus) {
 };
 
 const loadtree = () => {
-    $.ui.fancytree
-      .getTree("#treetable")
-      .reload()
-      .done();
+    $.ui.fancytree.getTree("#treetable").reload().done();
 }
 export { initTree ,loadtree};

@@ -116,7 +116,7 @@
                 aria-hidden="true"
                 :class="{ 'is-invalid': submitted && $v.Permission.$error }"
               >
-                <option v-for="item in data" :key="item.value" :label="item.PermissionName" :value="item.ID"></option>
+                <option v-for="item in data" :key="item.value" :label="item.Name" :value="item.ID"></option>
 
                 <!-- <option data-select2-id="61">2</option> -->
               </select>
@@ -201,10 +201,8 @@ export default {
           });
       }
     },
-    GetListAllPermissions(Userid = 0) {
-      HTTP.post("AdminUser/GetListAllPermissions", {
-        userid: Userid
-      })
+    GetListAllPermissions() {
+      HTTP.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);
@@ -216,21 +214,6 @@ export default {
     resetForm() {
       this.$router.push("/adminUser");
     }
-    // save() {
-    //   HTTP.post("AdminKPI/add", {
-    //     Name: this.Name,
-    //     LevelID: this.LevelID,
-    //     Unit: this.Unit
-    //   })
-    //     .then(response => {
-    //       this.$router.push("/adminKPI");
-    //       alertify.success("Success");
-    //       // console.log()
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //     });
-    // }
   }
 };
 </script>

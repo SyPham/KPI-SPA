@@ -96,11 +96,7 @@ export default {
       })
         .then(r => {
           this.$router.push("/adminCategory");
-          swal.fire({
-            title: "Success!",
-            text: "Update successfully!",
-            type: "success"
-          });
+          success("success!");
           // console.log(r);
         })
         .catch(e => {

@@ -1,24 +1,29 @@
 <template>
   <div class="row">
+    <div class="col-md-12 my-3">
+      <button @click="$router.push(`/adminCategory/create`)" class="btn btn-success float-right">
+        <i class="fa fa-plus"></i> Add
+      </button>
+    </div>
+
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">List Categories</h3>
-        </div>
-        <div class="card-header">
-          <button @click="$router.push(`/adminCategory/create`)" class="btn btn-success pull-right">
-            <i class="fa fa-plus"></i> Add
-          </button>
-        </div>
-        <div class="card-header">
-          <input
-            v-model="searchname"
-            type="text"
-            class="form-control"
-            placeholder="Search name"
-          />
-          <br>
-          <button class="btn btn-success btn-sm" @click="searchname = ''">Cancel Search</button>
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="card-title">List Categories</h3>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <input v-model="searchname" type="text" class="form-control" placeholder="Search name"/>
+                  <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                    <button class="input-group-text btn-success" @click="searchname = ''">Clear</button>
+                  </div>    
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -78,9 +83,8 @@
           ></Paginate>
         </div>
       </div>
-      <!-- /.card -->
     </div>
-    <!-- /.col -->
+      <!-- /.card -->
   </div>
 </template>
 
@@ -99,7 +103,7 @@ export default {
       skip: 0,
       name: " ",
       pageSize: 10,
-      searchname: " ",
+      searchname: "",
     };
   },
   components: {
@@ -112,12 +116,16 @@ export default {
     seft.ID = seft.$route.params.id;
     // console.log(seft.ID);
   },
-   watch: {
+  watch: {
     searchname: function(newOld, oldVal) {
-      this.LoadData(this.name, newOld, 1);
+      console.log(newOld)
+      console.log(oldVal)
+      this.name = newOld;
+      this.LoadData();
     }
   },
   methods: {
+
     LoadData() {
       let seft = this;
       HTTP.post(`Admincategory/LoadData2/${seft.page}/${seft.pageSize}/${seft.name}`)
@@ -159,7 +167,7 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.post("AdminCategory/delete/" + id)
+            HTTP.get(`AdminCategory/delete/${id}`)
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");
@@ -170,7 +178,7 @@ export default {
               });
             swalWithBootstrapButtons.fire(
               "Deleted!",
-              "Your file has been deleted.",
+              "Category has been deleted.",
               "success"
             );
           } else if (
