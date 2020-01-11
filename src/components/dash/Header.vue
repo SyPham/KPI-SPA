@@ -55,7 +55,7 @@
                 <li v-for="(item, key, index) in data" :key="index">
 
                     <!-- comment -->
-                    <a v-if="item.Action == 'Comment' && item.SenderID !== userid "  :href="item.Link" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <a v-if="item.Action == 'Comment' && item.SenderID !== userid " @click="getcomment(item.Link)"   class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fas fa-comment"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.SenderID == userid ? "you" : item.Sender}} mentioned {{item.RecipientID == userid ? "you" : item.Recipient}} in {{item.Title}}</p>
                       <p>{{item.Content}}</p>
@@ -74,7 +74,7 @@
                      <!-- Task-Auditor -->
                     <a v-if="item.Action == 'Task-Auditor' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
-                      <p class="wordWrap">The account {{item.Sender}} created the task "{{item.TaskName}}", assigned to {{item.RecipientID === sessionUserID ? "you" : item.Recipient}} are Auditor. </p>
+                      <p class="wordWrap">The account {{item.Sender}} created the task "{{item.TaskName}}", assigned to {{item.RecipientID === userid ? "you" : item.Recipient}} are Auditor. </p>
                       <p class="wordWrap">{{item.Title}}</p>
                       <p class="wordWrap">KPI Name "{{item.KPIName}}"</p>
                     </a>
@@ -240,6 +240,10 @@ export default {
     });
   },
   methods: {
+    getcomment(Link){
+      EventBus.$emit('hello2', Link);
+      window.location.href = Link
+    },
     gettask(URL){
       EventBus.$emit('hello', URL);
       window.location.href = URL

@@ -780,7 +780,8 @@ export default {
       searchyear: 0,
       currentUser: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
       keyword: ' ',
-      URL: ''
+      URL: '',
+      Link:''
     };
   },
   components: {
@@ -792,58 +793,18 @@ export default {
   mounted() {
     let seft = this
     // seft.createChart("planet-chart");
-    
-    seft.Loadchart();
-    
+    setTimeout(function(){
+      seft.Loadchart();
+    },500)
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
 
     let comID = Number(seft.$route.params.comID);
-    
     let dataID = Number(seft.$route.params.dataID);
-   
     let title = seft.$route.params.title;
-  
     let type = seft.$route.params.type;
-  
-    EventBus.$on('hello', URL =>{
-      seft.URL = URL
-      console.log('self.URL')
-      console.log(seft.URL)
-      let currentUrl = seft.$router.currentRoute;
-      let comID = Number(seft.$route.params.comID);
-      let dataID = Number(seft.$route.params.dataID);
-      let title = seft.$route.params.title;
-      let type = seft.$route.params.type;
-     
-      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
-        let boxTitle = $(".box-title").text();
-        $('.dataid').text(dataID);
-        $('.commentid').text(comID)
-        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
-        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
-
-        $("#modal-group-comment-data2").modal("show");
-            seft.remark(dataID);
-
-        seft.loadDataComment(true);
-        seft.LoadDataActionPlan(dataID, comID);
-        activaTab('pills-home');
-      }
-      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-        let boxTitle = $(".box-title").text();
-          $('.dataid').text(dataID);
-          $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
-          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
-
-          $("#modal-group-comment-data").modal("show");
-              seft.remark(dataID);
-              seft.LoadDataActionPlan(dataID, comID);
-              seft.loadDataComment(true);
-        }
-    });
 
     if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+      console.log("1")
       let boxTitle = $(".box-title").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
@@ -851,25 +812,105 @@ export default {
       $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
       $("#modal-group-comment-data2").modal("show");
-          seft.remark(dataID);
+        seft.remark(dataID);
 
       seft.loadDataComment(true);
       seft.LoadDataActionPlan(dataID, comID);
       activaTab('pills-home');
     }
-
     if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-     let boxTitle = $(".box-title").text();
+      console.log("2")
+      let boxTitle = $(".box-title").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
       $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
       $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
       $("#modal-group-comment-data").modal("show");
-          seft.remark(dataID);
-          seft.LoadDataActionPlan(dataID, comID);
-          seft.loadDataComment(true);
+        seft.remark(dataID);
+        seft.LoadDataActionPlan(dataID, comID);
+        seft.loadDataComment(true);
     }
+
+    // EventBus AddTask
+    setTimeout(function(){
+      EventBus.$on('hello', URL =>{
+        seft.URL = URL
+        console.log('self.URL')
+        console.log(seft.URL)
+        let currentUrl = seft.$router.currentRoute;
+        let comID = Number(seft.$route.params.comID);
+        let dataID = Number(seft.$route.params.dataID);
+        let title = seft.$route.params.title;
+        let type = seft.$route.params.type;
+       
+        if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+          let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+          $("#modal-group-comment-data2").modal("show");
+              seft.remark(dataID);
+  
+          seft.loadDataComment(true);
+          seft.LoadDataActionPlan(dataID, comID);
+          activaTab('pills-home');
+        }
+        if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+          let boxTitle = $(".box-title").text();
+            $('.dataid').text(dataID);
+            $('.commentid').text(comID)
+            $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+            $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+  
+            $("#modal-group-comment-data").modal("show");
+                seft.remark(dataID);
+                seft.LoadDataActionPlan(dataID, comID);
+                seft.loadDataComment(true);
+        }
+      });
+    },500)
+
+    // EventBus addComment
+    setTimeout(function(){
+
+      EventBus.$on('hello2',Link=>{
+        seft.Link = Link
+        console.log('self.Link')
+        console.log(seft.Link)
+        let currentUrl = seft.$router.currentRoute;
+        let comID = Number(seft.$route.params.comID);
+        let dataID = Number(seft.$route.params.dataID);
+        let title = seft.$route.params.title;
+        let type = seft.$route.params.type;
+        // if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        //   let boxTitle = $(".box-title").text();
+        //   $('.dataid').text(dataID);
+        //   $('.commentid').text(comID)
+        //   $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        //   $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+        //   $("#modal-group-comment-data2").modal("show");
+        //       seft.remark(dataID);
+  
+        //   seft.loadDataComment(true);
+        //   seft.LoadDataActionPlan(dataID, comID);
+        //   activaTab('pills-home');
+        // }
+        if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+          let boxTitle = $(".box-title").text();
+            $('.dataid').text(dataID);
+            $('.commentid').text(comID)
+            $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+            $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+  
+            $("#modal-group-comment-data").modal("show");
+              seft.remark(dataID);
+              seft.LoadDataActionPlan(dataID, comID);
+              seft.loadDataComment(true);
+        }
+      })
+    },500)
   },
   created() {
     let seft = this;
@@ -879,9 +920,6 @@ export default {
     seft.searchyear = seft.$route.params.year;
     seft.Loadchart();
     seft.getAllNotifications();
-    let currentUrl = seft.$router.currentRoute;
-
-    console.log(currentUrl);
   },
   watch: {
     searchyear: function(newOld, oldVal) {
@@ -917,7 +955,7 @@ export default {
       this.$router.replace({
         name: "chart2" ,
       });
-      self.LoadDataActionPlan();
+      // self.Loadchart();
       let currentUrl = self.$router.currentRoute;
       console.log("currentUrl");
       console.log(currentUrl);
@@ -927,6 +965,7 @@ export default {
       let type = self.$route.params.type;
       
       if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        console.log("1")
         let boxTitle = $(".box-title").text();
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
@@ -941,6 +980,7 @@ export default {
         activaTab('pills-home');
       }
       if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+        console.log("2")
         let boxTitle = $(".box-title").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
@@ -951,8 +991,48 @@ export default {
               self.remark(dataID);
               self.LoadDataActionPlan(dataID, comID);
               self.loadDataComment(true);
-        }
       }
+    },
+    Link: function(newOld,oldVal){
+      let self = this;
+      this.$router.replace({
+        name: "chart2" ,
+      });
+      // self.Loadchart();
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      // if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+      //   let boxTitle = $(".box-title").text();
+      //   $('.dataid').text(dataID);
+      //   $('.commentid').text(comID)
+      //   $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+      //   $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+      //   $("#modal-group-comment-data2").modal("show");
+      //       self.remark(dataID);
+
+      //   self.loadDataComment(true);
+      //   self.LoadDataActionPlan(dataID, comID);
+      //   activaTab('pills-home');
+      // }
+      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+            self.remark(dataID);
+            self.LoadDataActionPlan(dataID, comID);
+            self.loadDataComment(true);
+      }
+    }
     
   },
   methods: {
@@ -1015,7 +1095,7 @@ export default {
           CreateTime: new Date()
           };
 
-      HTTP.post('https://localhost:44371/ChartPeriod/AddNotification', {notification:notification})
+      HTTP.post('ChartPeriod/AddNotification', {notification:notification})
         .then(function (response) {
           console.log("done notification")
       });
@@ -1053,7 +1133,7 @@ export default {
           CreateTime:this.dateNow()
           };
 
-        HTTP.post('https://localhost:44371/ChartPeriod/AddNotification', {notification:notification})
+        HTTP.post('ChartPeriod/AddNotification', {notification:notification})
           .then(function (response) {
               console.log("done notification")
         });
