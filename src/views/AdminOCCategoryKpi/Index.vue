@@ -173,7 +173,391 @@
       <!-- endkpilevellist -->
 
       <!-- modal -->
-      <listoc></listoc>
+      <div class="modal fade" id="modal-group-general" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Weekly</h4>
+            <input type="text" value class="KPILevelID" style="display:none" />
+            <input type="number" class="form-control kpilevelInputHidden" style="display:none" />
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="box-body">
+                <div class="form-group ownerManager">
+                  <label for="ownerManager">
+                    Manager
+                    <span style="color:red">(*)</span>
+                  </label>
+                  <textarea class="form-control KPILevelSelect2" placeholder="Manager..." rows="1"></textarea>
+                </div>
+                <div class="form-group Owner">
+                  <label for="owner">
+                    Owner
+                    <span style="color:red">(*)</span>
+                  </label>
+                  <textarea class="form-control KPILevelSelect2" placeholder="Owner..." rows="1"></textarea>
+                </div>
+                <div class="form-group PIC">
+                  <label for="PIC">
+                    Updater
+                    <span style="color:red">(*)</span>
+                  </label>
+                  <textarea class="form-control KPILevelSelect2" placeholder="Updater..." rows="1"></textarea>
+                </div>
+
+                <div class="form-group Sponsor">
+                  <label for="Sponsor">Sponsor</label>
+                  <textarea class="form-control KPILevelSelect2" placeholder="Sponsor..." rows="1"></textarea>
+                </div>
+                <div class="form-group Participant">
+                  <label for="Participant">Participant</label>
+                  <textarea
+                    class="form-control KPILevelSelect2"
+                    placeholder="Participant..."
+                    rows="1"
+                  ></textarea>
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary btnSaveGeneral"
+                  id="btnSaveGeneral"
+                >Save</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="modal-group" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Add User</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="box-body" id="addKPI">
+                <div class="form-group" style="display:none">
+                  <label for="Name">ID</label>
+                  <input type="text" class="form-control ID" id="ID" placeholder="ID" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Username</label>
+                  <input type="text" class="form-control Name" id="Name" placeholder="Enter Name" />
+                </div>
+                <div class="form-group">
+                  <label for="Passwrod">Passwrod</label>
+                  <input
+                    type="password"
+                    class="form-control Passwrod"
+                    id="Passwrod"
+                    placeholder="Enter Passwrod"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="Code">Code</label>
+                  <input type="text" class="form-control Code" id="Code" placeholder="Enter Code" />
+                </div>
+                <div class="form-group">
+                  <label for="Code">Level</label>
+                  <input
+                    type="text"
+                    class="form-control LevelID"
+                    id="LevelID"
+                    placeholder="Enter Level"
+                  />
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button id="btnAdd" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- @* update *@ -->
+    <div class="modal fade" id="modal-group2" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Update User</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="box-body" id="updateKpi">
+                <div class="form-group" style="display:none">
+                  <label for="Name">ID</label>
+                  <input type="text" class="form-control ID" id="ID" placeholder="ID" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Name</label>
+                  <input type="text" class="form-control Name" id="Name" placeholder="Enter Name" />
+                </div>
+                <div class="form-group">
+                  <label for="Code">Code</label>
+                  <input type="text" class="form-control Code" id="Code" placeholder="Enter Code" />
+                </div>
+                <div class="form-group">
+                  <label for="Code">Level</label>
+                  <input
+                    type="text"
+                    class="form-control LevelID"
+                    id="LevelID"
+                    placeholder="Enter Level"
+                  />
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveUpdateModal">Update</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- @* weekly madal *@ -->
+    <div class="modal fade" id="modal-group-weekly" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Weekly</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="weekly">Day of the week</label>
+                  <select class="form-control weekly" data-id id="weekly">
+                    <option value>Choose day of the week</option>
+                    <option value="MON">Monday</option>
+                    <option value="TUE">Tuesday</option>
+                    <option value="WED">Wednesday</option>
+                    <option value="THU">Thursday</option>
+                    <option value="FRI">Friday</option>
+                    <option value="SAT">Saturday</option>
+                  </select>
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="button" class="btn btn-primary btnsaveweekly" id="btnsaveweekly">Save</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- @* monthly modal *@ -->
+    <div class="modal fade" id="modal-group-monthly" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Monthly</h4>
+          </div>
+          <div class="modal-body">
+            <div class="box-body">
+              <div class="form-group">
+                <label for="monthly">Monthly</label>
+                <div class="input-group date monthly">
+                  <input type="text" data-id class="form-control date monthly" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+              <a href="#" class="btn btn-primary" id="btnsavemonthlymodal">Save</a>
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- @* Quaterly Modal *@ -->
+    <div class="modal fade" id="modal-group-quaterly" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Quaterly</h4>
+          </div>
+          <div class="modal-body">
+            <div class="box-body">
+              <div class="form-group">
+                <label for="quaterly">Quaterly</label>
+                <div class="input-group date quaterly">
+                  <input type="text" data-id class="form-control date quaterly" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+              <a href="#" class="btn btn-primary" id="btnsavequaterlymodal">Save</a>
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- @* Yearly Modal *@ -->
+    <div class="modal fade" id="modal-group-yearly" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Yearly</h4>
+          </div>
+          <div class="modal-body">
+            <div class="box-body">
+              <div class="form-group">
+                <label for="yearly">Yearly</label>
+                <div class="input-group date yearly">
+                  <input type="text" data-id class="form-control date yearly" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+              <button type="button" class="btn btn-primary" id="btnsaveyearly">Update</button>
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    
+    <!-- @* get kpi code *@ -->
+    <div class="modal fade" id="modal-group3" style="display: none">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Get KPI Code</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="box-body" id="updateKpi">
+                <div class="form-group" style="display:none">
+                  <label for="Name">Get KPI Code</label>
+                  <input type="text" class="form-control ID" id="ID" placeholder="Get KPI Code" />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Get KPI Code Weekly</label>
+                  <input
+                    type="text"
+                    class="form-control Weekly"
+                    id="Weekly"
+                    placeholder="Get KPI Code Weekly"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Get KPI Code Monthly</label>
+                  <input
+                    type="text"
+                    class="form-control Monthly"
+                    id="Monthly"
+                    placeholder="Get KPI Code Monthly"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Get KPI Code Quaterly</label>
+                  <input
+                    type="text"
+                    class="form-control Quaterly"
+                    id="Quaterly"
+                    placeholder="Get KPI Code Quaterly"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="Name">Get KPI Code Yearly</label>
+                  <input
+                    type="text"
+                    class="form-control Yearly"
+                    id="Yearly"
+                    placeholder="Get KPI Code Yearly"
+                  />
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <!-- @*<button type="button" class="btn btn-primary" onclick="Update();">Update</button>
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>*@-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
       <!-- endmodal -->
     </div>
   </div>
@@ -184,6 +568,7 @@
 // import listoc from "../../components/adminOC/List"
 import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/AdminOCCategoryKpi/Modal";
+import { HTTP } from '../../http-constants';
 export default {
   name: "IndexKpi",
   data() {
@@ -335,11 +720,11 @@ export default {
             var entity = {
               kpilevel: $('#modal-group-general .kpilevelInputHidden').val(),
               category: $('#box .catid').val(),
-              pic: $('#modal-group-general .PIC .KPILevelSelect2').val().replace(/\@@/g, ",").trim(),
-              owner: $('#modal-group-general .Owner .KPILevelSelect2').val().replace(/\@@/g, ",").trim(),
-              manager: $('#modal-group-general .ownerManager .KPILevelSelect2').val().replace(/\@@/g, ",").trim(),
-              sponsor: $('#modal-group-general .Sponsor .KPILevelSelect2').val().replace(/\@@/g, ",").trim(),
-              participant: $('#modal-group-general .Participant .KPILevelSelect2').val().replace(/\@@/g, ",").trim()
+              pic: $('#modal-group-general .PIC .KPILevelSelect2').val().replace(/\@/g, ",").trim(),
+              owner: $('#modal-group-general .Owner .KPILevelSelect2').val().replace(/\@/g, ",").trim(),
+              manager: $('#modal-group-general .ownerManager .KPILevelSelect2').val().replace(/\@/g, ",").trim(),
+              sponsor: $('#modal-group-general .Sponsor .KPILevelSelect2').val().replace(/\@/g, ",").trim(),
+              participant: $('#modal-group-general .Participant .KPILevelSelect2').val().replace(/\@/g, ",").trim()
             }
             categoryKPILevelAdmin.addGeneral(entity);
           });
@@ -403,81 +788,48 @@ export default {
             id: id,
             levelid: levelid,
           };
-          $.ajax({
-            url: "https://localhost:44309/AddUserToLevel/AddUserToLevel",
-            data: JSON.stringify(mObj),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              if (result) {
-                Swal.fire({
-                  title: 'Success!',
-                  text: 'Update successfully!',
-                  type: 'success'
-                });
-
-              }
-            },
-            error: function (errormessage) {
-              console.log(errormessage);
+          HTTP.post("AddUserToLevel/AddUserToLevel",JSON.stringify(mObj))
+          .then(result=>{
+            if (result) {
+              success("success!");
             }
-          });
+          })
+         
         },
         addCategoryLevel: function (entity) {
           var entity = {
               KPILevelID: entity.KPILevelID,
               CategoryID: entity.CategoryID
           };
-          $.ajax({
-              url: "https://localhost:44309//CategoryKPILevelAdmin/Add",
-              data: JSON.stringify(entity),
-              type: "POST",
-              contentType: "application/json;charset=utf-8",
-              dataType: "json",
-              success: function (result) {
-                  console.log(result)
-                  if (result) {
-                    swal.fire({
-                      title: "Success!",
-                      text: "Update successfully!",
-                      type: "success"
-                    });
-                  }
-              },
-              error: function (errormessage) {
-                  console.log(errormessage.responseText);
-              }
-          });
+          HTTP.post("CategoryKPILevelAdmin/Add",JSON.stringify(entity))
+          .then(result=>{
+            console.log("addCategoryLevel")
+            console.log(result)
+            if (result) {
+              success("success!");
+            }
+          })
+         
         },
         loadTree: function () {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
         getAllCategories: function(changePageSize, level, OCID) {
           console.log("getAllCategories");
-          $.ajax({
-            url: "https://localhost:44309/CategoryKPILevelAdmin/GetAllCategories",
-            type: "GET",
-            data: {
-              OCID: OCID,
-              level: level,
-              page: config.pageIndex,
-              pageSize: config.pageSize
-            },
-            dataType: "json",
-            success: function(r) {
-              console.log(r);
-              if (r.status) {
+          HTTP.get(`CategoryKPILevelAdmin/GetAllCategories/${level}/${OCID}/${config.pageIndex}/${config.pageSize}`)
+          .then(r=>{
+            console.log(r);
+              if (r.data.status) {
                 var count = 1;
-                var data = r.data;
-                var page = r.page;
-                var pageSize = r.pageSize;
+                var data = r.data.data;
+                var page = r.data.page;
+                var pageSize = r.data.pageSize;
                 if (page === 1) count = page;
                 else count = (page - 1) * pageSize;
-                self.events = r.data;
+                self.events = r.data.data;
                 console.log(self.events);
                 categoryKPILevelAdmin.pagingCategoryKPILevel(
-                  r.total,
+                  r.data.total,
                   function() {
                     categoryKPILevelAdmin.getAllCategories("", level, OCID);
                   },
@@ -485,11 +837,7 @@ export default {
                 );
                 categoryKPILevelAdmin.registerEvent();
               }
-            },
-            error: function(err) {
-              console.log(err);
-            }
-          });
+          })
         },
         pagingCategoryKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
@@ -521,38 +869,24 @@ export default {
 
           console.log(category)
           console.log(levelid)
-
-          $.ajax({
-          url: 'https://localhost:44309/CategoryKPILevelAdmin/LoadDataKPILevel',
-          type: "GET",
-          data: {
-            level: levelid,
-            category: category,
-            page: config.pageIndex,
-            pageSize: config.pageSize
-          },
-          dataType: "json",
-          success: function (r) {
+          HTTP.get(`CategoryKPILevelAdmin/LoadDataKPILevel/${levelid}/${category}/${config.pageIndex}/${config.pageSize}`)
+          .then(r=>{
             console.log(r);
-            if (r.status) {
-                var count = 1;
-                var data = r.data;
-                var page = r.page;
-                var pageSize = r.pageSize;
-                if (page === 1) count = page;
-                else count = (page - 1) * pageSize + 1;
-                self.dataKPILV = r.data;
-                console.log(self.dataKPILV);
-                categoryKPILevelAdmin.pagingKPILevel(r.total, function () {
-                    categoryKPILevelAdmin.loadDataKPILevel(false, level, category);
-                }, changePageSize);
-                categoryKPILevelAdmin.registerEvent();
-              }
-            },
-            error: function (err) {
-                console.log(err);
+            if (r.data.status) {
+              var count = 1;
+              var data = r.data.data;
+              var page = r.data.page;
+              var pageSize = r.data.pageSize;
+              if (page === 1) count = page;
+              else count = (page - 1) * pageSize + 1;
+              self.dataKPILV = r.data.data;
+              console.log(self.dataKPILV);
+              categoryKPILevelAdmin.pagingKPILevel(r.data.total, function () {
+                  categoryKPILevelAdmin.loadDataKPILevel(false, level, category);
+              }, changePageSize);
+              categoryKPILevelAdmin.registerEvent();
             }
-          });
+          })
         },
         pagingKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);
@@ -579,9 +913,15 @@ export default {
           });
         },
         getAllUser() {
-          $.post("https://localhost:44309/AdminKPILevel/GetListAllUser", function (data) {
+          HTTP.get("AdminKPILevel/GetListAllUser").then(data=>{
+            console.log("getAllUser");
+            console.log(data);
             var users = [], username, fullname;
-            var arrays = data;
+            console.log("users")
+            console.log(users)
+            var arrays = data.data;
+            console.log("arrays")
+            console.log(arrays)
             $.each(arrays, function (i, item) {
               users.push({
                 username: item.Username,
@@ -589,7 +929,7 @@ export default {
               })
             })
 
-            $('.KPILevelSelect2').suggest('@@', {
+            $('.KPILevelSelect2').suggest('@', {
               data: users,
               map: function (user) {
                 return {
@@ -602,7 +942,7 @@ export default {
               }
 
             });
-          });
+          })
         },
         addGeneral: function (entity) {
           var res = categoryKPILevelAdmin.validate();
@@ -611,40 +951,28 @@ export default {
           }
           var entity = {
             kpilevel: entity.kpilevel,
-            category: entity.category,
+            category: Number(entity.category),
             pic: entity.pic,
             owner: entity.owner,
             manager: entity.manager,
             sponsor: entity.sponsor,
             participant: entity.participant
           };
-          $.ajax({
-            url: "https://localhost:44309/CategoryKPILevelAdmin/AddGeneral",
-            data: JSON.stringify(entity),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              console.log(result)
-              if (result) {
-                swal.fire({
-                  title: "Success!",
-                  text: "Update successfully!",
-                  type: "success"
-                });
-                categoryKPILevelAdmin.clearForm();
-                var key = $('#box .levelid').val();
-                var catid = $('#box .catid').val();
-                config.pageIndex = Number($('#paginationKPILevel li.active a').text());
+          HTTP.post(`CategoryKPILevelAdmin/AddGeneral`,JSON.stringify(entity))
+          .then(result=>{
+            console.log(result)
+            if (result) {
+              success("success!");
+              categoryKPILevelAdmin.clearForm();
+              var key = $('#box .levelid').val();
+              var catid = $('#box .catid').val();
+              config.pageIndex = Number($('#paginationKPILevel li.active a').text());
 
-                categoryKPILevelAdmin.loadDataKPILevel(false, key, catid);
-                $('#modal-group-general').modal('hide');
-              }
-            },
-            error: function (errormessage) {
-                console.log(errormessage);
+              categoryKPILevelAdmin.loadDataKPILevel(false, key, catid);
+              $('#modal-group-general').modal('hide');
             }
-          });
+          })
+          
         },
         clearForm() {
           $('#modal-group-general .PIC .KPILevelSelect2').val("");
@@ -697,28 +1025,16 @@ export default {
           return isValid;
         },
         getUserByCategoryIDAndKPILevelID(entity) {
-          $.ajax({
-            url: "https://localhost:44309/CategoryKPILevelAdmin/GetUserByCategoryIDAndKPILevelID",
-            data: {
-                KPILevelID: entity.KPILevelID,
-                CategoryID: entity.CategoryID
-
-            },
-            type: "GET",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (res) {
-                console.log(res)
-                $('#modal-group-general .PIC .KPILevelSelect2').val(res.Updater);
-                $('#modal-group-general .Owner .KPILevelSelect2').val(res.Owner);
-                $('#modal-group-general .ownerManager .KPILevelSelect2').val(res.Manager);
-                $('#modal-group-general .Sponsor .KPILevelSelect2').val(res.Sponsor);
-                $('#modal-group-general .Participant .KPILevelSelect2').val(res.Participant);
-            },
-            error: function (errormessage) {
-                console.log(errormessage.responseText);
-            }
-          });
+          HTTP.get(`CategoryKPILevelAdmin/GetUserByCategoryIDAndKPILevelID/${entity.KPILevelID}/${entity.CategoryID}`)
+          .then(res=>{
+            console.log("getUserByCategoryIDAndKPILevelID")
+            console.log(res)
+              $('#modal-group-general .PIC .KPILevelSelect2').val(res.data.Updater);
+              $('#modal-group-general .Owner .KPILevelSelect2').val(res.data.Owner);
+              $('#modal-group-general .ownerManager .KPILevelSelect2').val(res.data.Manager);
+              $('#modal-group-general .Sponsor .KPILevelSelect2').val(res.data.Sponsor);
+              $('#modal-group-general .Participant .KPILevelSelect2').val(res.data.Participant);
+          })
 
         }
       }

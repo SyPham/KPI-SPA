@@ -157,68 +157,6 @@ export default {
     seft.loadAll();
   },
   methods: {
-    // registerEvent() {
-    //   let self = this
-    //   $('#box .searchUser').off('keypress').on('keypress', function (e) {
-    //     if (e.which === 13) {
-    //       var code = $(this).val();
-    //       var levelid = Number($('#box .code').text());
-    //       self.LoadDataUser(true, code,levelid);
-    //     }
-    //   });
-
-    //   $('#tbluser tr td:nth-child(2) input').change(function () {
-    //     var id = $(this).closest('tr').data('id');
-    //     var levelid = Number($('#box .kpi-name .code').text());
-
-    //     if (levelid === 0) {
-    //       Toast.fire({
-    //         type: 'error',
-    //         title: 'Please choose team!',
-    //       });
-    //     }
-    //     else {
-    //       let username = $(this).next().children('label').text();
-    //       self.updateUser(id,levelid);
-    //       self.LoadDataUser("",username,levelid);
-    //       $('#box .searchUser').val(username)
-    //     }
-    //   });
-    // },
-    // changePage(pageNum) {
-    //   this.LoadDataUser(this.name, pageNum);
-    // },
-    // LoadDataUser() {
-    //   let self = this
-    //   var levelID = Number($('#box .code').text());
-    //   console.log("Id of level is " + levelID);
-    //   //  debugger
-    //   HTTP.get(`https://localhost:44371/AddUserToLevel/LoadDataUser/${levelID}/${self.code}/${self.page}/${self.pageSize}`)
-    //   .then(response => {
-    //     console.log(response)
-    //     if (response.data.status) {
-          
-    //       self.totalPage = response.data.totalPage;
-    //       self.page = response.data.page;
-    //       self.data = response.data.data;
-    //       self.pageSize = response.data.pageSize;
-          
-    //       self.events = response.data.data;
-    //       // console.log(self.events)
-    //       // self.LoadDataUser();
-    //       self.registerEvent();
-    //     }
-    //   })
-          
-    // },
-    // updateUser(id = 0,levelid = 0) {
-    //   HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`).then(r => {
-    //     console.log(r);
-    //     if (r) {
-    //       success("success!");
-    //     }
-    //   });
-    // },
     loadAll() {
       let self = this;
       let glyph_opts = {
@@ -317,7 +255,8 @@ export default {
       });
       var config = {
         pageSize: 6,
-        pageIndex: 1
+        pageIndex: 1,
+        code: ' '
       };
       var AddUserToLevelController = {
         init: function () {
@@ -350,64 +289,43 @@ export default {
 
         },
         updateUser: function (id, levelid) {
-          var mObj = {
-            id: id,
-            levelid: levelid,
-          };
-
-          $.ajax({
-            url: "https://localhost:44309/AddUserToLevel/AddUserToLevel",
-            data: JSON.stringify(mObj),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-              console.log(result)
+          // var mObj = {
+          //   id: id,
+          //   levelid: levelid,
+          // };
+          HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
+          .then(result=>{
+            console.log(result)
               if (result) {
                 success("success!");
               }
-            },
-            error: function (errormessage) {
-              console.log(errormessage.responseText);
-            }
-          });
+          })
+          
         },
         loadTree: function () {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
         LoadDataUser: function (changePageSize, code, levelID) {
-          
-          $.ajax({
-            url: 'https://localhost:44309/AddUserToLevel/LoadDataUser',
-            type: "GET",
-            data: {
-                levelid: levelID,
-                code: code,
-                page: config.pageIndex,
-                pageSize: config.pageSize
-            },
-            dataType: "json",
-            success: function (response) {
-              console.log(response)
-              if (response.status) {
+          HTTP.get(`AddUserToLevel/LoadDataUser/${levelID}/${config.code}/${config.pageIndex}/${config.pageSize}`)
+          .then(response=>{
+            console.log(response)
+              if (response.data.status) {
                 var count;
-                var data = response.data;
-                var page = response.page;
-                var pageSize = response.pageSize;
-                self.events = response.data;
+                var data = response.data.data;
+                var page = response.data.page;
+                var pageSize = response.data.pageSize;
+                self.events = response.data.data;
                 if (page === 1)
                   count = page;
                 else count = (page - 1) * pageSize + 1;
-                AddUserToLevelController.pagingKPILevel(response.total, function () {
+                AddUserToLevelController.pagingKPILevel(response.data.total, function () {
                   AddUserToLevelController.LoadDataUser("", code, levelID);
                 }, changePageSize);
                 AddUserToLevelController.registerEvent();
               }
-            },
-            error: function (err) {
-                //console.log(err);
-            }
-          });
+          })
+         
+          
         },
         pagingKPILevel: function (totalRow, callback, changePageSize) {
           var totalPage = Math.ceil(totalRow / config.pageSize);

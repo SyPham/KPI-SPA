@@ -42,7 +42,7 @@
             <!-- Add icons to the links using the .nav-icon class
                   with font-awesome or any other icon font library -->
             <li   class="nav-item has-treeview">
-              <a href="#" class="nav-link">
+              <a href="#/home" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Home
@@ -76,7 +76,10 @@ export default {
      lang: ''
     }
   },
-
+  mounted(){
+    let seft = this;
+    seft.loadmenu();
+  },
   created(){
     let seft = this;
     seft.loadmenu();
@@ -86,7 +89,6 @@ export default {
     loadmenu(){
         let seft = this;
         seft.menus = JSON.parse(localStorage.getItem("Menus"));
-        // console.log(seft.menus)
     }
   }
 };

@@ -29,11 +29,11 @@
                 @click="changeLocale(entry.language)"
                 :title="entry.title"
                 >
-                <flag
+                <!-- <flag
                   style="fontsize:"
                   :iso="entry.flag"
                   v-bind:squared="false"
-                />
+                /> -->
                 {{ entry.title }} |
               </li>
             </ul>
@@ -72,7 +72,7 @@
                     </a>
 
                      <!-- Task-Auditor -->
-                    <a v-if="item.Action == 'Task-Auditor' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <a v-if="item.Action == 'Task-Auditor' && item.SenderID !== userid " @click="gettask(item.URL)" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p class="wordWrap">The account {{item.Sender}} created the task "{{item.TaskName}}", assigned to {{item.RecipientID === userid ? "you" : item.Recipient}} are Auditor. </p>
                       <p class="wordWrap">{{item.Title}}</p>
@@ -143,11 +143,11 @@
         </li>
 
         <!-- logout -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
             <i class="fas fa-th-large"></i>
           </a>
-        </li>
+        </li> -->
 
       </ul>
       
@@ -209,6 +209,7 @@ export default {
       userid: 0,
       username: null,
       password : null,
+      connection:{},
       time: 0,
       arrayID: [],
       data: [],
@@ -220,20 +221,35 @@ export default {
       ]
     };
   },
-  created: function() {
-
+  mounted() {
+    let seft = this
+    seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+    const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://10.4.4.224:98/henry-hub")
+    .withAutomaticReconnect()
+    .build();
+    connection.start().then(function () {
+        console.log("connected");
+    });
+    connection.on("ReceiveMessage", (user, message) => {
+      console.log("ReceiveMessage");
+    seft.getAllNotifications();
+    });
+    
+  },
+  created(){
     let seft = this;
+    seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
     seft.username  =  localStorage.getItem("User")
     seft.getAllNotifications();
     // Listen to score changes coming from SignalR events
     const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://10.4.4.224:98/henry-hub")
-    .configureLogging(signalR.LogLevel.Information)
+    .withAutomaticReconnect()
     .build();
     connection.start().then(function () {
         console.log("connected");
     });
-
     connection.on("ReceiveMessage", (user, message) => {
       console.log("ReceiveMessage");
     seft.getAllNotifications();
@@ -242,11 +258,13 @@ export default {
   methods: {
     getcomment(Link){
       EventBus.$emit('hello2', Link);
-      window.location.href = Link
+      return this.$router.push(Link)
+      // window.location.href = "#"+Link.split('#')[1]
     },
     gettask(URL){
       EventBus.$emit('hello', URL);
-      window.location.href = URL
+      // window.location.href = URL
+      return this.$router.push(URL)
       
     },
     getnotifi(NotificationID){
@@ -348,9 +366,10 @@ export default {
     },
     getAllNotifications() {
       let seft = this;
+      //seft.connection.invoke("ReceiveMessage", seft.user, seft.message).catch(err => console.error(err.toString()));
       HTTP.get("Home/GetNotifications").then(r => {
         seft.arrayID = r.data.arrayID;
-        //console.log(seft.arrayID);
+        console.log(seft.arrayID);
         seft.data = r.data.data;
         seft.listdata = r.data;
         seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
@@ -360,7 +379,9 @@ export default {
     logout: function() {
       this.$auth.destroyToken();
       // this.user = {};
-      this.$router.push("/login");
+      var uri = this.$route.path;
+      console.log(uri)
+      this.$router.push({ path: '/login', query: { redirect: uri } });
       success("success!");
     }
   }

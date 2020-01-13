@@ -55,39 +55,53 @@ export default {
      userid: 0
     }
   },
-
+  mounted(){
+    let seft = this;
+    seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+    seft.loadmenu();
+    seft.getAllNotifications();
+  },
   created(){
     let seft = this;
     seft.loadmenu();
+    setTimeout(function(){
+      seft.getAllNotifications();
+    },500)
+    const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://10.4.4.224:98/henry-hub")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+    connection.start().then(function () {
+        console.log("connected");
+    });
+    connection.on("ReceiveMessage", (user, message) => {
+      console.log("ReceiveMessage");
     seft.getAllNotifications();
+    });
   }, 
-   computed: {
+  computed: {
     user: function() {
       return this.$store.state.currentUser;
     }
-    
   },
 
   methods: {
-    getAllNotifications(){
-      let seft = this ;
-      HTTP.get("Home/GetNotifications")
-      .then(r=>{
-        seft.arrayID = r.data.arrayID
-        //console.log(seft.arrayID)
-        seft.data = r.data.data
-        console.log(seft.data)
-        seft.listdata = r.data
-        console.log(seft.listdata)
-        seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-        // console.log(user)
-      })
+    getAllNotifications() {
+      let seft = this;
+      HTTP.get("Home/GetNotifications").then(r => {
+        seft.arrayID = r.data.arrayID;
+        console.log("seft.arrayID");
+        console.log(seft.arrayID);
+        seft.data = r.data.data;
+        seft.listdata = r.data;
+        seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+        console.log(seft.userid);
+      });
     },
     loadmenu(){
         let seft = this;
-        
         seft.menus = JSON.parse(localStorage.getItem("Menus"));
-        // console.log(seft.menus)
+        
     }
   }
 };

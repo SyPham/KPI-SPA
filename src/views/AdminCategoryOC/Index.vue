@@ -170,7 +170,7 @@ export default {
             },
             glyph: glyph_opts,
             source: {
-              url: "https://localhost:44371/OCCategories/GetListTree",
+              url: "http://10.4.4.224:98/OCCategories/GetListTree",
               debugDelay: 1000
             },
             table: {
@@ -262,7 +262,7 @@ export default {
         },
         getCategoryByOC: function (changePageSize, level, ocID) {
           console.log("GetCategoryByOC")
-          HTTP.get(`https://localhost:44371/OCCategories/GetCategoryByOC/${level}/${ocID}/${self.page}/${self.pageSize}`)
+          HTTP.get(`OCCategories/GetCategoryByOC/${level}/${ocID}/${self.page}/${self.pageSize}`)
           .then(response =>{
             console.log(response)
             if (response.data.status) {

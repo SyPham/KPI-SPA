@@ -171,7 +171,7 @@ const router = new VueRouter({
       path: "/CategoryKPILevelAdmin",
       component: Dash,
       children: [
-        { path: "/CategoryKPILevelAdmin",component: AdminOCCategoryKpi,}
+        { path: "/CategoryKPILevelAdmin",component: AdminOCCategoryKpi }
       ]
     },
     //Login
@@ -179,7 +179,7 @@ const router = new VueRouter({
       path: "/login",
       component: Auth,
       children: [ 
-        { path: "/login", component: Login , meta: { requiresGuest: true } }
+        { path: "/login", component: Login , meta: { requiresGuest: true} }
         
       ]
     },
@@ -200,7 +200,7 @@ const router = new VueRouter({
       path: "/CategoryKPILevel",
       component: Dash,
       children: [
-        { path: "/CategoryKPILevel",component: UserKPI}
+        { path: "/CategoryKPILevel",component: UserKPI ,meta:{ requiresAuth: true} }
       ]
     },
 
@@ -209,10 +209,11 @@ const router = new VueRouter({
       path: "/ChartPeriod",
       component: Dash,
       children: [
-        { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod ,meta: { requiresAuth: true }},
-        { name: 'chart2', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end/:type/:comID/:dataID/:title" ,component: ChartPeriod,meta: { requiresAuth: true }},
-      ]
-    },
+        { name: 'chart', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end",component: ChartPeriod , meta:{ requiresAuth: true} },
+        { name: 'chart2', path: "/ChartPeriod/:kpilevelcode/:catid/:period/:year/:start/:end/:type/:comID/:dataID/:title" ,component: ChartPeriod, meta:{ requiresAuth: true}  },
+      ],
+     
+     },
 
     //ChartPeriod/ListTasks
     {

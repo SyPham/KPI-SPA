@@ -90,10 +90,16 @@ export default {
       this.$http.post("http://10.4.4.224:98/api/auth/login", this.user )
         .then(function(res) {
           console.log(res)
-          // localStorage.setItem('menus', res.user.menus);
-          // console.log( localStorage.getItem('menus'));
           this.$auth.setToken(res.body.token, Date.now() + 14400000 ,res.body.user.Menus ,res.body.user.User.Alias); // + 4 hours
-          this.$router.push("/home");
+          var uri = this.$route.query.redirect || "";
+          if(this.$route.query.redirect.length != 0)
+          {
+              //debugger
+            this.$router.push(uri);
+          }
+          else{
+            this.$router.push("/home");
+          }
           success("success!");
       }).catch((res) => {
           warning("Username and password are incorrect, please try again!")
