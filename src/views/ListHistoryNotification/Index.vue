@@ -27,7 +27,7 @@
                     <tr v-if="item.Action == 'Comment'">
                         <td style="width: 15px">{{key+1}}</td>
                         <td>
-                            <p> <i class="far fa-check-circle"></i> {{(item.SenderID == userProfile.User.ID ? "You" : item.Sender)}} mentioned {{(item.RecipientID == userProfile.User.ID ? "You" : item.Recipient)}} in {{item.Title}}</p>
+                            <p> <i class="far fa-check-circle"></i> {{(item.SenderID == userId ? "You" : item.Sender)}} mentioned {{(item.RecipientID == userId ? "You" : item.Recipient)}} in {{item.Title}}</p>
                             <p>
                                 <b>Content: </b>
                                 <ul class="chart-legend clearfix">
@@ -42,7 +42,7 @@
                     <tr v-if="item.Action == 'Task'">
                         <td>{{key+1}}</td>
                         <td>
-                            <p> <i class="far fa-check-circle"></i> {{(item.SenderID == userProfile.User.ID ? "You" : item.Sender)}} mentioned {{(item.RecipientID == userProfile.User.ID ? "You" : item.Recipient)}} in {{item.Title}}</p>
+                            <p> <i class="far fa-check-circle"></i> {{(item.SenderID == userId ? "You" : item.Sender)}} mentioned {{(item.RecipientID == userId ? "You" : item.Recipient)}} in {{item.Title}}</p>
 
                             <p>
                                 <b>Content: </b>
@@ -60,7 +60,7 @@
                     <tr v-if="item.Action == 'Done'">
                         <td>{{key+1}}</td>
                         <td>
-                            <p><i class="far fa-check-circle"></i> {{(item.SenderID == userProfile.User.ID ? "You" : item.Sender)}} updated the status in {{item.Title}}</p>
+                            <p><i class="far fa-check-circle"></i> {{(item.SenderID == userId ? "You" : item.Sender)}} updated the status in {{item.Title}}</p>
                             <p><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}}</p>
                         </td>
                     </tr>
@@ -69,7 +69,7 @@
                     <tr v-if="item.Action == 'Approval'">
                         <td>{{key+1}}</td>
                         <td>
-                            <p><i class="far fa-check-circle"></i> {{(item.SenderID == userProfile.User.ID ? "You" : item.Sender)}} approved in {{item.Title}}</p>
+                            <p><i class="far fa-check-circle"></i> {{(item.SenderID == userId ? "You" : item.Sender)}} approved in {{item.Title}}</p>
                             <p><i class="far fa-clock"></i>{{JSONDateWithTime(item.CreateTime)}}</p>
                         </td>
                     </tr>
@@ -128,6 +128,7 @@ export default {
             page: 1,
             skip: 0,
             pageSize: 5,
+            userId: 0
         }
     },
     components: {
@@ -136,6 +137,8 @@ export default {
     created() {
         let self = this
         self.LoadAll()
+        self.userId = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+        console.log(self.userId)
     },
     methods: {
         JSONDateWithTime(dateStr){
@@ -218,7 +221,7 @@ export default {
         },
         LoadAll(){
             let self = this
-            HTTP.get("https://localhost:44371/Home/ListHistoryNotification")
+            axios.get("Home/ListHistoryNotification")
             .then(res=>{
                 self.data = res.data
                 console.log(res)

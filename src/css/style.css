@@ -3,6 +3,19 @@
     
 }
 
+i.far.fa-bell {
+    font-size: 25px;
+}
+
+span.badge.badge-warning.navbar-badge {
+    font-size: 0.8rem;
+    right: 0px;
+    /* left: 6px; */
+    padding: 2px 4px;
+    top: 5px;
+    font-weight: 400;
+}
+
 p.text-danger:hover {
     font-size: 17px;
 }
@@ -424,6 +437,10 @@ thead tr th {
 /* Important part */
 .modal-dialog {
     overflow-y: initial !important
+}
+
+.modal-dialog.modal-lg {
+    min-width: 90%;
 }
 
 .modal-content {

@@ -44,8 +44,9 @@
         <li  class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false" data-id="123">
             <i class="far fa-bell"></i>
-            <span class="badge badge-warning navbar-badge">{{listdata.total}}</span>
+            <h6><span class="badge badge-warning navbar-badge">{{listdata.total}}</span></h6>
           </a>
+          
           <ul class="dropdown-menu dropdown-menu-lg2 dropdown-menu-right" style="border-radius: 11px" >
             <span class="dropdown-item dropdown-header">You have {{ listdata.total }} Notifications</span>
             <div  class="dropdown-divider"></div>
@@ -56,7 +57,8 @@
 
                     <!-- comment -->
                     <a v-if="item.Action == 'Comment' && item.SenderID !== userid " @click="getcomment(item.Link)"   class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Comment <i class="fas fa-comment"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span class="badge bg-green">New</span> Comment <i class="fas fa-comment"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Comment <i class="fas fa-comment"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.SenderID == userid ? "you" : item.Sender}} mentioned {{item.RecipientID == userid ? "you" : item.Recipient}} in {{item.Title}}</p>
                       <p>{{item.Content}}</p>
                     </a>
@@ -65,7 +67,8 @@
 
                     <!-- Task -->
                     <a v-if="item.Action == 'Task' && item.SenderID !== userid " @click="gettask(item.URL)"   class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false" ><span class="badge bg-green">New</span> Add Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else > Add Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.Sender}} assigned  {{item.RecipientID == userid ? "you" : item.Recipient}} the task {{item.TaskName}} </p>
                       <p>{{item.Title}}</p>
                       <p>KPI - {{item.KPIName}}</p>
@@ -73,7 +76,8 @@
 
                      <!-- Task-Auditor -->
                     <a v-if="item.Action == 'Task-Auditor' && item.SenderID !== userid " @click="gettask(item.URL)" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span class="badge bg-green">New</span> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Add Task (Auditor) <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p class="wordWrap">The account {{item.Sender}} created the task "{{item.TaskName}}", assigned to {{item.RecipientID === userid ? "you" : item.Recipient}} are Auditor. </p>
                       <p class="wordWrap">{{item.Title}}</p>
                       <p class="wordWrap">KPI Name "{{item.KPIName}}"</p>
@@ -81,7 +85,8 @@
 
                     <!-- Done -->
                     <a v-if="item.Action == 'Done' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
                       <p>{{item.Title}}</p>
                       <p>KPI - {{item.KPIName}}</p>
@@ -89,31 +94,36 @@
 
                     <!-- Approval -->
                     <a v-if="item.Action == 'Approval' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                    <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
                     </a>
 
                     <!-- UpdateApproval -->
                     <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
                     </a>
 
                     <!-- LateOnTask -->
                     <a v-if="item.Action == 'LateOnTask' " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Late On Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Late On Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">Some of task are overdue. Please check your email</p>
                     </a>
 
                     <!-- LateOnUploadData -->
                     <a v-if="item.Action == 'LateOnUploadData' " @click="getnotifi(item.NotificationID)"  style="cursor: pointer" class="dropdown-item" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Late On Upload Data  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Late On Upload Data  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else>Late On Upload Data  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">There are some KPIs that haven't uploaded their data on time. Please check your email</p>
                     </a>
 
                     <!-- Upload -->
                     <a v-if="item.Action == 'Upload' || item.SenderID === userid || item.RecipientID === userid || item.UserID === userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
-                      <h6><span v-if="item.Seen === false" class="badge bg-green">New</span> Upload Successfully <small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Upload Successfully <small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
+                      <h6 v-else> Upload Successfully <small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">{{item.SenderID == userid ? "You" : "The account " + item.Sender}} has uploaded KPIs data successfully!</p>
                     </a>
                 </li>
@@ -135,19 +145,19 @@
               <i class="fas fa-key"></i> Change Password
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#" @click.prevent="logout" class="dropdown-item">
+            <!-- <a href="" @click.prevent="logout" class="dropdown-item">
               <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <div class="dropdown-divider"></div>
+            </a> -->
+            <!-- <div class="dropdown-divider"></div> -->
           </div>
         </li>
 
         <!-- logout -->
-        <!-- <li class="nav-item">
-          <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
-            <i class="fas fa-th-large"></i>
+        <li >
+          <a class="nav-link"  href="" @click.prevent="logout">
+            <i class="fas fa-sign-out-alt"></i> Sign-out
           </a>
-        </li> -->
+        </li>
 
       </ul>
       
@@ -197,6 +207,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { HTTP } from "../../http-constants";
 import VueJwtDecode from "vue-jwt-decode";
 import i18n from "../../lang/i18n";
@@ -217,35 +228,25 @@ export default {
       languages: [
         { flag: "tw", language: "tw-zh", title: "中文" },
         { flag: "us", language: "en", title: "English" },
-        { flag: "vn", language: "vi", title: "Tiếng Việt" }
+        { flag: "vn", language: "vi", title: "Vietnamese" }
       ]
     };
   },
   mounted() {
     let seft = this
     seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-    const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://10.4.4.224:98/henry-hub")
-    .withAutomaticReconnect()
-    .build();
-    connection.start().then(function () {
-        console.log("connected");
-    });
-    connection.on("ReceiveMessage", (user, message) => {
-      console.log("ReceiveMessage");
-    seft.getAllNotifications();
-    });
-    
+   
   },
   created(){
     let seft = this;
     seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
     seft.username  =  localStorage.getItem("User")
-    seft.getAllNotifications();
+   
+     seft.getAllNotifications();
     // Listen to score changes coming from SignalR events
     const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://10.4.4.224:98/henry-hub")
-    .withAutomaticReconnect()
+    .configureLogging(signalR.LogLevel.Information)
     .build();
     connection.start().then(function () {
         console.log("connected");
@@ -276,7 +277,10 @@ export default {
       HTTP.post("https://localhost:44309/AdminUser/ChangePassword",{
         id: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
         username: this.username ,
-        password: this.password
+        password: this.password,
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
       }).then(r=>{
         success("ChangePass successfully!");
         $("#modal-group-change-password").modal("hide");
@@ -366,15 +370,17 @@ export default {
     },
     getAllNotifications() {
       let seft = this;
-      //seft.connection.invoke("ReceiveMessage", seft.user, seft.message).catch(err => console.error(err.toString()));
-      HTTP.get("Home/GetNotifications").then(r => {
-        seft.arrayID = r.data.arrayID;
-        console.log(seft.arrayID);
+      
+
+      axios.get("http://10.4.4.224:98/Home/GetNotifications").then(r=>{
+        console.log(r);
+         seft.arrayID = r.data.arrayID;
+        
         seft.data = r.data.data;
         seft.listdata = r.data;
         seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-        console.log(seft.userid);
-      });
+        
+      })
     },
     logout: function() {
       this.$auth.destroyToken();

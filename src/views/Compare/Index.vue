@@ -224,7 +224,7 @@ export default {
     },
     LoadDataCompare(){
         let seft = this
-        HTTP.get(`Compare/Compare/${seft.$route.params.obj}`)
+        axios.get(`Compare/Compare/${seft.$route.params.obj}`)
         .then(r=>{
           console.log(r.data)
           seft.kpiname = r.data[0].kpiname

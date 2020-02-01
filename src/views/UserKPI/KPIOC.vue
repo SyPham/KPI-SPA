@@ -239,7 +239,7 @@ export default {
         console.log(self.categoryId)
       });
 
-      HTTP.get(
+      axios.get(
         `CategoryKPILevel/getAllKPILevelByCategory/${self.categoryId}/${self.pageIndex}/${self.pageSize}`
       ).then(response => {
         console.log(response);

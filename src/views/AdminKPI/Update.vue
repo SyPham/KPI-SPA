@@ -44,7 +44,7 @@
 
           <div class="card-footer">
             <button  type="submit" class="btn btn-success">Save</button>
-            <button @click="$router.go(-1)" type="submit" class="btn btn-danger">Close</button>
+            <button @click="resetForm"  class="btn btn-danger">Close</button>
           </div>
         </form>
       </div>
@@ -75,7 +75,11 @@ export default {
   },
   methods: {
     getUnit() {
-      HTTP.get("AdminKPI/getallunit")
+      axios.get("AdminKPI/getallunit",{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
         .then(r => {
           this.data = r.data;
           // console.log(r.data);
@@ -85,11 +89,15 @@ export default {
         });
     },
     resetForm() {
-      this.$router.push("/adminKPI");
+      this.$router.go("/AdminKPI");
     },
     get(id) {
       if (id == undefined) return;
-        HTTP.get("AdminKPI/GetbyID/"+ id)
+        axios.get("AdminKPI/GetbyID/"+ id,{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
+        })
         .then(r => {
           // seft.loading = false;
           this.Name = r.data.Name
@@ -104,14 +112,17 @@ export default {
         });
     },
     update() {
-      HTTP.post("AdminKPI/Update",{
+      axios.post("AdminKPI/Update",{
           ID: this.ID,
           Name: this.Name,
           LevelID: this.LevelID,
-          Unit: this.Unit
+          Unit: this.Unit,
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
       })
         .then(r => {
-          this.$router.push("/adminKPI");
+          this.$router.go(-1);
           success("success!");
           // console.log(r)
         })

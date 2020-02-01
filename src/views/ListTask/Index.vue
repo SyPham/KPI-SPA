@@ -20,26 +20,73 @@
             </div>
         
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body box-scrollbar" style="overflow-x:scroll">
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>No.</th>
-                    <th>OC</th>
-                    <th>DeadLine</th>
-                    <th>KPI Name</th>
-                    <th>Code</th>
-                    <th>Year</th>
+                    <th>.No</th>
+                <th>
+                    OC
+                </th>
+                <th>
+                    KPIName
+                </th>
+                <th>
+                    TaskName
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    PIC
+                </th>
+                <th>
+                    DueDate
+                </th>
+                <th>
+                    UpdateSheduleDate
+                </th>
+                <th>
+                    ActualFinishDate
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Approved
+                </th>
+
+                <th>
+                    CreatedBy
+                </th>
+                <th>
+                    CreatedDate
+                </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(kpi,key,index) in data" :key="index">
                     <td>{{key+1}}</td>
-                    <td>{{kpi.Area}}</td>
-                    <td>{{kpi.DeadLine}}</td>
-                    <td>{{kpi.KPIName}}</td>
-                    <td>{{kpi.Code}}</td>
-                    <td>{{kpi.Year}}</td>
+                    <td>{{kpi.OC}}</td>
+                    <td>
+                        <a :href="kpi.URL">{{kpi.KPIName}}</a>
+                    </td>
+                    <td>{{kpi.TaskName}}</td>
+                    <td>{{kpi.Description}}</td>
+                    <td>{{kpi.PIC}}</td>
+                    <td>{{kpi.DueDate}}</td>
+                    <td>{{kpi.UpdateSheduleDate}}</td>
+                    <td>{{kpi.ActualFinishDate}}</td>
+                    <td>
+                        <span v-if="kpi.Status == true" class="badge bg-green"> Finished</span>
+                        <span v-else class="badge bg-red">Not Finished</span>
+                    </td>
+                    <td>
+                        <span v-if="kpi.Approved == true" class="badge bg-green">Approved</span>
+                        <span v-else class="badge bg-red">Not Approved</span>
+                    </td>
+                    <td>{{kpi.CreatedBy}}</td>
+                    <td>{{kpi.CreatedDate}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -71,6 +118,7 @@
 import { HTTP } from "../../http-constants";
 import Paginate from "vuejs-paginate";
 import VueJwtDecode from 'vue-jwt-decode'
+import Axios from 'axios';
 export default {
     data(){
         return {
@@ -79,17 +127,28 @@ export default {
             page: 1,
             skip: 0,
             pageSize: 5,
+            code: 0
         }
     },
     components:{
         Paginate
     },
     created(){
-
+        this.loadTask()
     },
     methods: {
         changePage(pageNum){
-            this.LoadAll(this.name,pageNum)
+            this.loadTask(this.name,pageNum)
+        },
+        loadTask(){
+            axios.post(`ChartPeriod/ListTasks/${this.$route.params.kpilevelcode}/${this.page}/${this.pageSize}`)
+            .then(res => {
+                this.totalPage = res.data.total;
+                this.page = res.data.page;
+                this.data = res.data.data;
+                this.pageSize = res.data.pageSize;
+                console.log(res)
+            })
         }
     }
 }

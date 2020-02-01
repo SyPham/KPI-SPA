@@ -206,7 +206,7 @@ export default {
     },
     getAllKPILevelByCategory(changePageSize, category) {
       let self = this;
-      HTTP.get(
+      axios.get(
         `CategoryKPILevel/getAllKPILevelByCategory/${category}/${self.pageIndex}/${self.pageSize}`
       ).then(response => {
         if (response.status) {

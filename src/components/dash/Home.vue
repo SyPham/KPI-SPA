@@ -39,21 +39,28 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Sidebar from './Sidebar.vue';
 import { HTTP } from "../../http-constants";
 import VueJwtDecode from "vue-jwt-decode";
 import i18n from "../../lang/i18n";
 import signal from "../../hub";
+import EventBus from "../../utils/EventBus.js";
 export default {
   name: "home",
  data() {
     return {
      menus: [],
+     menuSidebar:'',
      loggedIn: this.$auth.loggedIn(),
      arrayID: [],
      data: [],
      listdata: [],
      userid: 0
     }
+  },
+   components: {
+    AppSidebar: Sidebar,
   },
   mounted(){
     let seft = this;
@@ -63,7 +70,11 @@ export default {
   },
   created(){
     let seft = this;
-    seft.loadmenu();
+   
+    seft.menuSidebar = JSON.parse(localStorage.getItem('Menus'))
+    // seft.menus = JSON.parse(localStorage.getItem('Menus'))
+    // console.log(seft.menus)
+    //seft.loadmenu();
     setTimeout(function(){
       seft.getAllNotifications();
     },500)
@@ -72,7 +83,7 @@ export default {
     .configureLogging(signalR.LogLevel.Information)
     .build();
     connection.start().then(function () {
-        console.log("connected");
+      console.log("connected");
     });
     connection.on("ReceiveMessage", (user, message) => {
       console.log("ReceiveMessage");
@@ -88,20 +99,34 @@ export default {
   methods: {
     getAllNotifications() {
       let seft = this;
-      HTTP.get("Home/GetNotifications").then(r => {
-        seft.arrayID = r.data.arrayID;
-        console.log("seft.arrayID");
-        console.log(seft.arrayID);
+      
+      // HTTP.get("Home/GetNotifications").then(r => {
+      //   seft.arrayID = r.data.arrayID;
+      //   console.log("seft.arrayID");
+      //   console.log(seft.arrayID);
+      //   seft.data = r.data.data;
+      //   seft.listdata = r.data;
+      //   seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+      //   console.log(seft.userid);
+      // });
+
+      axios.get("http://10.4.4.224:98/Home/GetNotifications").then(r=>{
+         seft.arrayID = r.data.arrayID;
         seft.data = r.data.data;
         seft.listdata = r.data;
         seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-        console.log(seft.userid);
-      });
+       
+      })
     },
     loadmenu(){
-        let seft = this;
-        seft.menus = JSON.parse(localStorage.getItem("Menus"));
-        
+        let seft = this
+        axios.get('http://10.4.4.92:91/Menus/Getall').then(r=>{
+          seft.menus = r.data
+          console.log(seft.menus)
+        })
+        // seft.menus = JSON.parse(localStorage.getItem('Menus'))
+        // console.log(seft.menus)
+        // seft.$forceUpdate()
     }
   }
 };

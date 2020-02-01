@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     GetListAllPermissions(Userid = 0) {
-      HTTP.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
+      axios.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);
@@ -145,7 +145,7 @@ export default {
     },
     get(id) {
       if (id == undefined) return;
-        HTTP.get("AdminUser/GetbyID/"+ id)
+        axios.get("AdminUser/GetbyID/"+ id)
         .then(r => {
           console.log(r)
           // seft.loading = false;
@@ -165,7 +165,7 @@ export default {
         });
     },
     update() {
-      HTTP.post("AdminUser/Update",{
+      axios.post("AdminUser/Update",{
           ID: this.ID,
           Username: this.UserName,
           Email: this.Email,

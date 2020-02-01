@@ -336,6 +336,23 @@
                 </div>
               </div>
 
+              <div class="col-md-12 working-plan" >
+                <div class="box box-solid">
+                  <div class="box-header with-border">
+                      <i class="fa fa-tag"></i>
+                      <h3 class="box-title font-weight-bold">Working Plan:</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <blockquote>
+                      <p>Not available!</p>
+                    </blockquote>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+              </div>
+
               <!-- Chartjs -->
               <div class="chart">
                 <canvas id="planet-chart" style="height:500px"></canvas>
@@ -365,6 +382,9 @@
               <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Monthly</h3>
               <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Quarterly</h3>
               <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Yearly</h3>
+              <div class="box-tools float-right">
+                <button @click="$router.push(`/Chartperiod/ListTasks/${kpilevelcode}`)" type="button" class="btn btn-info btn-sm listTaskBtn"><i class="fa fa-info"></i> List Tasks</button>
+              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -395,6 +415,7 @@
 
       <!-- </comment>  -->
     </section>
+
     <div class="modal fade" id="modal-group">
         <div class="modal-dialog modal-lg " >
             <div class="modal-content">
@@ -532,7 +553,7 @@
 
 
     <div class="modal fade modal-window modal" id="modal-group-comment-data2">
-      <div class="modal-dialog modal-lg" >
+      <div class="modal-dialog modal-lg" style="overflow:scroll;" >
           <div class="modal-content">
               <div class="modal-header" style="background-color:#00a65a;color:#fff">
                   <h4 class="modal-title">
@@ -566,12 +587,14 @@
                                   <thead>
                                       <tr>
                                           <th style="width: 10px">No.</th>
+                                          <th>Task ID</th>
                                           <th>Task name</th>
                                           <th>Descriptions</th>
                                           <th>PIC</th>
                                           <th>Due date</th>
                                           <th>Update shedule date</th>
                                           <th>Actual finish date</th>
+                                          <th>Remark</th>
                                           <th>Status</th>
                                           <th class="Approval" style="width: 100px">Approve</th>
                                           <th class="Option" style="width: 50px">Option</th>
@@ -585,23 +608,23 @@
                               </table>
                           </div>
                           <div class="card-footer clearfix">
-                          <Paginate
-                            v-model="page"
-                            :page-count="totalPage "
-                            :prev-text="'Prev'"
-                            :next-text="'Next'"
-                            :page-range="3"
-                            :margin-pages="2"
-                            :container-class="'pagination'"
-                            :page-class="'page-item'"
-                            :prev-class="'page-item'"
-                            :next-class="'page-item'"
-                            :page-link-class="'page-link'"
-                            :prev-link-class="'page-link'"
-                            :next-link-class="'page-link'"
-                            :click-handler="changePage"
-                          ></Paginate>
-                        </div>
+                            <Paginate
+                              v-model="page"
+                              :page-count="totalPage "
+                              :prev-text="'Prev'"
+                              :next-text="'Next'"
+                              :page-range="3"
+                              :margin-pages="2"
+                              :container-class="'pagination'"
+                              :page-class="'page-item'"
+                              :prev-class="'page-item'"
+                              :next-class="'page-item'"
+                              :page-link-class="'page-link'"
+                              :prev-link-class="'page-link'"
+                              :next-link-class="'page-link'"
+                              :click-handler="changePage"
+                            ></Paginate>
+                          </div>
                       </div>
                       <div class="tab-pane fade" id="pills-profile">
                           <div class="addTask">
@@ -653,6 +676,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import { HTTP } from "../../http-constants";
 import LineChart from "../../utils/ChartJs/LineChart";
 import { initLineChart } from "../../plugins/LineChartPlugin";
@@ -781,7 +805,8 @@ export default {
       currentUser: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
       keyword: ' ',
       URL: '',
-      Link:''
+      Link:'',
+      kpilevelcode: ''
     };
   },
   components: {
@@ -818,7 +843,7 @@ export default {
       $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
       $("#modal-group-comment-data2").modal("show");
-        seft.remark(dataID);
+      seft.remark(dataID);
 
       seft.loadDataComment(true);
       seft.LoadDataActionPlan(dataID, comID);
@@ -837,7 +862,6 @@ export default {
         seft.LoadDataActionPlan(dataID, comID);
         seft.loadDataComment(true);
     }
-
     // EventBus AddTask
     EventBus.$on('hello', URL =>{
       seft.URL = URL
@@ -919,12 +943,12 @@ export default {
     seft.vstart = seft.$route.params.start;
     seft.vend = seft.$route.params.end;
     seft.searchyear = seft.$route.params.year;
+    seft.kpilevelcode = seft.$route.params.kpilevelcode
+    console.log("kpilevelcode")
+    console.log(seft.kpilevelcode)
     seft.Loadchart();
     seft.getAllNotifications();
-    console.log('VueJwtDecode.decode(localStorage.getItem("authToken")).nameid')
-    console.log(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid)
-    console.log(seft.$route.path)
-    console.log(seft.checktarget("81.5",90));
+    seft.GetItem();
   },
   destroyed() {
     // Stop listening the event hello with handler
@@ -962,7 +986,7 @@ export default {
     },
     URL: function(newOld,oldVal){
       let self = this;
-      this.$router.push({
+      self.$router.replace({
         name: "chart2" ,
       });
       // self.Loadchart();
@@ -1005,7 +1029,7 @@ export default {
     },
     Link: function(newOld,oldVal){
       let self = this;
-      this.$router.push({
+      self.$router.replace({
         name: "chart2" ,
       });
       // self.Loadchart();
@@ -1043,9 +1067,31 @@ export default {
             self.loadDataComment(true);
       }
     }
-    
   },
   methods: {
+    closechart(){
+      let self = this;
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      self.$router.replace({
+        name: "chart" ,
+      });
+      $("#modal-group-comment-data2").modal("hide");
+      console.log('aaaaaaaaaa')
+    },
+    GetItem(){
+      let self = this 
+      axios.get(`ChartPeriod/GetItemInListOfWorkingPlan/${self.$route.params.kpilevelcode}/${self.$route.params.period}`)
+      .then(r=>{
+        console.log("GetItem")
+        console.log(r)
+        if (r.data.status) {
+          $(".working-plan blockquote p").text("");
+          $(".working-plan blockquote p").text(r.data.data || "Not avaiable!");
+        }
+      })
+    },
     checktarget(value,target){
       return parseFloat(value) <= (target || 0) ? ' text-center active-td' : 'active-td2 text-center'
     },
@@ -1068,7 +1114,7 @@ export default {
     },
     getAllNotifications(){
       let seft = this ;
-      HTTP.get("Home/GetNotifications")
+      axios.get("Home/GetNotifications")
       .then(r=>{
         seft.arrayID = r.data.arrayID
         //console.log(seft.arrayID)
@@ -1107,7 +1153,7 @@ export default {
           CreateTime: new Date()
           };
 
-      HTTP.post('ChartPeriod/AddNotification', {notification:notification})
+      axios.post('ChartPeriod/AddNotification', {notification:notification})
         .then(function (response) {
           console.log("done notification")
       });
@@ -1145,7 +1191,7 @@ export default {
           CreateTime:this.dateNow()
           };
 
-        HTTP.post('ChartPeriod/AddNotification', {notification:notification})
+        axios.post('ChartPeriod/AddNotification', {notification:notification})
           .then(function (response) {
               console.log("done notification")
         });
@@ -1193,7 +1239,7 @@ export default {
           Period: seft.$route.params.period,
           UserID: UserID,
       };
-      HTTP.post("ChartPeriod/AddFavourite",{
+      axios.post("ChartPeriod/AddFavourite",{
         data: JSON.stringify(mObj)
       }).then(result=>{
         Swal.fire({
@@ -1215,7 +1261,7 @@ export default {
       // debugger
       let seft = this 
       var obj = seft.$route.params.kpilevelcode+ ',' + seft.$route.params.period ;
-      HTTP.get(`ChartPeriod/LoadDataProvide/${obj}/${seft.page}/${seft.pageSize}`)
+      axios.get(`ChartPeriod/LoadDataProvide/${obj}/${seft.page}/${seft.pageSize}`)
         .then(data => {
         var count = 1;
         console.log(data);
@@ -1236,7 +1282,7 @@ export default {
     deleteActionPlan(id) {
       let seft = this
       if (Number(id) > 0) {
-        HTTP.get(`ChartPeriod/Delete/${id}`).then(res =>{
+        axios.get(`ChartPeriod/Delete/${id}`).then(res =>{
           if (res) {
             var commentid = Number($('.commentid').text());
             var dataid = Number($('.dataid').text());
@@ -1254,7 +1300,7 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       }
-      HTTP.post("ChartPeriod/Approval",JSON.stringify(data))
+      axios.post("ChartPeriod/Approval",JSON.stringify(data))
       .then(data => {
         console.log(data)
         success("Successfully!")
@@ -1273,14 +1319,14 @@ export default {
         CategoryID: Number(seft.$route.params.catid),
         url: window.location.href
       };
-      HTTP.post("ChartPeriod/Done",JSON.stringify(data))
+      axios.post("ChartPeriod/Done",JSON.stringify(data))
       .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
         seft.LoadDataActionPlan(dataid, commentid);
       })
-      // let promise = HTTP.post("http://10.4.4.224:98/ChartPeriod/Done", JSON.stringify(data))
+      // let promise = axios.post("http://10.4.4.224:98/ChartPeriod/Done", JSON.stringify(data))
       // promise.then(data => {
       //   success("Successfully!")
       //   var commentid = Number($('.commentid').text());
@@ -1344,7 +1390,7 @@ export default {
           KPILevelCode: seft.$route.params.kpilevelcode,
         };
         
-        HTTP.post('ChartPeriod/Add', obj ).then(res=>{
+        axios.post('http://10.4.4.92:91/ChartPeriod/Add', obj ).then(res=>{
         console.log("res");
         console.log(res);
         if (res.data.status === true ) {
@@ -1370,106 +1416,110 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this
-      HTTP.post(`ChartPeriod/getallpaging/${dataid}/${commentid}/${Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid)}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
+      axios.post(`http://10.4.4.92:91/ChartPeriod/getallpaging/${dataid}/${commentid}/${Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid)}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
      .then(res => {
        console.log(res)
       //  var res = res.data;
        if (res.data.status) {
-          var data = res.data.data;
-          seft.totalPage = res.data.totalPage;
-          seft.page = res.data.page;
-          seft.pageSize = res.data.pageSize;
-          console.log(data)
-          var html = '';
-          var content='';
-          // debugger
-          
-          $.each(data, function (i, item) {
-            let currentUser = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
-                tagContent = '',
-                statusContent = '',
-                aprovedContent = '';
+        var data = res.data.data;
+        seft.totalPage = res.data.totalPage;
+        seft.page = res.data.page;
+        seft.pageSize = res.data.pageSize;
+        console.log("LoadDataActionPlan")
+        console.log(data)
+        var html = '';
+        var content='';
+        // debugger
+        
+        $.each(data, function (i, item) {
+          let currentUser = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
+            tagContent = '',
+            statusContent = '',
+            aprovedContent = '';
 
-            //Kiểm tra tag, nếu tag nhiều người thi render ra nhiều
+          //Kiểm tra tag, nếu tag nhiều người thi render ra nhiều
             if (item.Tag !== null)
+              {
+                let array2 = item.Tag.split(',');
+                $.each(array2, function (i, item2)
                 {
-                    let array2 = item.Tag.split(',');
+                  if (item2.length > 1) {
+                    tagContent += `<span class="badge badge-danger text-bold ">${item2}</span> `;
+                  }
+                });
+              }
 
-                    $.each(array2, function (i, item2)
-                    {
-                        if (item2.length > 1) {
-                            tagContent += `<span class="badge badge-danger text-bold ">${item2}</span> `;
-                        }
-                    });
-            }
-
-            //Kiểm tra Finish Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
-            if (item.Status) {
-                statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
-                                        <input type="checkbox" class="updateStatus" checked>
-                                        <div class="state p-success"><i class="icon fa fa-check"></i>
-                                            <label>Finished</label>
-                                        </div>
-                                    </div>`;
-            }
-            else {
-                  statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
-                                        <input type="checkbox" class="updateStatus">
-                                        <div class="state p-danger"><i class="icon fa fa-check"></i>
-                                            <label>Not Finished</label>
-                                        </div>
-                                    </div>`;
-            }
-            //Kiểm tra Approved Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
-
-            if (item.ApprovedStatus) {
-                aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
-                                        <input type="checkbox" class="btnApproveActionPlan" checked>
-                                        <div class="state p-success"><i class="icon fa fa-check"></i>
-                                            <label>Approved</label>
-                                        </div>
-                                    </div>`;
-            }
-            else {
-                  aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
-                                        <input type="checkbox" class="btnApproveActionPlan">
-                                        <div class="state p-danger"><i class="icon fa fa-check"></i>
-                                            <label>Not Approved</label>
-                                        </div>
-                                    </div>`;
-            }
-            console.log(item.ListUserIDs.indexOf(12))
-            //Nếu người nào tạo tag hoặc được chỉ định trong tag thì mới được click vào tag đó
-              content += `<tr data-id="${item.ID}" style="${item.CreatedBy == currentUser || item.Auditor == currentUser || item.ListUserIDs.indexOf(currentUser) != -1 ? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
-                                <td>${(i + 1)}</td>
-                                <td class="text-bold" style="padding-left:15px;">
-                                    <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
-                                </td>
-                                <td>
-                                    <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
-                                </td>
-                                <td>${tagContent}</td>
-                                <td>
-                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.Deadline}">
-                                </td>
-                                <td>
-                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="${item.UpdateSheduleDate}">
-                                </td>
-                                <td>
-                                    <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
-                                </td>
-                                <td>
-                                    ${statusContent}
-                                </td>
-                                <td>
-                                    ${aprovedContent}
-                                </td>
-                                <td style="${item.CreatedBy == currentUser || item.ListAuditorIDs.indexOf(currentUser) !== -1? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash"></i></button>
+          //Kiểm tra Finish Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
+          if (item.Status) {
+            statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                    <input type="checkbox" class="updateStatus" checked>
+                                    <div class="state p-success"><i class="icon fa fa-check"></i>
+                                        <label>Finished</label>
                                     </div>
-                                </td>
-                            </tr>`;
+                                </div>`;
+          }
+          else {
+            statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                  <input type="checkbox" class="updateStatus">
+                                  <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                      <label>Not Finished</label>
+                                  </div>
+                              </div>`;
+          }
+          //Kiểm tra Approved Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
+
+          if (item.ApprovedStatus) {
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                    <input type="checkbox" class="btnApproveActionPlan" checked>
+                                    <div class="state p-success"><i class="icon fa fa-check"></i>
+                                        <label>Approved</label>
+                                    </div>
+                                </div>`;
+          }
+          else {
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+                                  <input type="checkbox" class="btnApproveActionPlan">
+                                  <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                      <label>Not Approved</label>
+                                  </div>
+                              </div>`;
+          }
+          console.log(item.ListUserIDs.indexOf(12))
+          //Nếu người nào tạo tag hoặc được chỉ định trong tag thì mới được click vào tag đó
+            content += `<tr data-id="${item.ID}" style="${item.CreatedBy == currentUser || item.Auditor == currentUser || item.ListUserIDs.indexOf(currentUser) != -1 ? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                            <td>${(i + 1)}</td>
+                            <td>${item.ID}</td>
+                            <td class="text-bold" style="padding-left:15px;">
+                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
+                            </td>
+                            <td>
+                                <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
+                            </td>
+                            <td>${tagContent}</td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.Deadline}">
+                            </td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="${item.UpdateSheduleDate}">
+                            </td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
+                            </td>
+                            <td class="text-bold" style="padding-left:15px;">
+                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
+                            </td>
+                            <td>
+                                ${statusContent}
+                            </td>
+                            <td>
+                                ${aprovedContent}
+                            </td>
+                            <td style="${item.CreatedBy == currentUser || item.ListAuditorIDs.indexOf(currentUser) !== -1? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>`;
 
         
           });
@@ -1626,6 +1676,43 @@ export default {
               dataType: "json"
             }
           });
+
+          $('#modal-group-comment-data2 .RemarkActionPlan').editable({
+            placement: "right",
+            type: "text",
+            pk: $(this).data("item-id"),
+            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            params: function(params) {
+              var data = {};
+              data['name'] = params.name;
+              data['value'] = params.value;
+              data['pk'] = params.pk;
+              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+            //  abc=params; 
+              data.item = { value: data.value}
+              console.log(data)
+              console.log(params)
+              return data;
+            },
+              success: function(response, newValue) {
+                console.log(response);
+                var commentid = Number($('.commentid').text()),
+                dataid = Number($('.dataid').text());
+                if (response.status) {
+                    success(response.message)
+                } else {
+                   warning(response.message)
+                }
+                seft.LoadDataActionPlan(dataid, commentid);
+            },
+            display: function (value, response) {
+
+            },
+            ajaxOptions: {
+              type: "POST",
+              dataType: "json"
+            }
+          });
         }
      });
        
@@ -1724,7 +1811,7 @@ export default {
       confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
           if (result.value) {
-            HTTP.get(`https://localhost:44371/ChartPeriod/DeleteComment2/${id}`)
+            axios.get(`ChartPeriod/DeleteComment2/${id}`)
             .then(res=>{
               if(res){
                 console.log(res)
@@ -1740,7 +1827,11 @@ export default {
       });
     },
     remark(id) {
-      HTTP.get(`ChartPeriod/Remark/${id}`).then(r => {
+      axios.get(`ChartPeriod/Remark/${id}`,{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      }).then(r => {
         console.log(r);
         let result = r.data.model;
         var userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
@@ -1819,7 +1910,7 @@ export default {
         CategoryID: Number(this.$route.params.catid)
       };
       
-       HTTP.post("ChartPeriod/AddComment",mObj)
+       axios.post("http://10.4.4.92:91/ChartPeriod/AddComment",mObj)
         .then(data => {
           
           var res = data.data;
@@ -1851,6 +1942,7 @@ export default {
           period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
 
         $("#modal-group-comment-data").modal("show");
+        console.log("opencomment")
         console.log(number);
         console.log(value);
         console.log(period);
@@ -1860,8 +1952,10 @@ export default {
         $(".dataid").text(id);
 
         $(".RemarkChart").text(e.text);
-
-        $(".RemarkChart").text( "Remark - " + period + " " + value + " - " + " KPI Chart " + " - " + this.kpiname + " - " + this.convertPeriod(this.period, false));
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        $(".RemarkChart").text( "Remark on " + monthNames[value - 1] + " - " + " KPI Chart " + " - " + this.kpiname + " - " + this.convertPeriod(this.period, false));
 
         this.remark(id);
         //Khi tao ra table roi thi moi load data
@@ -2003,7 +2097,11 @@ export default {
       // EventBus.$on('hello', URL =>{
       //   seft.URL = URL
       // });
-      HTTP.get(`http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`)
+      axios.get(`http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`,{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
         .then(response=>{
           console.log('respon1')
            console.log(response);

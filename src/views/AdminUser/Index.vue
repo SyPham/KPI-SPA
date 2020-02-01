@@ -186,7 +186,7 @@ export default {
     LoadData() {
       // debugger
       let seft = this;
-      HTTP.post(`AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
+      axios.post(`AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
         console.log(res);
         seft.skip = res.data.skip;
         seft.totalPage = res.data.pageCount;
@@ -195,7 +195,7 @@ export default {
       });
     },
     LockUser(Id=1){
-      HTTP.get(`AdminUser/LockUser/${Id}`)
+      axios.get(`AdminUser/LockUser/${Id}`)
         .then(r => {
           // success('Successfully');
           this.LoadData();
@@ -237,7 +237,7 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.post("AdminKPI/delete/" + id)
+            axios.post("AdminKPI/delete/" + id)
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");

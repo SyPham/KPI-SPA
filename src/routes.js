@@ -231,6 +231,7 @@ const router = new VueRouter({
       
       children: [
         { name: 'dataset', path: "/Dataset/:catid/:period/:start/:end/:year/",component: Dataset},
+        { name: 'dataset2', path: "/Dataset/:catid/:period/:start/:end/:year/:type/:comID/:dataID/:title",component: Dataset}
       ]
     },
 

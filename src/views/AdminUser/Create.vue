@@ -177,7 +177,7 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        HTTP.post("AdminUser/add", {
+        axios.post("AdminUser/add", {
           UserName: this.UserName,
           Password: this.Password,
           Email: this.Email,
@@ -202,7 +202,7 @@ export default {
       }
     },
     GetListAllPermissions() {
-      HTTP.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
+      axios.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);

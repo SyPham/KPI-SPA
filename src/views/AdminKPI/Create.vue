@@ -10,49 +10,40 @@
         <!-- /.card-header -->
         <!-- form start -->
         <form @submit.prevent="save" role="form">
+
           <div class="card-body">
             <div class="form-group col-md-6">
-              <label for="exampleInputEmail1">Name</label>
+              <label for="exampleInputEmail1">Chinese Name</label>
               <span style="color:red">(*)</span>
-              <input
-                type="text"
-                class="form-control"
-                v-model="Name"
-                placeholder="Enter Name"
-                :class="{ 'is-invalid': submitted && $v.Name.$error }"
-              />
+              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
               <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
             </div>
+
             <div class="form-group col-md-6">
+              <label for="exampleInputEmail1">English Name</label>
+              <span style="color:red">(*)</span>
+              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
+              <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="exampleInputEmail1">Vietnamese Name</label>
+              <span style="color:red">(*)</span>
+              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
+              <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
+            </div>
+            <!-- <div class="form-group col-md-6">
               <label for="exampleInputEmail1">Level</label>
               <span style="color:red">(*)</span>
-              <input
-                :class="{ 'is-invalid': submitted && $v.LevelID.$error }"
-                type="number"
-                class="form-control"
-                v-model="LevelID"
-                placeholder="Enter Level"
-              />
-              <div
-                v-if="submitted && !$v.LevelID.required"
-                class="invalid-feedback"
-              >LevelID is required</div>
-            </div>
+              <input :class="{ 'is-invalid': submitted && $v.LevelID.$error }" type="number" class="form-control" v-model="LevelID" placeholder="Enter Level"/>
+              <div v-if="submitted && !$v.LevelID.required" class="invalid-feedback">LevelID is required</div>
+            </div> -->
 
             <div class="form-group col-md-6">
               <label>Unit</label>
               <span style="color:red">(*)</span>
-              <select
-                class="form-control select2bs4 select2-hidden-accessible"
-                style="width: 100%;"
-                data-select2-id="17"
-                tabindex="-1"
-                v-model="Unit"
-                aria-hidden="true"
-                :class="{ 'is-invalid': submitted && $v.Unit.$error }"
-              >
+              <select class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" v-model="Unit" aria-hidden="true" :class="{ 'is-invalid': submitted && $v.Unit.$error }">
                 <option v-for="item in data" :key="item.value" :label="item.Name" :value="item.ID"></option>
-
                 <!-- <option data-select2-id="61">2</option> -->
               </select>
               <div v-if="submitted && !$v.Unit.required" class="invalid-feedback">Unit is required</div>
@@ -93,6 +84,7 @@ export default {
   },
   created() {
     this.getUnit();
+    console.log('Bearer ' + localStorage.getItem("authToken"))
   },
   methods: {
     save() {
@@ -102,10 +94,14 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        HTTP.post("AdminKPI/add", {
+        axios.post("AdminKPI/add", {
           Name: this.Name,
-          LevelID: this.LevelID,
-          Unit: this.Unit
+          // LevelID: this.LevelID,
+          Unit: this.Unit,
+        },{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
         })
           .then(response => {
             this.$router.push("/adminKPI");
@@ -118,7 +114,11 @@ export default {
       }
     },
     getUnit() {
-      HTTP.get("AdminKPI/getallunit")
+      axios.get("AdminKPI/getallunit",{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
         .then(r => {
           this.data = r.data;
           // console.log(r.data);
@@ -128,7 +128,7 @@ export default {
         });
     },
     resetForm() {
-      this.$router.push("/adminKPI");
+      this.$router.go(-1);
     }
   }
 };

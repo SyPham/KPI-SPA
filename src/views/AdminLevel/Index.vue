@@ -16,7 +16,7 @@
     
     <div class="col-md-12">
       <div class="callout bg-yellow-gradient" style="border-color:#c57901">
-        <h3>4. Organization Chart</h3>
+        <h3>1. Organization Chart</h3>
       </div>
     </div>
     <div class="col-md-12">
@@ -156,7 +156,7 @@ export default {
                   }
                   //console.log(obj)
                   // Save data.input.val() or return false to keep the editor open
-                  HTTP.post("http://10.4.4.224:98/AdminLevel/Rename",obj)
+                  axios.post("http://10.4.4.224:98/AdminLevel/Rename",obj)
                   .then(result =>{
 
                   })
@@ -483,8 +483,11 @@ export default {
             title: obj.title,
             levelnumber: obj.levelnumber,
             parentid: obj.parentid,
+            headers:{
+              Authorization: 'Bearer '+ localStorage.getItem("authToken")
+            }
           };
-          HTTP.post("http://10.4.4.224:98/AdminLevel/Rename",JSON.stringify(level))
+          axios.post("http://10.4.4.224:98/AdminLevel/Rename",JSON.stringify(level))
           .then(result=>{
             if (result) {
                 success('Edit successfully!');
@@ -529,7 +532,11 @@ export default {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.value) {
-              HTTP.get(`http://10.4.4.224:98/AdminLevel/Remove/${JSON.stringify(value)}`)
+              axios.get(`http://10.4.4.224:98/AdminLevel/Remove/${JSON.stringify(value)}`,{
+                headers:{
+                  Authorization: 'Bearer '+ localStorage.getItem("authToken")
+                }
+              })
               .then(result =>{
                 success('Delete successfully.');
                 levelAdminController.loadData();
@@ -550,9 +557,12 @@ export default {
             Code: obj.code,
             Name: obj.title,
             LevelNumber: obj.levelnumber,
-            ParentID: obj.parentid
+            ParentID: obj.parentid,
+            headers:{
+              Authorization: 'Bearer '+ localStorage.getItem("authToken")
+            }
           };
-          HTTP.post("http://10.4.4.224:98/AdminLevel/Add",JSON.stringify(mObj))
+          axios.post("http://10.4.4.224:98/AdminLevel/Add",JSON.stringify(mObj))
           .then(result=>{
             if (result) {
                 success('Add successfully!');
@@ -573,9 +583,12 @@ export default {
             Code: $('#addKPI .Code').val(),
             Name: $('#addKPI .Name').val(),
             LevelNumber: $('#addKPI .LevelID').val(),
-            ParentID: $('#addKPI .ParentID').val()
+            ParentID: $('#addKPI .ParentID').val(),
+            headers:{
+              Authorization: 'Bearer '+ localStorage.getItem("authToken")
+            }
           };
-          HTTP.post("http://10.4.4.224:98/AdminLevel/AddOrUpdate",JSON.stringify(mObj)).then(result =>{
+          axios.post("http://10.4.4.224:98/AdminLevel/AddOrUpdate",JSON.stringify(mObj)).then(result =>{
             if (result) {
                 success('Add successfully!');
                 levelAdminController.loadData();

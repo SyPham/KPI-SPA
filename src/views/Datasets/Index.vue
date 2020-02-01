@@ -186,7 +186,7 @@
                     @click="opencomment"
                     :data-id="item2.ID"
                   >
-                    <div class="tooltip-css">
+                    <div class="tooltip-css" style="text-align: center;">
                       {{item2.ValueArray[0] == 0 ? "N/A" : item2.ValueArray[0]}}
                       <div class="top">
                         <p>{{item.CategoryName}}</p>
@@ -238,7 +238,7 @@
                         <button
                           @click="addcomment()"
                           type="button"
-                          class="btn btn-info pull-right btnComment"
+                          class="btn btn-info float-right btnComment"
                         >
                           <i class="far fa-paper-plane"></i> Post
                         </button>
@@ -252,7 +252,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" @click="close">Close</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -260,138 +260,125 @@
       </div>
 
       <div class="modal fade modal-window modal" id="modal-group-comment-data2">
-        <div class="modal-dialog modal-lg" style="width:95%;overflow-y:scroll">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color:#00a65a;color:#fff">
-              <span class="commentid" style="display:none"></span>
+        <div class="modal-dialog modal-lg" style="overflow:scroll;" >
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#00a65a;color:#fff">
+                    <h4 class="modal-title">
+                      <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" style="color:#fff;cursor:pointer" >
+                        <i class="fa fa-reply"></i>
+                      </a>
+                      &#32;
+                      <span class="ActionPlanChart"></span>
+                    </h4>
+                    <span class="commentid" style="display:none"></span>
 
-              <h4 class="modal-title">
-                <a
-                  href="#modal-group-comment-data"
-                  data-toggle="modal"
-                  data-dismiss="modal"
-                  style="color:#fff;cursor:pointer"
-                >
-                  <i class="fa fa-reply"></i>
-                </a>
-                &#32;
-                <span class="ActionPlanChart"></span>
-              </h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home">List</a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link"
-                    id="pills-profile-tab"
-                    data-toggle="pill"
-                    href="#pills-profile"
-                  >Add</a>
-                </li>
-              </ul>
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade" id="pills-home">
-                  <div class="listTask">
-                    <table class="table table-condensed table-bordered">
-                      <thead>
-                        <tr>
-                          <th style="width: 10px">No.</th>
-                          <th>Task name</th>
-                          <th>Descriptions</th>
-                          <th>PIC</th>
-                          <th>Due date</th>
-                          <th>Update shedule date</th>
-                          <th>Actual finish date</th>
-                          <th>Status</th>
-                          <th class="Approval" style="width: 100px">Approve</th>
-                          <th class="Option" style="width: 50px">Option</th>
-                        </tr>
-                      </thead>
-                      <tbody class="tblActionPlan">
-                        <tr>
-                          
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
-                <div class="tab-pane fade" id="pills-profile">
-                  <div class="addTask">
-                    <!-- text input -->
-                    <div class="form-group">
-                      <label>Task name</label>
-                      <input
-                        type="text"
-                        class="form-control Title"
-                        autocomplete="off"
-                        placeholder="Enter ..."
-                      />
-                      <!-- <input type="text" class="form-control ID hidden" placeholder="Enter ..."> -->
-                    </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home">List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile">Add</a>
+                        </li>
+                          <input v-model="seachActionPlan" class="search" style=""  type="text" placeholder="Search.." name="search2">
+                          <button class="btn btn-dark btn-sm"  @click="seachActionPlan = ' '" type="submit"><i class="fas fa-search-minus search2"></i></button>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-home" style="overflow-x:scroll;">
+                            <div class="listTask">
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">No.</th>
+                                            <th>Task ID</th>
+                                            <th>Task name</th>
+                                            <th>Descriptions</th>
+                                            <th>PIC</th>
+                                            <th>Due date</th>
+                                            <th>Update shedule date</th>
+                                            <th>Actual finish date</th>
+                                            <th>Remark</th>
+                                            <th>Status</th>
+                                            <th class="Approval" style="width: 100px">Approve</th>
+                                            <th class="Option" style="width: 50px">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tblActionPlan">
+                                        <tr>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer clearfix">
+                              <Paginate
+                                v-model="page"
+                                :page-count="totalPage "
+                                :prev-text="'Prev'"
+                                :next-text="'Next'"
+                                :page-range="3"
+                                :margin-pages="2"
+                                :container-class="'pagination'"
+                                :page-class="'page-item'"
+                                :prev-class="'page-item'"
+                                :next-class="'page-item'"
+                                :page-link-class="'page-link'"
+                                :prev-link-class="'page-link'"
+                                :next-link-class="'page-link'"
+                                :click-handler="changePage"
+                              ></Paginate>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile">
+                            <div class="addTask">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>Task name<b class="text-danger"> (*) </b></label>
+                                    <input type="text" class="form-control Title" autocomplete="off" placeholder="">
+                                </div>
 
-                    <!-- textarea -->
-                    <div class="form-group">
-                      <label>Description</label>
-                      <div
-                        class="editable Description"
-                        style="border:1px solid #d2d6de"
-                        contenteditable="true"
-                      >
-                        <ul style="list-style: decimal;padding-left: 20px;">
-                          <li></li>
-                        </ul>
-                      </div>
-                    </div>
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label>Description<b class="text-danger"> (*) </b></label>
+                                    <textarea type="text" class="form-control Description" rows="3" placeholder=""></textarea>
+                                </div>
 
-                    <!-- input states -->
-                    <div class="form-group">
-                      <label class="control-label" for="Tag">Assign PIC</label>
-                      <textarea
-                        type="text"
-                        class="form-control Tag"
-                        id="Tag"
-                        rows="1"
-                        placeholder="Require ..."
-                      ></textarea>
+                                <!-- input states -->
+                                <div class="form-group" tooltip-position="top" data-c-tooltip='Enter a character "@@" inside the textarea and you will see the dropdown list populated with suggestions.'>
+                                  <label class="control-label" for="Tag">Assign PIC<b class="text-danger"> (*) </b></label>
+                                  <textarea type="text" class="form-control Tag" id="Tag" rows="1" placeholder=""></textarea>
+                                </div>
+                                <div class="form-group" tooltip-position="top" data-c-tooltip='Enter a character "@@" inside the textarea and you will see the dropdown list populated with suggestions.'>
+                                  <label class="control-label" for="Auditor">Auditor<b class="text-danger"> (*) </b></label>
+                                  <textarea type="text" class="form-control Auditor" id="Auditor" rows="1" placeholder=""></textarea>
+                                </div>
+                                <!-- radio -->
+                                <div  class="form-group">
+                                    <label>Due date<b class="text-danger"> (*) </b></label><br>
+                                    <!-- <input autocomplete="off" type="text" class="form-control DueDate datepicker" id="datepicker" /> -->
+                                    <!-- <date-pick @click="gettime(date)" :isDateDisabled="isFutureDate"  v-model="date"></date-pick> -->
+                                    <input id="datepicker" class="form-control DueDate datepicker" autocomplete="off"  width="276" />
+                                </div>
+                                <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
+                                <div class="form-group">
+                                  <b class="text-danger">(*) Require fields not to be blank. </b>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                      <label class="control-label" for="Auditor">Auditor</label>
-                      <textarea
-                        type="text"
-                        class="form-control Auditor"
-                        id="Auditor"
-                        rows="1"
-                        placeholder="Optional ..."
-                      ></textarea>
-                    </div>
-                    <!-- radio -->
-                    <div class="form-group">
-                      <label>Due date</label>
-                      <input id="datepicker" class="form-control DueDate datepicker" autocomplete="off"  width="276" />
-                    </div>
-                    <button type="button" class="btn btn-success btnSaveActionPlan">Save</button>
-                  </div>
                 </div>
-              </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-secondary" data-dismiss="modal"  >Close</button>
+                    <a href="#modal-group-comment-data" data-toggle="modal" data-dismiss="modal" class="btn btn-primary">Back to remark</a>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <a
-                href="#modal-group-comment-data"
-                data-toggle="modal"
-                data-dismiss="modal"
-                class="btn btn-primary"
-              >Back to remark</a>
-            </div>
-          </div>
-          <!-- /.modal-content -->
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
       </div>
       <!-- </comment> -->
     </div>
@@ -400,9 +387,20 @@
 <script>
 import { HTTP } from "../../http-constants";
 import VueJwtDecode from "vue-jwt-decode";
+import Paginate from "vuejs-paginate";
+import EventBus from "../../utils/EventBus.js";
 export default {
   data() {
     return {
+      URL: '',
+      Link:'',
+      closemodal:"",
+      seachActionPlan: "",
+      totalPage: 0,
+      page: 1,
+      skip: 0,
+      pageSize: 10,
+      keyword: ' ',
       data: [],
       data2: [],
       title: [],
@@ -419,7 +417,17 @@ export default {
     };
   },
   watch: {
-      searchyear: function(newOld, oldVal) {
+    seachActionPlan: function(newOld,oldVal){
+      let seft = this
+      console.log(newOld)
+      console.log(oldVal)
+      let dataid = $('.dataid').text();
+      let commentid = $('.commentid').text()
+      console.log(dataid)
+      seft.keyword = newOld;
+      seft.LoadDataActionPlan(dataid, commentid);
+    },
+    searchyear: function(newOld, oldVal) {
       let seft = this;
       this.$router.replace({
         name: "dataset",
@@ -436,7 +444,216 @@ export default {
       let seft = this;
       this.$router.replace({ name: "dataset", params: { end: seft.vend } });
       seft.LoadDataset();
+    },
+    URL: function(newOld,oldVal){
+      let self = this;
+      self.$router.replace({
+        name: "dataset2" ,
+      });
+      // self.Loadchart();
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        console.log("1")
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+        $("#modal-group-comment-data2").modal("show");
+            self.remark(dataID);
+
+        self.loadDataComment(true);
+        self.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+        console.log("2")
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+              self.remark(dataID);
+              self.LoadDataActionPlan(dataID, comID);
+              self.loadDataComment(true);
+      }
+    },
+    Link: function(newOld,oldVal){
+      let self = this;
+      self.$router.replace({
+        name: "dataset2" ,
+      });
+      // self.Loadchart();
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+        $("#modal-group-comment-data2").modal("show");
+            self.remark(dataID);
+
+        self.loadDataComment(true);
+        self.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+            self.remark(dataID);
+            self.LoadDataActionPlan(dataID, comID);
+            self.loadDataComment(true);
+      }
     }
+  },
+  components:{
+    Paginate,
+  },
+  mounted(){
+    let self = this 
+    let currentUrl = self.$router.currentRoute;
+    console.log("currentUrl");
+    console.log(currentUrl);
+    let comID = Number(self.$route.params.comID);
+    console.log(comID)
+    let dataID = Number(self.$route.params.dataID);
+    console.log(dataID)
+    let title = self.$route.params.title;
+    console.log(title)
+    let type = self.$route.params.type;
+    console.log(type)
+
+    if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+
+      let boxTitle = $(".box-title").text();
+      // $('.kpilevelcode').text(getUrlParameter("kpilevelcode"));
+
+      $('.dataid').text(dataID);
+      $('.commentid').text(comID)
+      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark", "Action Plan") + boxTitle);
+      $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+      $("#modal-group-comment-data").modal("show");
+      self.remark(dataID);
+      self.LoadDataActionPlan(dataID, comID);
+      self.loadDataComment(true);
+
+    }
+
+    if (comID > 0 && dataID > 0 && title !== "" && type === "task") {
+      let boxTitle = $(".box-title").text();
+      $('.dataid').text(dataID);
+      $('.commentid').text(comID)
+      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan", "Remark") + boxTitle);
+      $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+      // $('.kpilevelcode').text(getUrlParameter("kpilevelcode"));
+      $("#modal-group-comment-data2").modal("show");
+      self.remark(dataID);
+
+      self.loadDataComment();
+      self.LoadDataActionPlan(dataID, comID);
+      activaTab('pills-home');
+
+    }
+
+    // EventBus AddTask
+    EventBus.$on('hello', URL =>{
+      self.URL = URL
+      console.log('self.URL')
+      console.log(self.URL)
+      let currentUrl = self.$router.currentRoute;
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+        $("#modal-group-comment-data2").modal("show");
+            self.remark(dataID);
+
+        self.loadDataComment(true);
+        self.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+              self.remark(dataID);
+              self.LoadDataActionPlan(dataID, comID);
+              self.loadDataComment(true);
+      }
+    });
+
+    // EventBus addComment
+    EventBus.$on('hello2',Link=>{
+      self.Link = Link
+      console.log('self.Link')
+      console.log(self.Link)
+      let currentUrl = self.$router.currentRoute;
+      let comID = Number(self.$route.params.comID);
+      let dataID = Number(self.$route.params.dataID);
+      let title = self.$route.params.title;
+      let type = self.$route.params.type;
+      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+        let boxTitle = $(".box-title").text();
+        $('.dataid').text(dataID);
+        $('.commentid').text(comID)
+        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+        $("#modal-group-comment-data2").modal("show");
+            self.remark(dataID);
+
+        self.loadDataComment(true);
+        self.LoadDataActionPlan(dataID, comID);
+        activaTab('pills-home');
+      }
+      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+        let boxTitle = $(".box-title").text();
+          $('.dataid').text(dataID);
+          $('.commentid').text(comID)
+          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
+
+          $("#modal-group-comment-data").modal("show");
+            self.remark(dataID);
+            self.LoadDataActionPlan(dataID, comID);
+            self.loadDataComment(true);
+      }
+    })
+
   },
   created() {
     let seft = this;
@@ -449,10 +666,78 @@ export default {
     seft.LoadDataset();
   },
   methods: {
+    deleteComment(id) {
+      let self = this
+      Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+          if (result.value) {
+            axios.get(`ChartPeriod/DeleteComment2/${id}`)
+            .then(res=>{
+              if(res){
+                console.log(res)
+                  if (res.status) {
+                  self.loadDataComment();
+                  success("success!");
+                  } else {
+                    warning('error');
+                }
+              }
+            })
+          }
+      });
+    },
+    close(){
+      let self = this;
+      let currentUrl = self.$router.currentRoute;
+      console.log("currentUrl");
+      console.log(currentUrl);
+      self.$router.push({
+        name: "dataset" ,
+      });
+      $("#modal-group-comment-data").modal("hide");
+      console.log('aaaaaaaaaa')
+    },
+    changePage(pageNum) {
+      this.loadDataProvide(this.obj,pageNum);
+    },
+    convertPeriod(period, status = true) {
+      if (status) {
+        switch (period) {
+          case "m":
+            return "Months In Year";
+          case "w":
+            return "Weeks In Year";
+          case "q":
+            return "Quarters In Year";
+          case "y":
+            return "Years In Year";
+        }
+      } else {
+        switch (period) {
+          case "m":
+            return "Monthly";
+          case "w":
+            return "Weekly";
+          case "q":
+            return "Quarterly";
+          case "y":
+            return "Yearly";
+        }
+      }
+
+      return "N/A";
+    },
     deleteActionPlan(id) {
       let seft = this
       if (Number(id) > 0) {
-        HTTP.get(`ChartPeriod/Delete/${id}`).then(res =>{
+        axios.get(`ChartPeriod/Delete/${id}`).then(res =>{
           if (res) {
             var commentid = Number($('.commentid').text());
             var dataid = Number($('.dataid').text());
@@ -470,7 +755,7 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       }
-      HTTP.post("ChartPeriod/Approval",JSON.stringify(data))
+      axios.post("ChartPeriod/Approval",JSON.stringify(data))
       .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
@@ -488,16 +773,15 @@ export default {
         CategoryID: Number(seft.$route.params.catid)
       };
 
-      HTTP.post("ChartPeriod/Done",JSON.stringify(data))
+      axios.post("ChartPeriod/Done",JSON.stringify(data))
       .then(data => {
         success("Successfully!")
         var commentid = Number($('.commentid').text());
         var dataid = Number($('.dataid').text());
         seft.LoadDataActionPlan(dataid, commentid);
       })
-    }, 
+    },
     addcomment() {
-      //   debugger
       if ($("#comment").val() == "") {
         warning("Please enter message!!");
         return;
@@ -522,13 +806,13 @@ export default {
         CommentMsg: CommentMsg,
         UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
         Tag: Tag,
-        Link: window.location.href,
+        Link: this.$route.path,
         Title: $(".RemarkChart").text(),
         KPILevelCode: this.KPILevelCode,
         CategoryID: Number(this.$route.params.catid)
       };
 
-      HTTP.post("ChartPeriod/AddComment", mObj)
+      axios.post("ChartPeriod/AddComment", mObj)
         .then(data => {
           var res = data.data;
           // console.log(res.status);
@@ -556,21 +840,29 @@ export default {
     opencomment(e) {
       console.log(e);
       if (e.toElement.classList[2] == "active-td" && "active-td2") {
+        let number = Number(e.toElement.textContent),
+          value = Number(e.toElement.cellIndex),
+          period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
         $("#modal-group-comment-data").modal("show");
         var id = e.toElement.dataset.id;
         // var kpiname = $(this).closest('tr').children('td:nth-child(3)').text();
         $(".dataid").text(id);
         $(".RemarkChart").text(e.text);
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
         $(".RemarkChart").text(
-          "Remark - " + this.categoryname + " - " + this.period
+          "Remark on  " + monthNames[value - 1] + " - "  + this.kpiname + " - " + this.convertPeriod(this.period, false)
         );
+        //$('.RemarkChart').text(`Remark on ${monthNames[value - 1]} - ${kpiname} - ${data[0].Period}`);
+
         this.remark(id);
         //Khi tao ra table roi thi moi load data
         this.loadDataComment();
       }
     },
     remark(id) {
-     HTTP.get(`ChartPeriod/Remark/${id}`).then(r => {
+     axios.get(`ChartPeriod/Remark/${id}`).then(r => {
         console.log(r);
         let result = r.data.model;
         var userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
@@ -620,211 +912,111 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this;
-      HTTP.get(`ChartPeriod/getall/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`)
+      axios.post(`ChartPeriod/getallpaging/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
       .then(res => {
         console.log(res);
         //  var res = res.data;
         if (res.data.status) {
           var data = res.data.data;
-          console.log(data);
-          var html = "";
+          seft.totalPage = res.data.totalPage;
+          seft.page = res.data.page;
+          seft.pageSize = res.data.pageSize;
+          console.log("LoadDataActionPlan")
+          console.log(data)
+          var html = '';
+          var content='';
           // debugger
-          $.each(data, function(i, item) {
-            $(".listTask .Approval").hide();
-            $(".listTask .Option").hide();
-            console.log(item);
+          $.each(data, function (i, item) {
+          let currentUser = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
+            tagContent = '',
+            statusContent = '',
+            aprovedContent = '';
 
-            if (item.CreatedBy || item.Auditor) {
-              html += '<tr data-id="' + item.ID + '">';
-              html += "<td>" + (i + 1) + "</td>";
-              html +=
-                '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="text" data-name="Title" data-pk="' +
-                item.ID +
-                '" data-value="' +
-                item.Title +
-                '" data-title="Enter your title">' +
-                item.Title +
-                "</span></td>";
-              html +=
-                '<td><div class="DescriptionEdit"  style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' +
-                item.Description +
-                '" data-pk="' +
-                item.ID +
-                '" data-userid ="' +
-                item.CreatedBy +
-                '" > ' +
-                item.Description +
-                "</div> ";
-              html += "</td>";
-              html += "<td>";
-
-              if (item.Tag !== null) {
-                var array2 = item.Tag.split(",");
-
-                $.each(array2, function(i, item2) {
+          //Kiểm tra tag, nếu tag nhiều người thi render ra nhiều
+            if (item.Tag !== null)
+              {
+                let array2 = item.Tag.split(',');
+                $.each(array2, function (i, item2)
+                {
                   if (item2.length > 1) {
-                    html +=
-                      '<span class="badge bg-navy text-bold ">' +
-                      item2 +
-                      "</span> ";
+                    tagContent += `<span class="badge badge-danger text-bold ">${item2}</span> `;
                   }
                 });
               }
 
-              html += "</td>";
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.Deadline +
-                '"></td>';
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.UpdateSheduleDate +
-                '"></td>';
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.ActualFinishDate +
-                '"></td>';
-              html += "<td > ";
-              html += '<div class="pretty p-icon p-round p-pulse">';
+          //Kiểm tra Finish Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
+          if (item.Status) {
+            statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
+                                    <input type="checkbox" class="updateStatus" checked>
+                                    <div class="state p-success"><i class="icon fa fa-check"></i>
+                                        <label>Finished</label>
+                                    </div>
+                                </div>`;
+          }
+          else {
+            statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
+                                  <input type="checkbox" class="updateStatus">
+                                  <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                      <label>Not Finished</label>
+                                  </div>
+                              </div>`;
+          }
+          //Kiểm tra Approved Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
 
-              if (item.Status) {
-                html +=
-                  '<input type="checkbox" class="updateStatus" checked  />';
-                html += '<div class="state p-success">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += "<label>Finished</label>";
-              } else {
-                html += '<input type="checkbox" class="updateStatus" />';
-                html += '<div class="state p-danger">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += "<label>Not finished</label>";
-              }
+          if (item.ApprovedStatus) {
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
+                                    <input type="checkbox" class="btnApproveActionPlan" checked>
+                                    <div class="state p-success"><i class="icon fa fa-check"></i>
+                                        <label>Approved</label>
+                                    </div>
+                                </div>`;
+          }
+          else {
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
+                                  <input type="checkbox" class="btnApproveActionPlan">
+                                  <div class="state p-danger"><i class="icon fa fa-check"></i>
+                                      <label>Not Approved</label>
+                                  </div>
+                              </div>`;
+          }
+          console.log(item.ListUserIDs.indexOf(12))
+          //Nếu người nào tạo tag hoặc được chỉ định trong tag thì mới được click vào tag đó
+            content += `<tr data-id="${item.ID}" style="${item.CreatedBy == currentUser || item.Auditor == currentUser || item.ListUserIDs.indexOf(currentUser) != -1 ? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                            <td>${(i + 1)}</td>
+                            <td>${item.ID}</td>
+                            <td class="text-bold" style="padding-left:15px;">
+                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
+                            </td>
+                            <td>
+                                <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
+                            </td>
+                            <td>${tagContent}</td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.Deadline}">
+                            </td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="${item.UpdateSheduleDate}">
+                            </td>
+                            <td>
+                                <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
+                            </td>
+                            <td class="text-bold" style="padding-left:15px;">
+                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
+                            </td>
+                            <td>
+                                ${statusContent}
+                            </td>
+                            <td>
+                                ${aprovedContent}
+                            </td>
+                            <td style="${item.CreatedBy == currentUser || item.ListAuditorIDs.indexOf(currentUser) !== -1? "" :"pointer-events: none;opacity: 0.5;cursor: not-allowed"}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>`;
 
-              html += "</div>";
-              html += "</div>";
-              html += "</td > ";
-
-              $(".listTask .Approval").show();
-              $(".listTask .Option").show();
-              html += "<td> ";
-
-              if (item.ApprovedStatus) {
-                html += '<div class="pretty p-icon p-round p-jelly">';
-                html +=
-                  '<input type="checkbox" checked class="btnApproveActionPlan" />';
-                html += '<div class="state p-success">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += '<label class="black">Approved</label>';
-                html += "</div>";
-                html += "</div >";
-              } else {
-                html += '<div class="pretty p-icon p-round p-jelly">';
-                html +=
-                  '<input type="checkbox" class="btnApproveActionPlan" />';
-                html += '<div class="state p-danger">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += '<label class="black">Not approved</label>';
-                html += "</div>";
-                html += "</div >";
-              }
-
-              html += "</td > ";
-              html += "<td>";
-              html += '<div class="btn-group">';
-              html +=
-                '<button type="button" class="btn btn-warning btn-sm btnDeleteActionPlan"><i class="fas fa-trash-alt"></i></button>';
-              html += "</div>";
-              html += "</div>";
-              html += "</td>";
-              html += "</tr>";
-            } else {
-              if (item.ListUserIDs[0] !== -1)
-                html += '<tr data-id="' + item.ID + '">';
-              else
-                html +=
-                  '<tr style="pointer-events: none;" data-id="' +
-                  item.ID +
-                  '">';
-              console.log(item.ListUserIDs);
-              html += "<td>" + (i + 1) + "</td>";
-              html +=
-                '<td class="text-bold" style="padding-left:15px;"><span style="font-weight: 700;cursor: pointer;"  class="TitleEdit" data-url="/ChartPeriod/Update" data-type="text" data-name="Title" data-pk="' +
-                item.ID +
-                '" data-value="' +
-                item.Title +
-                '" data-title="Enter your title">' +
-                item.Title +
-                "</span></td>";
-              html +=
-                '<td><div class="DescriptionEdit" data-userid ="' +
-                item.CreatedBy +
-                '" style="font-weight: 700;cursor: pointer;"  data-type="textarea"   data-name="Description" data-value="' +
-                item.Description +
-                '" data-pk="' +
-                item.ID +
-                '"> ' +
-                item.Description +
-                "</div> ";
-              html += "</td>";
-              html += "<td>";
-
-              if (item.Tag !== null) {
-                var array2 = item.Tag.split(",");
-                $.each(array2, function(i, item2) {
-                  if (item2.length > 1) {
-                    html +=
-                      '<span class="badge bg-default text-bold ">' +
-                      item2 +
-                      "</span> ";
-                  }
-                });
-              }
-
-              html += "</td>";
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.Deadline +
-                '"></td>';
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" name="UpdateSheduleDate" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.UpdateSheduleDate +
-                '"></td>';
-              html +=
-                '<td><input autocomplete="off" data-id="' +
-                item.ID +
-                '" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="' +
-                item.ActualFinishDate +
-                '"></td>';
-              html += "<td > ";
-              html += '<div class="pretty p-icon p-round p-pulse">';
-
-              if (item.Status) {
-                html +=
-                  '<input type="checkbox" class="updateStatus" checked />';
-                html += '<div class="state p-success">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += "<label>Finished</label>";
-              } else {
-                html += '<input type="checkbox" class="updateStatus" />';
-                html += '<div class="state p-danger">';
-                html += '<i class="icon fa fa-check"></i>';
-                html += "<label>Not finished</label>";
-              }
-              html += "</div>";
-              html += "</div>";
-              html += "</td > ";
-              html += "</tr>";
-            }
+        
           });
 
           $('#datepicker').datepicker({
@@ -835,35 +1027,29 @@ export default {
 
           $(".tblActionPlan").empty();
 
-          $(".tblActionPlan").append(html);
+          $(".tblActionPlan").append(content);
           seft.btnSaveActionPlan();
 
-          $(".updateStatus")
-            .unbind("click")
-            .on("click", function() {
-              var id = $(this)
-                .closest("tr")
-                .data("id");
-              seft.done(id);
-            });
+          $(".updateStatus").unbind("click").on("click", function() {
+            var id = $(this)
+              .closest("tr")
+              .data("id");
+            seft.done(id);
+          });
 
-          $(".btnApproveActionPlan")
-            .off("click")
-            .on("click", function() {
-              var id = $(this)
-                .closest("tr")
-                .data("id");
-              seft.approval(id);
-            });
+          $(".btnApproveActionPlan").off("click").on("click", function() {
+            var id = $(this)
+              .closest("tr")
+              .data("id");
+            seft.approval(id);
+          });
 
-          $(".btnDeleteActionPlan")
-            .off("click")
-            .on("click", function() {
-              var id = $(this)
-                .closest("tr")
-                .data("id");
-              seft.deleteActionPlan(id);
-            });
+          $(".btnDeleteActionPlan").off("click").on("click", function() {
+            var id = $(this)
+              .closest("tr")
+              .data("id");
+            seft.deleteActionPlan(id);
+          });
 
           $("#modal-group-comment-data2 .datepickerEdit").datepicker({
             dateFormat: "mm-dd-yy"
@@ -926,11 +1112,10 @@ export default {
             });
 
           $("#modal-group-comment-data2 .TitleEdit").editable({
-                placement: "right",
-                type: "text",
-                // pk: $(this).data("item-id"),
-                url:
-              "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" ,
+            placement: "right",
+            type: "text",
+            // pk: $(this).data("item-id"),
+            url:"http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" ,
             params: function(params) {
               var data = {};
               data["name"] = params.name;
@@ -993,13 +1178,51 @@ export default {
               dataType: "json"
             }
           });
+
+          $('#modal-group-comment-data2 .RemarkActionPlan').editable({
+            placement: "right",
+            type: "text",
+            pk: $(this).data("item-id"),
+            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            params: function(params) {
+              var data = {};
+              data['name'] = params.name;
+              data['value'] = params.value;
+              data['pk'] = params.pk;
+              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+            //  abc=params; 
+              data.item = { value: data.value}
+              console.log(data)
+              console.log(params)
+              return data;
+            },
+              success: function(response, newValue) {
+                console.log(response);
+                var commentid = Number($('.commentid').text()),
+                dataid = Number($('.dataid').text());
+                if (response.status) {
+                    success(response.message)
+                } else {
+                   warning(response.message)
+                }
+                seft.LoadDataActionPlan(dataid, commentid);
+            },
+            display: function (value, response) {
+
+            },
+            ajaxOptions: {
+              type: "POST",
+              dataType: "json"
+            }
+          });
+          
         }
       });
     },
     btnSaveActionPlan(){
       let seft = this
        $('.btnSaveActionPlan').unbind('click').on('click', function () {
-            seft.addActionPlan();
+          seft.addActionPlan();
         });
     },
     validate(){
@@ -1061,13 +1284,13 @@ export default {
         Description: Description,
         Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
         SubmitDate: convertDate(new Date),
-        Link: window.location.href,
+        Link: this.$route.path,
         Subject: $('.ActionPlanChart').text(),
         Auditor: Auditor,
         CategoryID: Number(seft.$route.params.catid),
         KPILevelCode: seft.KPILevelCode,
       };
-      HTTP.post('ChartPeriod/Add', obj ).then(res=>{
+      axios.post('ChartPeriod/Add', obj ).then(res=>{
         console.log(res);
       if (res.data.status === true ) {
         var commentid = Number($('.commentid').text());
@@ -1144,7 +1367,10 @@ export default {
               '    <img src="src/img/user-icon.png" alt="" class="img-circle">';
             html += "</a>";
             html += '<div class="media-body">';
-            html += '<span class="text-muted pull-right">';
+            html += '<span class="text-muted float-right  deleteComment"  data-commentid="' + item.CommentID + '" style="padding-left: 13px; cursor: pointer" >';
+            html += '   <p class="text-danger"></i></i> <i class="fas fa-times"></i> Delete</p>';
+            html += '</span>';
+            html += '<span class="text-muted float-right">';
             html +=
               '    <small class="text-muted">' +
               JSONDateWithTime(item.CommentedDate) +
@@ -1153,18 +1379,18 @@ export default {
             html +=
               '<strong class="text-success">' + item.FullName + "</strong>";
             if (item.Read) {
-              html += '<span class="label bg-green"> new</span>';
+              html += '<span class="badge bg-green"> new</span>';
             }
             if (item.Task) {
               html +=
                 '<p><a href="#modal-group-comment-data2" data-toggle="modal" data-commentid="' +
                 item.CommentID +
-                '" data-dismiss="modal" class="btn btn-xs btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
+                '" data-dismiss="modal" class="btn btn-sm btn-danger text-bold btnTask"><i class="fa fa-tags"></i> Task</a> </p>';
             } else {
               html +=
                 '<p><a href="#modal-group-comment-data2" data-toggle="modal" title="There are no task." data-commentid="' +
                 item.CommentID +
-                '" data-dismiss="modal" class="btn btn-xs btn-success text-bold btnTask tooltip-ui"><i class="fa fa-tags"></i> Task</a> </p>';
+                '" data-dismiss="modal" class="btn btn-sm btn-success text-bold btnTask tooltip-ui"><i class="fa fa-tags"></i> Task</a> </p>';
             }
             html += "<p>";
             html += item.CommentMsg;
@@ -1174,7 +1400,10 @@ export default {
           });
           $("#media-list").empty();
           $("#media-list").append(html);
-
+          //DeleteCommnet
+          $(".deleteComment").off('click').on('click', function () {
+            seft.deleteComment(Number($(this).data("commentid")))
+          });
           seft.btntabload();
         },
         error: function(err) {}
@@ -1237,7 +1466,7 @@ export default {
     },
     LoadDataset() {
       let seft = this;
-      HTTP.get(`http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`)
+      axios.get(`http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`)
       .then(response => {
         seft.data = response.data;
         seft.data2 = response.data[0].Datasets;

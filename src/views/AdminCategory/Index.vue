@@ -128,7 +128,11 @@ export default {
 
     LoadData() {
       let seft = this;
-      HTTP.post(`Admincategory/LoadData2/${seft.page}/${seft.pageSize}/${seft.name}`)
+      axios.post(`Admincategory/LoadData2/${seft.page}/${seft.pageSize}/${seft.name}`,{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
       .then(res => {
         console.log(res);
         seft.skip = res.data.skip;
@@ -167,7 +171,11 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.get(`AdminCategory/delete/${id}`)
+            axios.get(`AdminCategory/delete/${id}`,{
+              headers:{
+                Authorization: 'Bearer '+ localStorage.getItem("authToken")
+              }
+            })
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");

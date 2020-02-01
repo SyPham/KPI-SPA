@@ -100,7 +100,11 @@ export default {
   methods: {
     loadmenu(){
         let seft = this;
-        HTTP.get("menus/getall")
+        axios.get("menus/getall",{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
+        })
         .then((r) => {
           seft.Listmenus = r.data
           console.log(seft.Listmenus);
@@ -135,8 +139,12 @@ export default {
         .then(result => {
      
           if (result.value) {
-            // this.$http.get("http://10.4.4.224:98/menus/delete/" + id)
-            HTTP.get(`menus/delete/${id}`)
+            // this.$axios.get("http://10.4.4.224:98/menus/delete/" + id)
+            axios.get(`menus/delete/${id}`,{
+              headers:{
+                Authorization: 'Bearer '+ localStorage.getItem("authToken")
+              }
+            })
               .then(r => {
                 this.loadmenu();
                 $("#RemoveModal").modal("hide");

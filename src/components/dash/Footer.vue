@@ -1,8 +1,10 @@
 <template>
   <div id="appFooter">
-    <footer class="main-footer">
-      <strong>Copyright &copy; 2019 <a href="/">Lab Team</a>.</strong>
-      All rights reserved.
+    <footer class="main-footer ">
+      <h5>
+        <strong>Copyright &copy; 2019 <a href="/">Lab Team</a>.</strong>
+        All rights reserved.
+      </h5>
     </footer>
   </div>
 </template>

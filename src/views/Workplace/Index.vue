@@ -14,8 +14,20 @@
         <div class="card " id="boxActionPlan">
           <div class="card-header with-border kpi-name">
             <h3 class="card-title float-left font-weight-bold" style="margin-right: 10px;">
-              To Do List&#32;&#32;
+              Action Plan&#32;&#32;
             </h3>
+            <div class="box-tools float-right toolActionplan">
+              <div class="btn-group" >
+                <button type="button" value="true" class="btn btn-success btn-sm button-nocolor Finished" >
+                  <i class="fa fa-check"></i> Finished
+                </button>
+              </div>
+              <div class="btn-group">
+                <button  type="button" value="false" class="btn btn-danger btn-sm button-nocolor NotFinished">
+                  <i class="fa fa-close"></i> Not Finished
+                </button>
+              </div>
+            </div>
             <div class="form-group">
               <select id="role" class="form-control role" style="width:200px">
                 <option value>N/A</option>
@@ -55,26 +67,20 @@
                   <td class="text-center">{{ item.DueDate }}</td>
                   <td class="text-center">
                     {{ 
-                      (item.UpdateSheduleDate || "").length === 0
-                        ? "#N/A"
-                        : item.UpdateSheduleDate
+                      (item.UpdateSheduleDate || "").length === 0 ? "#N/A" : item.UpdateSheduleDate
                     }}
                   </td>
                   <td class="text-center">
                     {{
-                      (item.ActualFinishDate|| "").length === 0
-                        ? "#N/A"
-                        : item.ActualFinishDate
+                      (item.ActualFinishDate || "").length === 0 ? "#N/A" : item.ActualFinishDate
                     }}
                   </td>
                   <td class="text-center">
-                    <span v-if="item.Status == true" class="badge bg-green"
-                      >Finished</span>
+                    <span v-if="item.Status == true" class="badge bg-green">Finished</span>
                     <span v-else class="badge bg-red">Not Finished</span>
                   </td>
                   <td class="text-center">
-                    <span v-if="item.Approved == true" class="badge bg-green"
-                      >Approved</span>
+                    <span v-if="item.Approved == true" class="badge bg-green">Approved</span>
                     <span v-else class="badge bg-red">Not Approved</span>
                   </td>
                 </tr>
@@ -453,6 +459,8 @@ import Paginate from "vuejs-paginate";
 export default {
   data() {
     return {
+      asd: '',
+      status: false,
       data: [],
       list1: [],
       list2: [],
@@ -499,7 +507,7 @@ export default {
       let self = this
       var levelid = $("#box .kpi-name .code").text();
       console.log("Id of level is " + levelid);
-      HTTP.get(`https://localhost:44371/Workplace/KPIRelated/${levelid}/${self.page3}/${self.pageSize3}`).then(res => {
+      axios.get(`http://10.4.4.92:91/Workplace/KPIRelated/${levelid}/${self.page3}/${self.pageSize3}`).then(res => {
         console.log(res);
         if (res.status) {
           self.totalPage3 = res.data.totalPage;
@@ -513,7 +521,7 @@ export default {
     },
     listKPIUpload() {
       let self = this
-      HTTP.get(`https://localhost:44371/Workplace/ListKPIUpload/${self.page2}/${self.pageSize2}`).then(res => {
+      axios.get(`http://10.4.4.92:91/Workplace/ListKPIUpload/${self.page2}/${self.pageSize2}`).then(res => {
         if (res.data.status) {
           if (!res.data.isUpdater) {
             warning("You are not an updater!");
@@ -533,31 +541,28 @@ export default {
     },
     registerEvent() {
       let self = this
-      $("#boxActionPlan .role")
-        .off("change")
-        .on("change", function(e) {
-          self.loadActionPlan();
-        });
-      $("#boxActionPlan .task")
-        .unbind()
-        .on("change", function(e) {
-          if ($(this).val() === "Upd") {
-            $("#tblKPIUpload").show();
-            self.listKPIUpload();
-          } else {
-            $("#tblKPIUpload").hide();
-          }
-        });
+      $("#boxActionPlan .role").off("change").on("change", function(e) {
+        $(".toolActionplan").show();
+        $('.NotFinished').focus();
+        self.loadActionPlan(false,false);
+      });
 
-      $("#box input")
-        .off("keypress")
-        .on("keypress", function(e) {
-          if (e.which === 13) {
-            var code = $(this).val();
-            var teamid = Number($("#box .kpi-name .code").text());
-            workplaceController.LoadDataUser(true, code, "");
-          }
-        });
+      $("#boxActionPlan .task").unbind().on("change", function(e) {
+        if ($(this).val() === "Upd") {
+          $("#tblKPIUpload").show();
+          self.listKPIUpload();
+        } else {
+          $("#tblKPIUpload").hide();
+        }
+      });
+      
+      $("#box input").off("keypress").on("keypress", function(e) {
+        if (e.which === 13) {
+          var code = $(this).val();
+          var teamid = Number($("#box .kpi-name .code").text());
+          workplaceController.LoadDataUser(true, code, "");
+        }
+      });
 
       $("#tbluser tr td:nth-child(2) input").change(function() {
         var id = $(this)
@@ -574,12 +579,56 @@ export default {
           workplaceController.loadTree();
         }
       });
+
+      $('.NotFinished').off('click').on('click', function (e) {
+        //console.log(e.toElement.value)
+        //self.loadActionPlan(false,false);
+        var role = $("#boxActionPlan .role").val();
+        var status =  e.toElement.value;
+        axios.get(`http://10.4.4.92:91/Workplace/loadActionPlan/${role}/${self.page}/${self.pageSize}/${status}`).then(res => {
+        console.log(res);
+        if (res.status) {
+            // var data = res.data;
+            self.totalPage = res.data.totalPage;
+            self.page = res.data.page;
+            self.data = res.data.data;
+            self.pageSize = res.data.pageSize;
+            self.list1 = res.data.data;
+            console.log("seft.list1");
+            console.log(self.list1);
+            self.registerEvent();
+          }
+        });
+      });
+      $('.Finished').off('click').on('click', function (e) {
+        //console.log(e.toElement.value)
+        //self.loadActionPlan(true,true);
+        var role = $("#boxActionPlan .role").val();
+        var status =  e.toElement.value;
+        axios.get(`http://10.4.4.92:91/Workplace/loadActionPlan/${role}/${self.page}/${self.pageSize}/${status}`).then(res => {
+        console.log(res);
+        if (res.status) {
+            // var data = res.data;
+            self.totalPage = res.data.totalPage;
+            self.page = res.data.page;
+            self.data = res.data.data;
+            self.pageSize = res.data.pageSize;
+            self.list1 = res.data.data;
+            console.log("seft.list1");
+            console.log(self.list1);
+            self.registerEvent();
+          }
+        });
+      });
     },
     loadActionPlan() {
       let self = this
       var role = $("#boxActionPlan .role").val();
-      HTTP.get(`Workplace/loadActionPlan/${role}/${self.page}/${self.pageSize}`).then(res => {
-        
+      var status =  $(".toolActionplan #aaa").val();
+      var status2 =  $(".toolActionplan #aaa2").val();
+      console.log(status)
+      //console.log(status2)
+      axios.get(`http://10.4.4.92:91/Workplace/loadActionPlan/${role}/${self.page}/${self.pageSize}/${self.status}`).then(res => {
         console.log(res);
         if (res.status) {
           // var data = res.data;
@@ -590,10 +639,10 @@ export default {
           self.list1 = res.data.data;
           console.log("seft.list1");
           console.log(self.list1);
-          
           self.registerEvent();
         }
       });
+     
     },
     changePageActionPlan(pageNum) {
       this.loadActionPlan(this.name,pageNum);
@@ -634,7 +683,7 @@ export default {
       var formData = new FormData();
       var fileUpload = document.querySelector("#UploadedFile");
       formData.append("UploadedFile", fileUpload.files[0]);
-      HTTP.post("Workplace/Import", formData, {
+      axios.post("Workplace/Import", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -684,6 +733,7 @@ export default {
       $(document).ready(function() {
         workplaceController.init();
         setTimeout(function(){
+          $(".toolActionplan").hide();
           $("#treetable").fancytree({
             extensions: ["glyph", "table"],
             checkbox: false,

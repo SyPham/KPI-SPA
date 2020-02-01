@@ -49,7 +49,7 @@
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
-              <ul v-for="(item,key,index) in menus" :key="index"  class="nav nav-treeview">
+              <ul v-for="(item,key,index) in menuSidebar" :key="index"  class="nav nav-treeview">
                 <li  class="nav-item">
                   <a :href="'#' + item.Link"  class="nav-link">
                     <i :class="item.FontAwesome"></i>
@@ -68,27 +68,61 @@
 </template>
 
 <script>
+import EventBus from "../../utils/EventBus.js";
 export default {
   name: "sidebar",
   data() {
     return {
-     menus: [],
+     menuSidebar: [],
      lang: ''
     }
   },
   mounted(){
-    let seft = this;
-    seft.loadmenu();
+   EventBus.$on('event-name', function (data) {
+      console.log("Receiving events", data);
+      //seft.$forceUpdate();
+      console.log('aaaaaaaaaaaa')
+    });
+  },
+  destroyed() {
+    // Stop listening the event hello with handler
+    //EventBus.$off('hello', menuSidebar1);
+  },
+  beforeMount(){
+    let self = this
+console.log('Nothing gets called before me!')
+self.loadmenuSidebar();
   },
   created(){
-    let seft = this;
-    seft.loadmenu();
-  }, 
-
+    // let seft = this;
+    let vm = this;
+    // setTimeout(function(){
+    //   console.log("refreshing vm..");
+    //   vm.$forceUpdate();
+    // },2000)
+    console.log('Nothing gets called before me1!')
+    vm.loadmenuSidebar();
+    EventBus.$on('event-name', function (data) {
+      console.log("Receiving events", data);
+      //seft.$forceUpdate();
+      console.log('aaaaaaaaaaaa')
+    })
+    
+  },
+  watch:{
+    // menuSidebar: function(newOld, oldVal) {
+    //   let seft = this;
+    //   seft.loadmenuSidebar();
+    // },
+  },
   methods: {
-    loadmenu(){
-        let seft = this;
-        seft.menus = JSON.parse(localStorage.getItem("Menus"));
+    loadmenuSidebar(){
+      let seft = this;
+      axios.get('http://10.4.4.92:91/Menus/Getall').then(r=>{
+        seft.menuSidebar = r.data
+      })
+      // let seft = this;
+      // seft.menus = JSON.parse(localStorage.getItem('Menus'));
     }
   }
 };

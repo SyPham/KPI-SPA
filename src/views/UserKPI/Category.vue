@@ -57,7 +57,7 @@ export default {
     },
     getAllCategories() {
       let self = this;
-      HTTP.get(
+      axios.get(
         `CategoryKPILevel/GetAllCategories/${self.ocID}/${self.level}/${self.pageIndex}/${self.pageSize}`
       ).then(response => {
         if (response.data.status) {

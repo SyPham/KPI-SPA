@@ -1,6 +1,6 @@
 <template>
     <vue-page-transition name="fade-in-down">
-        <router-view></router-view>
+      <router-view ></router-view>
     </vue-page-transition>
 </template>
 

@@ -37,7 +37,24 @@ var AuthPlugin = {
             return token;
         }
     },
+    getMenus: function () {
+        debugger
+        var token = localStorage.getItem('authToken');
+        var expiration = localStorage.getItem('authTokenExpiration');
+        var Menus = localStorage.getItem('Menus');
+        var User = localStorage.getItem('User');
+        // var User = localStorage.getItem('Pass');
 
+        if (!token || !expiration || !Menus || !User )
+            return null;
+
+        if (Date.now() > parseInt(expiration)) {
+            this.destroyToken();
+            return null;
+        } else {
+            return Menus;
+        }
+    },
     loggedIn: function () {
         if (this.getToken())
             return true;

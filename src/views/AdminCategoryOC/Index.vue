@@ -14,7 +14,7 @@
         </div>
     <div class="col-md-12">
         <div class="callout bg-yellow-gradient" style="border-color:#c57901">
-            <h3>5. OC Category</h3>
+            <h3>4. OC Category</h3>
         </div>
     </div>
     <div class="col-md-4">
@@ -262,7 +262,11 @@ export default {
         },
         getCategoryByOC: function (changePageSize, level, ocID) {
           console.log("GetCategoryByOC")
-          HTTP.get(`OCCategories/GetCategoryByOC/${level}/${ocID}/${self.page}/${self.pageSize}`)
+          axios.get(`OCCategories/GetCategoryByOC/${level}/${ocID}/${self.page}/${self.pageSize}`,{
+            headers:{
+              Authorization: 'Bearer '+ localStorage.getItem("authToken")
+            }
+          })
           .then(response =>{
             console.log(response)
             if (response.data.status) {
@@ -306,7 +310,11 @@ export default {
           //   OCID: ocId,
           //   CategoryID: catId,
           // };
-          HTTP.get(`http://10.4.4.224:98/OCCategories/AddOCCategory/${ocId}/${catId}`)
+          axios.get(`http://10.4.4.224:98/OCCategories/AddOCCategory/${ocId}/${catId}`,{
+            headers:{
+              Authorization: 'Bearer '+ localStorage.getItem("authToken")
+            }
+          })
           .then(result =>{
             if (result) {
               success("success!");

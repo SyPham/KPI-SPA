@@ -1,5 +1,9 @@
 import Vue from "vue";
+
 import App from "./App.vue";
+import axios from 'axios'
+
+// import http from './http-constants'
 import Router from "./routes";
 import i18n from './lang/i18n'
 import VueResource from 'vue-resource';
@@ -19,6 +23,11 @@ import VueJwtDecode from 'vue-jwt-decode'
 import VuePageTransition from 'vue-page-transition'
 
 import VueApexCharts from 'vue-apexcharts'
+
+// axios.defaults.headers.get['Accepts'] = 'application/json'
+
+window.axios = axios;
+// Vue.use(http)
 Vue.use(VuePageTransition)
 Vue.use(Vuesax, {
   // options here
@@ -35,12 +44,24 @@ Vue.use(BootstrapVue)
 Vue.use(Auth);
 Vue.use(VueResource);
 
-// Vue.use(VueJwtDecode)
 // VueJwtDecode.decode(localStorage.getItem("authToken"))
+axios.defaults.baseURL = 'http://10.4.4.224:98/'
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8'
+axios.interceptors.request.use(function (config) {
+  config.headers = {
+    'Authorization': 'Bearer ' + Vue.auth.getToken()
+  }
+  config.headers.post = {
+    'Content-Type': 'application/json; charset=utf-8'
+  }
+    return config;
+  }, function (error) {
+  // Do something with request error
+     return Promise.reject(error);
+});
 
-/* eslint-disable no-new */
-//configure alertify defaults
-// alertify.defaults.notifier.position = 'top-right';
+
 Vue.http.interceptors.push(function (request, next) {
   if (request.url[0] === '/') {
     request.url = process.env.API + request.url;
@@ -48,6 +69,8 @@ Vue.http.interceptors.push(function (request, next) {
     var token = Vue.auth.getToken();
     if (token)
       request.headers.set('Authorization', 'Bearer ' + token);
+      console.log("token")
+      console.log(token)
   }
 
   next(function (response) {

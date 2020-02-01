@@ -117,8 +117,12 @@ export default {
   methods : {
     get(id) {
       if (id == undefined) return;
-        HTTP.get("menus/getbyid/" + id)
-        // HTTP.get("AdminKPI/GetbyID/"+ id)
+        axios.get("menus/getbyid/" + id,{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
+        })
+        // axios.get("AdminKPI/GetbyID/"+ id)
         .then(r => {
           this.Name = r.data.name
           this.Link = r.data.link
@@ -133,21 +137,28 @@ export default {
         });
     },
     getpermission() {
-      HTTP.get("menus/getpermissions")
+      axios.get("menus/getpermissions",{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
       .then(r => {
         this.data = r.data
         // console.log(this.data)
       })
     },
     update() {
-      HTTP.post("menus/update",{
+      axios.post("menus/update",{
         id: this.ID,
         name: this.Name,
         link: this.Link,
         fontAwesome: this.FontAwesome,
         backgroudColor: this.BackgroudColor,
         position: this.Position,
-        permission: this.Permission
+        permission: this.Permission,
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
       }).then(r => {
           this.$router.push("/menus")
           swal.fire({

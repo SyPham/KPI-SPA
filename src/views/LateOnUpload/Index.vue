@@ -105,7 +105,7 @@ export default {
                 console.log('self.NotificationID')
                 console.log(self.NotificationID)
             });
-            HTTP.post(`https://localhost:44371/Home/LateOnUpload/${self.NotificationID}/${self.page}/${self.pageSize}`)
+            axios.post(`Home/LateOnUpload/${self.NotificationID}/${self.page}/${self.pageSize}`)
             .then(res=>{
                 console.log(res)
                 console.log(res.data.notificationId)

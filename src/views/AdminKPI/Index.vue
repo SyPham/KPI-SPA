@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-if="role == 1">
     <div class="col-md-12 my-3">
       <button @click="$router.push(`/adminKPI/create`)" class="btn btn-success float-right">
         <i class="fa fa-plus"></i> Add
@@ -96,10 +96,12 @@
 <script>
 import { HTTP } from "../../http-constants";
 import Paginate from "vuejs-paginate";
+import VueJwtDecode from 'vue-jwt-decode'
 export default {
   name: "IndexKpi",
   data() {
     return {
+      role: null,
       data: [],
       ID: 0,
       DID: 0,
@@ -128,13 +130,20 @@ export default {
     let seft = this;
     // seft.getAll();
     seft.LoadData();
+    seft.role = VueJwtDecode.decode(localStorage.getItem("authToken")).Role
+    console.log("seft.role")
+    console.log(seft.role)
     seft.ID = seft.$route.params.id;
   },
   methods: {
     LoadData() {
       // debugger
       let seft = this
-      HTTP.post(`AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}`).then(res => {
+      axios.post(`AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}`,{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      }).then(res => {
         console.log(res);
         
         seft.totalPage = res.data.pageCount;
@@ -147,7 +156,11 @@ export default {
       this.LoadData(this.name, pageNum);
     },
     getAll() {
-      HTTP.get("AdminKPI/getall")
+      axios.get("AdminKPI/getall",{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
         .then(r => {
           this.data = r.data;
           console.log(r);
@@ -182,7 +195,11 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.get(`AdminKPI/delete/${id}`)
+            axios.get(`AdminKPI/delete/${id}`,{
+              headers:{
+                Authorization: 'Bearer '+ localStorage.getItem("authToken")
+              }
+            })
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");

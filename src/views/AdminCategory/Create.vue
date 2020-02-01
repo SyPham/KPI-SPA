@@ -96,10 +96,13 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        HTTP.post("adminCategory/add",{
+        axios.post("adminCategory/add",{
           Name: this.Name,
           Code: this.Code,
-          LevelID: this.Level
+          LevelID: this.Level,
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
         })
         .then(response => {
           console.log(response)
@@ -113,7 +116,7 @@ export default {
       }
     },
     resetForm() {
-      this.$router.push("/adminCategory");
+      this.$router.go(-1);
     }
   }
 };

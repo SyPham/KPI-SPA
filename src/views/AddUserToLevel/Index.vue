@@ -48,7 +48,10 @@
           <span class="code" style="display:none"></span>
           <span class="level" style="display:none"></span>
           <!-- <input v-model="searchname" class="form-control float-right searchUser" placeholder="search here..." style="width:40%" /> -->
-          <input  type="text" class="form-control float-right searchUser" placeholder="Search name" style="width:40%"/>
+          <div class="input-group float-right" style="width:50%">
+            <input v-model="searchname" type="text" class="form-control searchUser" placeholder="search here...">
+            <span class="input-group-addon clearSearch" style="cursor:pointer"><i class="fas fa-times"></i></span>
+          </div>
         </div>
         <div class="box-body">
           <div class="box-body">
@@ -58,7 +61,7 @@
                   <th>#</th>
                   <th>Username</th>
                   <th>Alias</th>
-                  <th>Level</th>
+                  <th>OC Name</th>
                 </tr>
               </thead>
               <tbody v-for="(item,key,index) in events" :key="index" class="tbody" id="tbluser">
@@ -67,7 +70,7 @@
                   <td>
                     <div class="pretty p-icon p-rotate">
                       <input v-if="item.Status == true" checked type="checkbox" class="checkbox"  name="name" />
-                      <input v-else type="checkbox" class="checkbox"  name="name" />
+                      <input  v-else type="checkbox" class="checkbox"  name="name" />
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
                         <label class="black username">{{item.Username}}</label>
@@ -75,20 +78,29 @@
                     </div>
                   </td>
                   <td class="text-center">{{item.FullName}}</td>
-                  <td class="text-center">{{item.LevelID}}</td>
+                  <td class="text-center">{{item.OCName}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="box-footer clearfix">
-          <ul id="paginationKPILevel" class="pagination pagination-sm no-margin pull-right">
-            <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">»</a></li>
-          </ul>
+          <Paginate
+            v-model="page"
+            :page-count="totalPage "
+            :prev-text="'Prev'"
+            :next-text="'Next'"
+            :page-range="3"
+            :margin-pages="2"
+            :container-class="'pagination'"
+            :page-class="'page-item'"
+            :prev-class="'page-item'"
+            :next-class="'page-item'"
+            :page-link-class="'page-link'"
+            :prev-link-class="'page-link'"
+            :next-link-class="'page-link'"
+            :click-handler="changePage"
+          ></Paginate>
           <!-- <Paginate
             v-model="page"
             :page-count="totalPage"
@@ -113,6 +125,7 @@
 
 <script>
 import { HTTP } from "../../http-constants";
+// import axios from 'axios';
 // import listoc from "../../components/adminOC/List"
 import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/adminOC/Modal";
@@ -135,6 +148,14 @@ export default {
       searchname: ""
     };
   },
+  watch: {
+    searchname: function(newOld, oldVal) {
+      console.log(newOld)
+      console.log(oldVal)
+      this.name = newOld;
+      this.LoadDataUser();
+    }
+  },
   components: {
     listoc,
     Hierarchy,
@@ -150,13 +171,76 @@ export default {
   },
   created() {
     let seft = this;
-    // seft.loadAll();
+    seft.loadAll();
   },
   mounted(){
     let seft = this;
-    seft.loadAll();
+    // seft.loadAll();
   },
   methods: {
+    registerEvent: function () {
+      let self = this 
+
+      $('#box .clearSearch').off('click').on('click', function (e) {
+        var levelid = Number($('#box .code').text());
+          $('#box .searchUser').val("");
+          //self.LoadDataUser("","",levelid);
+      })
+
+      $('#box .searchUser').off('keypress').on('keypress', function (e) {
+        if (e.which === 13) {
+          var code = $(this).val();
+          var levelid = Number($('#box .code').text());
+          //self.LoadDataUser(true, code,levelid);
+        }
+      });
+
+      $('#tbluser tr td:nth-child(2) input').change(function () {
+        var id = $(this).closest('tr').data('id');
+        var levelid = Number($('#box .kpi-name .code').text());
+          let username = $(this).next().children('label').text();
+          console.log(username)
+          self.updateUser(id, levelid);
+          //self.LoadDataUser("",username,levelid);
+          $('#box .searchUser').val(username);
+          success("success!");
+      });
+
+    },
+    updateUser: function (id, levelid) {
+      // var mObj = {
+      //   id: id,
+      //   levelid: levelid,
+      // };
+      axios.post(`http://10.4.4.92:91/AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
+      .then(result=>{
+        console.log(result)
+          if (result) {
+            success("success!");
+          }
+      })
+      
+    },
+    LoadDataUser() {
+      let self = this
+      var levelid = Number($('#box .kpi-name .code').text());
+      console.log("Id of level is " + levelid);
+      axios.get(`http://10.4.4.92:91/AddUserToLevel/LoadDataUser/${levelid}/${self.code}/${self.page}/${self.pageSize}`)
+      .then(response=>{
+        console.log(response)
+          if (response.data.status) {
+            self.events = response.data.data;
+            self.totalPage = response.data.totalPage;
+            self.page = response.data.page;
+            self.data = response.data.data;
+            self.pageSize = response.data.pageSize;
+            self.registerEvent();
+          }
+      })
+    },
+    changePage(pageNum) {
+      this.LoadDataUser(this.name, pageNum);
+    },
     loadAll() {
       let self = this;
       let glyph_opts = {
@@ -212,7 +296,7 @@ export default {
               $('#box .kpi-name .code').text(data.node.key);
               //$('#tbluser tr td:nth-child(2)').data('teamid',data.node.title);
               
-              AddUserToLevelController.LoadDataUser(true, "", Number(data.node.key),true,true);
+              self.LoadDataUser(true, "", Number(data.node.key),true,true);
   
   
               $('html, body').animate({
@@ -260,96 +344,11 @@ export default {
       };
       var AddUserToLevelController = {
         init: function () {
-          AddUserToLevelController.registerEvent();
-        },
-        registerEvent: function () {
-          $('#box .searchUser').off('keypress').on('keypress', function (e) {
-            if (e.which === 13) {
-              var code = $(this).val();
-              var levelid = Number($('#box .code').text());
-              AddUserToLevelController.LoadDataUser(true, code,levelid);
-            }
-          });
-
-          $('#tbluser tr td:nth-child(2) input').change(function () {
-            var id = $(this).closest('tr').data('id');
-            var levelid = Number($('#box .kpi-name .code').text());
-
-            if (levelid === 0) {
-              success("success!");
-            }
-            else {
-              let username = $(this).next().children('label').text();
-              AddUserToLevelController.updateUser(id, levelid);
-              AddUserToLevelController.LoadDataUser("",username,levelid);
-              $('#box .searchUser').val(username)
-            }
-
-          });
-
-        },
-        updateUser: function (id, levelid) {
-          // var mObj = {
-          //   id: id,
-          //   levelid: levelid,
-          // };
-          HTTP.post(`AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
-          .then(result=>{
-            console.log(result)
-              if (result) {
-                success("success!");
-              }
-          })
-          
+          self.registerEvent();
         },
         loadTree: function () {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },
-        LoadDataUser: function (changePageSize, code, levelID) {
-          HTTP.get(`AddUserToLevel/LoadDataUser/${levelID}/${config.code}/${config.pageIndex}/${config.pageSize}`)
-          .then(response=>{
-            console.log(response)
-              if (response.data.status) {
-                var count;
-                var data = response.data.data;
-                var page = response.data.page;
-                var pageSize = response.data.pageSize;
-                self.events = response.data.data;
-                if (page === 1)
-                  count = page;
-                else count = (page - 1) * pageSize + 1;
-                AddUserToLevelController.pagingKPILevel(response.data.total, function () {
-                  AddUserToLevelController.LoadDataUser("", code, levelID);
-                }, changePageSize);
-                AddUserToLevelController.registerEvent();
-              }
-          })
-         
-          
-        },
-        pagingKPILevel: function (totalRow, callback, changePageSize) {
-          var totalPage = Math.ceil(totalRow / config.pageSize);
-
-          //Unbind pagination if it existed or click change pagesize
-          if ($('#paginationKPILevel a').length === 0 || changePageSize === true) {
-              $('#paginationKPILevel').empty();
-              $('#paginationKPILevel').removeData("twbs-pagination");
-              $('#paginationKPILevel').unbind("page");
-          }
-
-          $('#paginationKPILevel').twbsPagination({
-            totalPages: totalPage === 0 ? 1 : totalPage,
-            first: "First",
-            next: "Next",
-            last: "Last",
-            prev: "Previous",
-            visiblePages: 10,
-            onPageClick: function (event, page) {
-              config.pageIndex = page;
-              setTimeout(callback, 500);
-            }
-          });
-        }
       }
     }
   }

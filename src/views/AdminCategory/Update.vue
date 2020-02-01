@@ -71,11 +71,15 @@ export default {
   },
   methods: {
     resetForm() {
-      this.$router.push("/adminCategory");
+      this.$router.go(-1);
     },
     get(id) {
       if (id == undefined) return;
-      HTTP.get("adminCategory/GetbyID/" + id)
+      axios.get("adminCategory/GetbyID/" + id,{
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
+      })
         .then(r => {
           // seft.loading = false;
           this.Name = r.data.Name;
@@ -88,11 +92,14 @@ export default {
         .catch(r => {});
     },
     update() {
-      HTTP.post("adminCategory/Update", {
+      axios.post("adminCategory/Update", {
         ID: this.ID,
         Name: this.Name,
         LevelID: this.Level,
-        Code: this.Code
+        Code: this.Code,
+        headers:{
+          Authorization: 'Bearer '+ localStorage.getItem("authToken")
+        }
       })
         .then(r => {
           this.$router.push("/adminCategory");

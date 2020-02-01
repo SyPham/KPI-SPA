@@ -174,71 +174,71 @@
 
       <!-- modal -->
       <div class="modal fade" id="modal-group-general" style="display: none">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title">Weekly</h4>
-            <input type="text" value class="KPILevelID" style="display:none" />
-            <input type="number" class="form-control kpilevelInputHidden" style="display:none" />
-          </div>
-          <div class="modal-body">
-            <div>
-              <div class="box-body">
-                <div class="form-group ownerManager">
-                  <label for="ownerManager">
-                    Manager
-                    <span style="color:red">(*)</span>
-                  </label>
-                  <textarea class="form-control KPILevelSelect2" placeholder="Manager..." rows="1"></textarea>
-                </div>
-                <div class="form-group Owner">
-                  <label for="owner">
-                    Owner
-                    <span style="color:red">(*)</span>
-                  </label>
-                  <textarea class="form-control KPILevelSelect2" placeholder="Owner..." rows="1"></textarea>
-                </div>
-                <div class="form-group PIC">
-                  <label for="PIC">
-                    Updater
-                    <span style="color:red">(*)</span>
-                  </label>
-                  <textarea class="form-control KPILevelSelect2" placeholder="Updater..." rows="1"></textarea>
-                </div>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Weekly</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+              <input type="text" value class="KPILevelID" style="display:none" />
+              <input type="number" class="form-control kpilevelInputHidden" style="display:none" />
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="box-body">
+                  <div class="form-group ownerManager">
+                    <label for="ownerManager">
+                      Manager
+                      <span style="color:red">(*)</span>
+                    </label>
+                    <textarea class="form-control KPILevelSelect2" placeholder="Manager..." rows="1"></textarea>
+                  </div>
+                  <div class="form-group Owner">
+                    <label for="owner">
+                      Owner
+                      <span style="color:red">(*)</span>
+                    </label>
+                    <textarea class="form-control KPILevelSelect2" placeholder="Owner..." rows="1"></textarea>
+                  </div>
+                  <div class="form-group PIC">
+                    <label for="PIC">
+                      Updater
+                      <span style="color:red">(*)</span>
+                    </label>
+                    <textarea class="form-control KPILevelSelect2" placeholder="Updater..." rows="1"></textarea>
+                  </div>
 
-                <div class="form-group Sponsor">
-                  <label for="Sponsor">Sponsor</label>
-                  <textarea class="form-control KPILevelSelect2" placeholder="Sponsor..." rows="1"></textarea>
+                  <div class="form-group Sponsor">
+                    <label for="Sponsor">Sponsor</label>
+                    <textarea class="form-control KPILevelSelect2" placeholder="Sponsor..." rows="1"></textarea>
+                  </div>
+                  <div class="form-group Participant">
+                    <label for="Participant">Participant</label>
+                    <textarea
+                      class="form-control KPILevelSelect2"
+                      placeholder="Participant..."
+                      rows="1"
+                    ></textarea>
+                  </div>
                 </div>
-                <div class="form-group Participant">
-                  <label for="Participant">Participant</label>
-                  <textarea
-                    class="form-control KPILevelSelect2"
-                    placeholder="Participant..."
-                    rows="1"
-                  ></textarea>
-                </div>
-              </div>
-              <!-- /.box-body -->
+                <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button
-                  type="button"
-                  class="btn btn-primary btnSaveGeneral"
-                  id="btnSaveGeneral"
-                >Save</button>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                <div class="box-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary btnSaveGeneral"
+                    id="btnSaveGeneral"
+                  >Save</button>
+                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                </div>
               </div>
             </div>
           </div>
+          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
       </div>
-      <!-- /.modal-dialog -->
-    </div>
 
     <div class="modal fade" id="modal-group" style="display: none">
       <div class="modal-dialog">
@@ -784,11 +784,11 @@ export default {
           })
         },
         updateUser: function (id, levelid) {
-          var mObj = {
+          let mObj = {
             id: id,
             levelid: levelid,
           };
-          HTTP.post("AddUserToLevel/AddUserToLevel",JSON.stringify(mObj))
+          axios.post("AddUserToLevel/AddUserToLevel",JSON.stringify(mObj))
           .then(result=>{
             if (result) {
               success("success!");
@@ -799,9 +799,9 @@ export default {
         addCategoryLevel: function (entity) {
           var entity = {
               KPILevelID: entity.KPILevelID,
-              CategoryID: entity.CategoryID
+              CategoryID: entity.CategoryID,
           };
-          HTTP.post("CategoryKPILevelAdmin/Add",JSON.stringify(entity))
+          axios.post("CategoryKPILevelAdmin/Add",JSON.stringify(entity))
           .then(result=>{
             console.log("addCategoryLevel")
             console.log(result)
@@ -816,7 +816,7 @@ export default {
         },
         getAllCategories: function(changePageSize, level, OCID) {
           console.log("getAllCategories");
-          HTTP.get(`CategoryKPILevelAdmin/GetAllCategories/${level}/${OCID}/${config.pageIndex}/${config.pageSize}`)
+          axios.get(`CategoryKPILevelAdmin/GetAllCategories/${level}/${OCID}/${config.pageIndex}/${config.pageSize}`)
           .then(r=>{
             console.log(r);
               if (r.data.status) {
@@ -869,7 +869,7 @@ export default {
 
           console.log(category)
           console.log(levelid)
-          HTTP.get(`CategoryKPILevelAdmin/LoadDataKPILevel/${levelid}/${category}/${config.pageIndex}/${config.pageSize}`)
+          axios.get(`CategoryKPILevelAdmin/LoadDataKPILevel/${levelid}/${category}/${config.pageIndex}/${config.pageSize}`)
           .then(r=>{
             console.log(r);
             if (r.data.status) {
@@ -913,7 +913,7 @@ export default {
           });
         },
         getAllUser() {
-          HTTP.get("AdminKPILevel/GetListAllUser").then(data=>{
+          axios.get("AdminKPILevel/GetListAllUser").then(data=>{
             console.log("getAllUser");
             console.log(data);
             var users = [], username, fullname;
@@ -950,7 +950,7 @@ export default {
             return false;
           }
           var entity = {
-            kpilevel: entity.kpilevel,
+            kpilevel: Number(entity.kpilevel),
             category: Number(entity.category),
             pic: entity.pic,
             owner: entity.owner,
@@ -958,7 +958,7 @@ export default {
             sponsor: entity.sponsor,
             participant: entity.participant
           };
-          HTTP.post(`CategoryKPILevelAdmin/AddGeneral`,JSON.stringify(entity))
+          axios.post(`CategoryKPILevelAdmin/AddGeneral`,JSON.stringify(entity))
           .then(result=>{
             console.log(result)
             if (result) {
@@ -1025,7 +1025,7 @@ export default {
           return isValid;
         },
         getUserByCategoryIDAndKPILevelID(entity) {
-          HTTP.get(`CategoryKPILevelAdmin/GetUserByCategoryIDAndKPILevelID/${entity.KPILevelID}/${entity.CategoryID}`)
+          axios.get(`CategoryKPILevelAdmin/GetUserByCategoryIDAndKPILevelID/${entity.KPILevelID}/${entity.CategoryID}`)
           .then(res=>{
             console.log("getUserByCategoryIDAndKPILevelID")
             console.log(res)

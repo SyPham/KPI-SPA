@@ -113,6 +113,7 @@
 
 <script>
 import { HTTP } from "../../http-constants";
+import axios from 'axios';
 import Paginate from "vuejs-paginate";
 import VueJwtDecode from 'vue-jwt-decode'
 export default {
@@ -151,7 +152,7 @@ export default {
       // debugger
       let seft = this;
       let userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-      HTTP.get(`Favourite/LoadData/${userid}/${seft.page}/${seft.pageSize}`)
+      axios.get(`Favourite/LoadData/${userid}/${seft.page}/${seft.pageSize}`)
         .then(res => {
         console.log(res);
         seft.skip = res.data.skip;
@@ -165,7 +166,7 @@ export default {
       this.LoadData(this.catID, this.name, pageNum);
     },
     getAll() {
-      HTTP.get("AdminKPI/getall")
+      axios.get("AdminKPI/getall")
         .then(r => {
           this.data = r.data;
           console.log(r);
@@ -200,7 +201,7 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            HTTP.post("AdminKPI/delete/" + id)
+            axios.post("AdminKPI/delete/" + id)
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");

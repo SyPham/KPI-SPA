@@ -59,8 +59,8 @@
                   <th>Period</th>
                 </tr>
               </thead>
-              <tbody v-for="(item,key,index) in events" :key="index" class="tbody" id="tblkpilevel">
-                <tr>
+              <tbody  class="tbody" id="tblkpilevel">
+                <tr v-for="(item,key,index) in events" :key="index" :data-id="item.ID">
                   <td :data-kpilevel="item.ID">{{key+1}}</td>
                   <td :data-unit="item.Unit" class="tooltip-css">
                     <div class="top">
@@ -218,9 +218,31 @@ export default {
     listoc,
     Hierarchy
   },
+  mounted(){
+    $('#datepicker').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
+    $('#datepicker2').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
+    $('#datepicker3').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
+  },
   created() {
     let seft = this;
     seft.loadAll();
+    $('#datepicker').datepicker({
+      autoclose: true, 
+      uiLibrary: 'bootstrap4',
+      format: 'mm-dd-yyyy'
+    });
   },
   methods: {
     loadAll() {
@@ -280,7 +302,7 @@ export default {
               $("#box .kpi-name h3").text("KPI - " + data.node.title);
               $("#box .kpi-name .code").text(data.node.key);
   
-              kpiController.loadDataCategory();
+              //kpiController.loadDataCategory();
               kpiController.loadDataKPILevel(true, data.node.key);
   
               $("html, body").animate(
@@ -343,94 +365,35 @@ export default {
         init: function() {
           kpiController.registerEvent();
         },
-        registerEvent: function() {
-          $("#box select")
-            .off("change")
-            .on("change", function(e) {
-              var code = $(this)
-                .parent()
-                .children(".code")
-                .text();
-              kpiController.loadDataKPILevel(true, code);
-            });
+        registerEvent: function () {
+          $('#modal-group-weekly .target').off('change').on('change', function (e) {
+            
+        });
+        $('#box select').off('change').on('change', function (e) {
+            var code = $(this).parent().children('.code').text();
+            kpiController.loadDataKPILevel(true, code);
+        });
+        
+        //-----------------------------------------------------------------------------------------------------------------
+        //show list kpilevel
+        $('#box select').off('change').on('change', function (e) {
+            var code = $(this).parent().children('.code').text();
+            kpiController.loadDataKPILevel(true, code);
+        });
 
-          //get KPIID
-
-          $("#get-kpi-code").click(function() {
-            var code = $("#box .kpi-name .code").text();
-            var levelcode = $(this)
-              .parent("td")
-              .parent("tr")
-              .children("td:nth-child(2)")
-              .children("div")
-              .children("span.kpi-code")
-              .data("kpicode");
-            var level = $(this)
-              .parent("td")
-              .parent("tr")
-              .children("td:nth-child(2)")
-              .children("div")
-              .children("span.level")
-              .data("level");
-            var codekpilevel = $(this)
-              .parent("td")
-              .parent("tr")
-              .children("td:nth-child(2)")
-              .children("div")
-              .children("input")
-              .data("code");
-
-            $("#updateKpi .ID").val(level + levelcode + codekpilevel + "PO");
-            $("#updateKpi .Weekly").val(
-              level + levelcode + codekpilevel + "POW"
-            );
-            $("#updateKpi .Monthly").val(
-              level + levelcode + codekpilevel + "POM"
-            );
-            $("#updateKpi .Quaterly").val(
-              level + levelcode + codekpilevel + "POQ"
-            );
-            $("#updateKpi .Yearly").val(
-              level + levelcode + codekpilevel + "POY"
-            );
-          });
-          //-----------------------------------------------------------------------------------------------------------------
-          //show list kpilevel
-          $("#box select")
-            .off("change")
-            .on("change", function(e) {
-              var code = $(this)
-                .parent()
-                .children(".code")
-                .text();
-              kpiController.loadDataKPILevel(true, code);
-            });
-
-          $("#tblkpilevel tr td:nth-child(2) input").change(function() {
-            var levelcode = $(this)
-              .parent()
-              .parent("td:nth-child(2)")
-              .children("div")
-              .children("span.kpi-code")
-              .data("kpicode");
-            var level = $(this)
-              .parent()
-              .parent("td:nth-child(2)")
-              .children("div")
-              .children("span.level")
-              .data("level");
-            var codekpilevel = $(this).data("code");
-
+        $('#tblkpilevel tr td:nth-child(2) input').change(function () {
+            var ID = $(this).closest('tr').data("id");
+            console.log(ID)
             var KPIID = $(this).val();
-            var LevelID = $("#box .kpi-name .code").text();
+            var LevelID = $('#box .kpi-name .code').text();
             var TimeCheck = new Date();
-            var KPILevelCode = level + levelcode + codekpilevel + "PO";
-            var Checked = $(this).is(":checked");
-            var UserCheck = $("#user").data("userid");
+            var KPILevelCode = "";
+            var Checked = $(this).is(':checked');
+            var UserCheck = $('#user').data('userid');
             var Weekly = null;
-            var Monthly = "2001/01/01";
-            var Quarterly = "2001/01/01";
-            var Yearly = "2001/01/01";
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
             var WeeklyChecked = null;
             var MonthlyChecked = null;
             var QuarterlyChecked = null;
@@ -439,636 +402,285 @@ export default {
             var MonthlyPublic = null;
             var QuarterlyPublic = null;
             var YearlyPublic = null;
-            var WeeklyStandard = 0;
-            var MonthlyStandard = 0;
-            var QuarterlyStandard = 0;
-            var YearlyStandard = 0;
-            var KPIName = null;
-            kpiController.updateKPILevel(
-              KPIID,
-              KPILevelCode,
-              UserCheck,
-              Checked,
-              WeeklyChecked,
-              MonthlyChecked,
-              QuarterlyChecked,
-              YearlyChecked,
-              Weekly,
-              Monthly,
-              Quarterly,
-              Yearly,
-              TimeCheck,
-              LevelID,
-              WeeklyPublic,
-              MonthlyPublic,
-              QuarterlyPublic,
-              YearlyPublic,
-              WeeklyStandard,
-              MonthlyStandard,
-              QuarterlyStandard,
-              YearlyStandard
-            );
-          });
-          //----------------------------------------------------------------------------------------------
-          
-          //update weeklychecked kpilevel
-          $("#tblkpilevel .weekly")
-            .off("click")
-            .on("click", function() {
-              kpiController.getAllUser();
-              var ID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(1)")
-                .data("kpilevel");
-              var KPIID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2) input")
-                .val();
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = $(this).is(":checked");
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.loadDetail(ID);
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-              if ($(this).is(":checked")) {
-                $("#modal-group-weekly")
-                  .modal("show")
-                  .fadeIn(1000);
-                $("#modal-group-weekly select").attr("data-id", KPIID);
-              }
-              var unit = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2)")
-                .data("unit");
-              if (unit === "Numeric") {
-                $("#modal-group-weekly .containStandard").hide();
-              } else {
-                $("#modal-group-weekly .containStandard").show();
-              }
-            });
-          //update monthly checked kpilevel
-          $("#tblkpilevel .monthly")
-            .off("click")
-            .on("click", function() {
-              kpiController.getAllUser();
 
-              var ID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(1)")
-                .data("kpilevel");
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+        });
 
-              var KPIID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2) input")
-                .val();
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = $(this).is(":checked");
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.loadDetail(ID);
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-              if ($(this).is(":checked")) {
-                $("#modal-group-monthly")
-                  .modal("show")
-                  .fadeIn(1000);
-                $("#modal-group-monthly .monthly").attr("data-id", KPIID);
-              }
-              var unit = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2)")
-                .data("unit");
-              if (unit === "Numeric") {
-                $("#modal-group-monthly .containStandard").hide();
-              } else {
-                $("#modal-group-monthly .containStandard").show();
-              }
-            });
-          //update quaterly checked kpilevel
-          $("#tblkpilevel .quaterly")
-            .off("click")
-            .on("click", function() {
-              kpiController.getAllUser();
+        //----------------------------------------------------------------------------------------------
 
-              var ID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(1)")
-                .data("kpilevel");
+        //update weeklychecked kpilevel
+        $('#tblkpilevel .weekly').off('click').on('click', function () {
+            kpiController.getAllUser();
+            var ID = $(this).closest('tr').data("id");
+            console.log("update weeklychecked kpilevel")
+            console.log(ID)
+            var KPIID = $(this).closest('tr').find('td:nth-child(2) input').val();
 
-              var KPIID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2) input")
-                .val();
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = $(this).is(":checked");
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.loadDetail(ID);
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-              if ($(this).is(":checked")) {
-                $("#modal-group-quarterly")
-                  .modal("show")
-                  .fadeIn(1000);
-                $("#modal-group-quarterly .quaterly").attr("data-id", KPIID);
-              }
-              var unit = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2)")
-                .data("unit");
-              if (unit === "Numeric") {
-                $("#modal-group-quarterly .containStandard").hide();
-              } else {
-                $("#modal-group-quartly .containStandard").show();
-              }
-            });
-          //update yearly checked kpilevel
-          $("#tblkpilevel .yearly")
-            .off("click")
-            .on("click", function() {
-              kpiController.getAllUser();
-
-              var ID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(1)")
-                .data("kpilevel");
-
-              var KPIID = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2) input")
-                .val();
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = $(this).is(":checked");
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.loadDetail(ID);
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-              if ($(this).is(":checked")) {
-                $("#modal-group-yearly")
-                  .modal("show")
-                  .fadeIn(1000);
-                $("#modal-group-yearly .yearly").attr("data-id", KPIID);
-              }
-              var unit = $(this)
-                .parent()
-                .parent()
-                .parent()
-                .find("td:nth-child(2)")
-                .data("unit");
-              if (unit === "Numeric") {
-                $("#modal-group-yearly .containStandard").hide();
-              } else {
-                $("#modal-group-yearly .containStandard").show();
-              }
-            });
-          //----------------------------------------------------------------------------------------------
-
-          //update weekly modal
-          $("#btnsaveweekly")
-            .off("click")
-            .on("click", function() {
-              var KPIID = $("#modal-group-weekly .weekly").attr("data-id");
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = $("#modal-group-weekly .weekly").val();
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic =
-                $(
-                  '#modal-group-weekly input[type="radio"][name=weekpublic]:checked'
-                ).val() === "true"
-                  ? true
-                  : false;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = $("#modal-group-weekly .standard").val();
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-
-              $("#modal-group-weekly").modal("hide");
-            });
-          //update monthly modal
-          $("#btnsavemonthlymodal")
-            .off("click")
-            .on("click", function(e) {
-              e.preventDefault();
-
-              var KPIID = $("#modal-group-monthly .monthly").data("id");
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = new Date(
-                $("#modal-group-monthly .monthly input").val()
-              );
-              var Quarterly = "2001/01/01";
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic =
-                $(
-                  '#modal-group-monthly input[type="radio"][name=monthlypublic]:checked'
-                ).val() === "true"
-                  ? true
-                  : false;
-              var QuarterlyPublic = null;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = $("#modal-group-monthly .standard").val();
-              var QuarterlyStandard = 0;
-              var YearlyStandard = 0;
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-
-              $("#modal-group-monthly").modal("hide");
-            });
-          //update quaterly modal
-          $("#btnsavequaterlymodal")
-            .off("click")
-            .on("click", function(e) {
-              e.preventDefault();
-
-              var KPIID = $("#modal-group-quarterly .quaterly").data("id");
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = new Date(
-                $("#modal-group-quarterly .quaterly input").val()
-              );
-              var Yearly = "2001/01/01";
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic =
-                $(
-                  '#modal-group-quarterly input[type="radio"][name=quarterlypublic]:checked'
-                ).val() === "true"
-                  ? true
-                  : false;
-              var YearlyPublic = null;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = $(
-                "#modal-group-quarterly .standard"
-              ).val();
-              var YearlyStandard = 0;
-
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-
-              $("#modal-group-quarterly").modal("hide");
-            });
-          //update yearly modal
-          $("#btnsaveyearly")
-            .off("click")
-            .on("click", function() {
-              var KPIID = $("#modal-group-yearly .yearly").data("id");
-              var LevelID = $("#box .kpi-name .code").text();
-              var TimeCheck = new Date();
-              var KPILevelCode = "";
-              var Checked = null;
-              var UserCheck = $("#user").data("userid");
-              var Weekly = null;
-              var Monthly = "2001/01/01";
-              var Quarterly = "2001/01/01";
-              var Yearly = new Date(
-                $("#modal-group-yearly .yearly input").val()
-              );
-              var WeeklyChecked = null;
-              var MonthlyChecked = null;
-              var QuarterlyChecked = null;
-              var YearlyChecked = null;
-              var WeeklyPublic = null;
-              var MonthlyPublic = null;
-              var QuarterlyPublic = null;
-              var YearlyPublic =
-                $(
-                  '#modal-group-quarterly input[type="radio"][name=quarterlypublic]:checked'
-                ).val() === "true"
-                  ? true
-                  : false;
-              var WeeklyStandard = 0;
-              var MonthlyStandard = 0;
-              var QuarterlyStandard = 0;
-              var YearlyStandard = $("#modal-group-yearly .standard").val();
-
-              kpiController.updateKPILevel(
-                KPIID,
-                KPILevelCode,
-                UserCheck,
-                Checked,
-                WeeklyChecked,
-                MonthlyChecked,
-                QuarterlyChecked,
-                YearlyChecked,
-                Weekly,
-                Monthly,
-                Quarterly,
-                Yearly,
-                TimeCheck,
-                LevelID,
-                WeeklyPublic,
-                MonthlyPublic,
-                QuarterlyPublic,
-                YearlyPublic,
-                WeeklyStandard,
-                MonthlyStandard,
-                QuarterlyStandard,
-                YearlyStandard
-              );
-
-              $("#modal-group-yearly").modal("hide");
-            });
-        },
-        loadDataCategory: function() {
-          $.ajax({
-            url: "https://localhost:44309/AdminKPILevel/GetCategoryCode",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-              $("#box select").empty();
-              $("#box select").append(
-                '<option value="">-: Choose Category :-</option>'
-              );
-              //console.log(data);
-              $.each(data, function(key, item) {
-                $("#box select").append(
-                  '<option value="' + item.ID + '">' + item.Name + "</option>"
-                );
-              });
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = $(this).is(':checked');
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.loadDetail(ID);
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+            if ($(this).is(':checked')) {
+                $('#modal-group-weekly').modal('show').fadeIn(1000);
+                $('#modal-group-weekly .KPILevelID').val(ID);
             }
-          });
-        },
+            var unit = $(this).closest('tr').find('td:nth-child(2)').data("unit");
+            if (unit === "Numeric") {
+                $('#modal-group-weekly .containStandard').hide();
+            } else {
+                $('#modal-group-weekly .containStandard').show();
+            }
+        });
+        //update monthly checked kpilevel
+        $('#tblkpilevel .monthly').off('click').on('click', function () {
+
+            kpiController.getAllUser();
+            var ID = $(this).closest('tr').data("id");
+            var KPIID = $(this).closest('tr').find('td:nth-child(2) input').val();
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = $(this).is(':checked');
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.loadDetail(ID);
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+            if ($(this).is(':checked')) {
+                $('#modal-group-monthly').modal('show').fadeIn(1000);
+                $('#modal-group-monthly .KPILevelID').val(ID);
+            }
+            var unit = $(this).closest('tr').find('td:nth-child(2)').data("unit");
+            if (unit === "Numeric") {
+                $('#modal-group-monthly .containStandard').hide();
+            } else {
+                $('#modal-group-monthly .containStandard').show();
+            }
+        });
+        //update quaterly checked kpilevel
+        $('#tblkpilevel .quaterly').off('click').on('click', function () {
+            kpiController.getAllUser();
+
+            var ID = $(this).closest('tr').data("id");
+            var KPIID = $(this).closest('tr').find('td:nth-child(2) input').val();
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = $(this).is(':checked');
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.loadDetail(ID);
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+            if ($(this).is(':checked')) {
+                $('#modal-group-quarterly').modal('show').fadeIn(1000);
+                $('#modal-group-quarterly .KPILevelID').val(ID);
+            }
+            var unit = $(this).closest('tr').find('td:nth-child(2)').data("unit");
+            if (unit === "Numeric") {
+                $('#modal-group-quarterly .containStandard').hide();
+            } else {
+                $('#modal-group-quartly .containStandard').show();
+            }
+        });
+        //update yearly checked kpilevel
+        $('#tblkpilevel .yearly').off('click').on('click', function () {
+            kpiController.getAllUser();
+
+            var ID = $(this).closest('tr').data("id");
+            var KPIID = $(this).closest('tr').find('td:nth-child(2) input').val();
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = $(this).is(':checked');
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.loadDetail(ID);
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+            if ($(this).is(':checked')) {
+                $('#modal-group-yearly').modal('show').fadeIn(1000);
+                $('#modal-group-yearly .KPILevelID').val(ID);
+            }
+            var unit = $(this).closest('tr').find('td:nth-child(2)').data("unit");
+            if (unit === "Numeric") {
+                $('#modal-group-yearly .containStandard').hide();
+            } else {
+                $('#modal-group-yearly .containStandard').show();
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------
+
+        //update weekly modal
+        $('#btnsaveweekly').off('click').on('click', function () {
+          // debugger
+            var ID = Number($('#modal-group-weekly .KPILevelID').val());
+            console.log(ID)
+            var Target = $('#modal-group-weekly .target').val();
+            var Period = "W";
+
+            var KPIID = $('#modal-group-weekly .weekly').val();
+            console.log(KPIID)
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = $("#modal-group-weekly .weekly").val();
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = $('#modal-group-weekly input[type="radio"][name=weekpublic]:checked').val() === "true" ? true : false;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
+
+            $('#modal-group-weekly').modal('hide');
+
+        });
+        //update monthly modal
+        $("#btnsavemonthlymodal").off('click').on('click', function (e) {
+
+            e.preventDefault();
+            var ID = Number($('#modal-group-monthly .KPILevelID').val());
+            var Target = $('#modal-group-monthly .target').val();
+            var Period = "M";
+
+            var KPIID = $('#modal-group-monthly .monthly').data('id');
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = $("#modal-group-monthly input[name=monthly-datepicker]").val();
+            var Quarterly = null;
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = $('#modal-group-monthly input[type="radio"][name=monthlypublic]:checked').val() === "true" ? true : false;
+            var QuarterlyPublic = null;
+            var YearlyPublic = null;
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
+
+            $('#modal-group-monthly').modal('hide');
+
+        });
+        //update quaterly modal
+        $("#btnsavequaterlymodal").off('click').on('click', function (e) {
+            e.preventDefault();
+            var ID = Number($('#modal-group-quarterly .KPILevelID').val());
+            var Target = $('#modal-group-quarterly .target').val();
+            var Period = "Q";
+
+            var KPIID = $('#modal-group-quarterly .quaterly').data('id');
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = $("#modal-group-quarterly input[name=quarterly-datepicker]").val();
+            var Yearly = null;
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = $('#modal-group-quarterly input[type="radio"][name=quarterlypublic]:checked').val() === "true" ? true : false;
+            var YearlyPublic = null;
+
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
+
+            $('#modal-group-quarterly').modal('hide');
+        });
+        //update yearly modal
+        $("#btnsaveyearly").off('click').on('click', function () {
+            var ID = Number($('#modal-group-yearly .KPILevelID').val());
+            var Target = $('#modal-group-yearly .target').val();
+            var Period = "Y";
+
+            var KPIID = $('#modal-group-yearly .yearly').data('id');
+            var LevelID = $('#box .kpi-name .code').text();
+            var TimeCheck = new Date();
+            var KPILevelCode = "";
+            var Checked = null;
+            var UserCheck = $('#user').data('userid');
+            var Weekly = null;
+            var Monthly = null;
+            var Quarterly = null;
+            var Yearly = $("#modal-group-yearly input[name=yearly-datepicker]").val();
+            var WeeklyChecked = null;
+            var MonthlyChecked = null;
+            var QuarterlyChecked = null;
+            var YearlyChecked = null;
+            var WeeklyPublic = null;
+            var MonthlyPublic = null;
+            var QuarterlyPublic = null;
+            var YearlyPublic = $('#modal-group-quarterly input[type="radio"][name=quarterlypublic]:checked').val() === "true" ? true : false;
+
+            kpiController.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
+
+            $('#modal-group-yearly').modal('hide');
+
+        });
+    },
         loadDataKPILevel: function(changePageSize, level) {
 
           //data onto an array
@@ -1076,7 +688,7 @@ export default {
             .find(":selected")
             .val();
           if (category === undefined || category === "") category = 0;
-          HTTP.get(`http://10.4.4.224:98/AdminKPILevel/LoadDataKPILevel/${level}/${category}/${kpiLevelConfig.pageIndex}/${kpiLevelConfig.pageSize}`)
+          axios.get(`AdminKPILevel/LoadDataKPILevel/${level}/${category}/${kpiLevelConfig.pageIndex}/${kpiLevelConfig.pageSize}`)
           .then(r => {
             console.log(r)
             if (r.data.status) {
@@ -1129,31 +741,9 @@ export default {
             }
           });
         },
-        updateKPILevel: function(
-          KPIID,
-          KPILevelCode,
-          UserCheck,
-          Checked,
-          WeeklyChecked,
-          MonthlyChecked,
-          QuarterlyChecked,
-          YearlyChecked,
-          Weekly,
-          Monthly,
-          Quarterly,
-          Yearly,
-          TimeCheck,
-          LevelID,
-          WeeklyPublic,
-          MonthlyPublic,
-          QuarterlyPublic,
-          YearlyPublic,
-          WeeklyStandard,
-          MonthlyStandard,
-          QuarterlyStandard,
-          YearlyStandard
-          ) {
+        updateKPILevel: function (ID ,KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target ="",Period="") {
           var mObj = {
+            ID : Number(ID),
             KPIID: KPIID,
             KPILevelCode: KPILevelCode,
             UserCheck: UserCheck,
@@ -1172,38 +762,20 @@ export default {
             MonthlyPublic: MonthlyPublic,
             QuarterlyPublic: QuarterlyPublic,
             YearlyPublic: YearlyPublic,
-            WeeklyStandard: WeeklyStandard,
-            MonthlyStandard: MonthlyStandard,
-            QuarterlyStandard: QuarterlyStandard,
-            YearlyStandard: YearlyStandard
+            Target: Target,
+            Period:Period
           };
-
-          $.ajax({
-            url: "https://localhost:44309/AdminKPILevel/UpdateKPILevel",
-            data: JSON.stringify(mObj),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function(result) {
-
-              if (result) {
-                swal.fire({
-                  title: "Success!",
-                  text: "Update successfully!",
-                  type: "success"
-                });
+          axios.post("AdminKPILevel/UpdateKPILevel",JSON.stringify(mObj))
+          .then(result=>{
+             if (result) {
+                success('Update successfully!.');
               }
-            },
-            error: function(errormessage) {
-              //console.log(errormessage.responseText);
-            }
-          });
+          })
         },
         getAllUser() {
-          $.post(
-            "https://localhost:44309/AdminKPILevel/GetListAllUser",
-            function(data) {
-              var users = [],
+          axios.get("AdminKPILevel/GetListAllUser")
+          .then(data=>{
+            var users = [],
                 username,
                 fullname;
               var arrays = data;
@@ -1231,66 +803,86 @@ export default {
                   console.log(index);
                 }
               });
-            }
-          );
+          })
+          // $.post(
+          //   "https://localhost:44309/AdminKPILevel/GetListAllUser",
+          //   function(data) {
+          //     var users = [],
+          //       username,
+          //       fullname;
+          //     var arrays = data;
+          //     $.each(arrays, function(i, item) {
+          //       users.push({
+          //         username: item.Username,
+          //         fullname: item.FullName
+          //       });
+          //     });
+
+          //     $(".KPILevelSelect2").suggest("@@", {
+          //       data: users,
+          //       map: function(user) {
+          //         return {
+          //           value: user.username + "\f",
+          //           text:
+          //             "<strong>" +
+          //             user.username +
+          //             "  </strong> <small>" +
+          //             user.fullname +
+          //             "</small>"
+          //         };
+          //       },
+          //       get: function(index) {
+          //         console.log(index);
+          //       }
+          //     });
+          //   }
+          // );
         },
         loadDetail: function(id) {
-          $.ajax({
-            url: "https://localhost:44309/AdminKPILevel/GetbyID/",
-            data: { ID: JSON.stringify(id) },
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            success: function(res) {
-              //console.log("show detail KPI")
-              //console.log(result);
-              console.log(res);
+          axios.get(`AdminKPILevel/GetbyID/${id}`)
+          .then(res=>{
+            console.log("loadDetail");
+            console.log(res);
+
               var result = res.data;
-
+              
               $(".KPILevelID").val(id);
-              $("#modal-group-weekly .weekly").val(result.Weekly);
-              $("#modal-group-weekly .weekly").val(result.Weekly);
-              $("#modal-group-weekly input[name=weekpublic]").val(
-                result.WeeklyPublic
-              );
-              $("#modal-group-weekly .standard").val(result.WeeklyStandard);
+              $("#modal-group-weekly .weekly").val(result.data.Weekly);
+              $("#modal-group-weekly .weekly").val(result.data.Weekly);
+              $("#modal-group-weekly input[name=weekpublic]").val(result.data.WeeklyPublic);
+              $("#modal-group-weekly .standard").val(result.data.WeeklyStandard);
+              $('#modal-group-weekly .target').val(result.WorkingPlanOfWeekly);
 
-              $("#modal-group-monthly .monthly").val(
-                kpiController.convertDateJson(result.Monthly)
-              );
-              $("#modal-group-monthly input[name=monthpublic]").val(
-                result.MonthlyChecked
-              );
-              $("#modal-group-monthly .standard").val(result.MonthlyStandard);
 
-              $("#modal-group-quarterly .quaterly").val(
-                kpiController.convertDateJson(result.Quarterly)
-              );
-              $("#modal-group-quarterly input[name=quarterpublic]").val(
-                result.QuarterlyChecked
-              );
-              $("#modal-group-quarterly .standard").val(
-                result.QuarterlyStandard
-              );
+              // $("#modal-group-monthly .monthly").val(kpiController.convertDateJson(result.Monthly));
+              // $("#modal-group-monthly input[name=monthpublic]").val(result.MonthlyChecked);
+              // $("#modal-group-monthly .standard").val(result.MonthlyStandard);
 
-              $("#modal-group-yearly .yearly").val(
-                kpiController.convertDateJson(result.Yearly)
-              );
-              $("#modal-group-yearly input[name=quaterpublic]").val(
-                result.YearlyChecked
-              );
-              $("#modal-group-yearly .standard").val(result.YearlyStandard);
-            },
-            error: function(err) {
-              //console.log(err);
-            }
-          });
+              $('#modal-group-monthly input[name=monthly-datepicker]').val(kpiController.convertDateJson(result.data.Monthly));
+              $('#modal-group-monthly input[name=monthpublic]').val(result.data.MonthlyChecked);
+              $('#modal-group-monthly .standard').val(result.data.MonthlyStandard);
+              $('#modal-group-monthly .target').val(result.WorkingPlanOfMonthly);
+              console.log(result.WorkingPlanOfMonthly)
+
+
+              $('#modal-group-quarterly input[name=quarterly-datepicker]').val(kpiController.convertDateJson(result.data.Quarterly));
+              $('#modal-group-quarterly input[name=quarterpublic]').val(result.data.QuarterlyChecked);
+              $('#modal-group-quarterly .standard').val(result.data.QuarterlyStandard);
+              $('#modal-group-quarterly .target').val(result.WorkingPlanOfQuarterly);
+
+
+              $('#modal-group-yearly  input[name=yearly-datepicker]').val(kpiController.convertDateJson(result.Yearly));
+              $('#modal-group-yearly input[name=quaterpublic]').val(result.data.YearlyChecked);
+              $('#modal-group-yearly .standard').val(result.data.YearlyStandard);
+              $('#modal-group-yearly .target').val(result.WorkingPlanOfYearly);
+          })
+         
         },
         convertDateJson(d) {
-          if (d === null) d = "/Date(1000000000000)/";
+         // if (d === null) d = "/Date(1000000000000)/";
 
-          let milli = d.replace(/\/Date\((-?\d+)\)\//, "$1");
-          let date = new Date(parseInt(milli));
+         // let milli = d.replace(/\/Date\((-?\d+)\)\//, "$1");
+          let date = new Date(d|| new Date());
           let dd = String(date.getDate()).padStart(2, "0");
           let mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
           let yyyy = date.getFullYear();
