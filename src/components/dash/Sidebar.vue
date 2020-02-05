@@ -45,7 +45,7 @@
               <a href="#/home" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Home
+                  {{ $t("home") }}
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
@@ -53,7 +53,7 @@
                 <li  class="nav-item">
                   <a :href="'#' + item.Link"  class="nav-link">
                     <i :class="item.FontAwesome"></i>
-                    <p>{{$t(item.Code)}}</p>
+                    <p>{{item.Name}}</p>
                   </a>
                 </li>
               </ul>
@@ -74,7 +74,8 @@ export default {
   data() {
     return {
      menuSidebar: [],
-     lang: ''
+     lang: '',
+     locale: $cookies.get("Lang")
     }
   },
   mounted(){
@@ -90,12 +91,16 @@ export default {
   },
   beforeMount(){
     let self = this
-console.log('Nothing gets called before me!')
-self.loadmenuSidebar();
+    console.log('Nothing gets called before me!')
+    self.loadmenuSidebar();
   },
   created(){
     // let seft = this;
     let vm = this;
+    let seft = this
+    EventBus.$on('flag', locale =>{
+      seft.locale = locale
+    });
     // setTimeout(function(){
     //   console.log("refreshing vm..");
     //   vm.$forceUpdate();
@@ -110,15 +115,15 @@ self.loadmenuSidebar();
     
   },
   watch:{
-    // menuSidebar: function(newOld, oldVal) {
-    //   let seft = this;
-    //   seft.loadmenuSidebar();
-    // },
+    locale : function(newOld,oldVal){
+      this.locale = newOld
+      this.loadmenuSidebar()
+    }
   },
   methods: {
     loadmenuSidebar(){
       let seft = this;
-      axios.get('http://10.4.4.92:91/Menus/Getall').then(r=>{
+      axios.get(`http://10.4.4.92:91/Menus/Getall2/${seft.locale}`).then(r=>{
         seft.menuSidebar = r.data
       })
       // let seft = this;

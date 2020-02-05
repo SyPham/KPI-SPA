@@ -172,10 +172,10 @@ export default {
     };
   },
   created() {
-    
+    //flag = false -> header click vietnamese -> flag = true
   },
   methods: {
-  
+    //Neu flag= true -> loadData()
   }
 };
 </script>

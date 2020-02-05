@@ -24,6 +24,8 @@ import VuePageTransition from 'vue-page-transition'
 
 import VueApexCharts from 'vue-apexcharts'
 
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 // axios.defaults.headers.get['Accepts'] = 'application/json'
 
 window.axios = axios;

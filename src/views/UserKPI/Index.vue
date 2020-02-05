@@ -3,7 +3,7 @@
     <div class="col-md-12 mt-2">
       <ol class="breadcrumb ">
         <li class="breadcrumb-item">
-          <a href="#/home">Home</a>
+          <a href="#/home">{{ $t("home") }}</a>
         </li>
         <li class="breadcrumb-item active">KPI</li>
       </ol>

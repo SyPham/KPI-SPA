@@ -812,7 +812,7 @@ export default {
         CategoryID: Number(this.$route.params.catid)
       };
 
-      axios.post("ChartPeriod/AddComment", mObj)
+      axios.post("http://10.4.4.92:91/ChartPeriod/AddComment", mObj)
         .then(data => {
           var res = data.data;
           // console.log(res.status);
@@ -912,7 +912,7 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this;
-      axios.post(`ChartPeriod/getallpaging/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
+      axios.post(`http://10.4.4.92:91/ChartPeriod/getallpaging/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
       .then(res => {
         console.log(res);
         //  var res = res.data;
@@ -1290,7 +1290,7 @@ export default {
         CategoryID: Number(seft.$route.params.catid),
         KPILevelCode: seft.KPILevelCode,
       };
-      axios.post('ChartPeriod/Add', obj ).then(res=>{
+      axios.post('http://10.4.4.92:91/ChartPeriod/Add', obj ).then(res=>{
         console.log(res);
       if (res.data.status === true ) {
         var commentid = Number($('.commentid').text());

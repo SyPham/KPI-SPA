@@ -9,7 +9,7 @@
             <li class="breadcrumb-item">
               <a href="#/home">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Home</li>
+            <li class="breadcrumb-item active">{{$t("home")}}</li>
           </ol>
         </div>
       </div>
@@ -22,7 +22,7 @@
             ></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">{{$t(item.Code)}}</span>
+              <span class="info-box-text">{{item.Name}}</span>
               <span class="info-box-number " style="color:#fff">
                 (1) 
               </span>
@@ -56,7 +56,8 @@ export default {
      arrayID: [],
      data: [],
      listdata: [],
-     userid: 0
+     userid: 0,
+     locale: $cookies.get("Lang")
     }
   },
    components: {
@@ -65,12 +66,24 @@ export default {
   mounted(){
     let seft = this;
     seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-    seft.loadmenu();
+    seft.getall2();
     seft.getAllNotifications();
+  },
+  watch:{
+    locale : function(newOld,oldVal){
+      this.locale = newOld
+      this.getall2()
+    }
   },
   created(){
     let seft = this;
-   
+    EventBus.$on('flag', locale =>{
+      seft.locale = locale
+    });
+    seft.locale = $cookies.get("Lang")
+    console.log("Lang")
+    console.log(seft.locale) 
+    // seft.getall2();
     seft.menuSidebar = JSON.parse(localStorage.getItem('Menus'))
     // seft.menus = JSON.parse(localStorage.getItem('Menus'))
     // console.log(seft.menus)
@@ -90,6 +103,10 @@ export default {
     seft.getAllNotifications();
     });
   }, 
+  destroyed() {
+    // Stop listening the event hello with handler
+    EventBus.$off('flag', this.locale);
+  },
   computed: {
     user: function() {
       return this.$store.state.currentUser;
@@ -97,18 +114,16 @@ export default {
   },
 
   methods: {
+    getall2(){
+    let seft = this
+    axios.get(`http://10.4.4.92:91/Menus/Getall2/${seft.locale}`).then(r=>{
+        seft.menus = r.data
+        console.log("menus")
+        console.log(seft.menus)
+      })
+    },
     getAllNotifications() {
       let seft = this;
-      
-      // HTTP.get("Home/GetNotifications").then(r => {
-      //   seft.arrayID = r.data.arrayID;
-      //   console.log("seft.arrayID");
-      //   console.log(seft.arrayID);
-      //   seft.data = r.data.data;
-      //   seft.listdata = r.data;
-      //   seft.userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
-      //   console.log(seft.userid);
-      // });
 
       axios.get("http://10.4.4.224:98/Home/GetNotifications").then(r=>{
          seft.arrayID = r.data.arrayID;

@@ -12,29 +12,20 @@
         <form @submit.prevent="update" role="form">
           <div class="card-body">
             <div class="form-group col-md-6">
-              <label for="exampleInputEmail1">Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="exampleInputEmail1"
-                placeholder="Enter Name"
-                v-model="Name"
-              />
+              <label for="exampleInputEmail1">Chinese Name</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Name" v-model="NameTW"/>
             </div>
             <div class="form-group col-md-6">
-              <label for="exampleInputEmail1">Level</label>
-              <input type="number" class="form-control" v-model="LevelID" placeholder="Enter Level" />
+              <label for="exampleInputEmail1">English Name</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Name" v-model="NameEn"/>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="exampleInputEmail1">Vietnamese Name</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Name" v-model="NameVI"/>
             </div>
             <div class="form-group col-md-6">
               <label>Unit</label>
-              <select
-                class="form-control select2bs4 select2-hidden-accessible"
-                style="width: 100%;"
-                data-select2-id="17"
-                tabindex="-1"
-                v-model="Unit"
-                aria-hidden="true"
-              >
+              <select class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" v-model="Unit" aria-hidden="true">
                 <option v-for="item in data" :key="item.value" :label="item.Name" :value="item.ID"></option>
                 <!-- <option data-select2-id="61">2</option> -->
               </select>
@@ -63,6 +54,9 @@ export default {
       data: [],
       ID:0,
       Name: null,
+      NameVI: null,
+      NameEn: null,
+      NameTW: null,
       LevelID: 0,
       Unit: ""
     };
@@ -93,28 +87,30 @@ export default {
     },
     get(id) {
       if (id == undefined) return;
-        axios.get("AdminKPI/GetbyID/"+ id,{
+        axios.get("http://10.4.4.92:91/AdminKPI/GetbyID/"+ id,{
           headers:{
             Authorization: 'Bearer '+ localStorage.getItem("authToken")
           }
         })
         .then(r => {
-          // seft.loading = false;
-          this.Name = r.data.Name
+          console.log(r)
+          this.NameVI = r.data.NameVI
+          this.NameEn = r.data.NameEn
+          this.NameTW = r.data.NameTW
           this.LevelID = r.data.LevelID
           this.Unit = r.data.Unit
-          // this.$router.push("/adminKPI");
-          // alertify.success("Success");
-          // console.log(r.data);
+          
         })
         .catch(r => {
           
         });
     },
     update() {
-      axios.post("AdminKPI/Update",{
+      axios.post("http://10.4.4.92:91/AdminKPI/Update",{
           ID: this.ID,
-          Name: this.Name,
+          NameVI: this.NameVI,
+          NameEn: this.NameEn,
+          NameTW: this.NameTW,
           LevelID: this.LevelID,
           Unit: this.Unit,
           headers:{

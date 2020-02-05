@@ -35,7 +35,6 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Code</th>
-                <th>level</th>
                 <th>Unit</th>
                 <th>Add/Edit/Delete</th>
               </tr>
@@ -43,11 +42,10 @@
             <tbody>
               <tr v-for="(kpi, key, index) in data" :key="index">
                 <td>{{ key + 1 }}</td>
-                <td>{{ kpi.Name }}</td>
+                <td>{{ kpi.Names.join(" - ") || kpi.Name }}</td>
                 <td>{{ kpi.Code }}</td>
-                <td>{{ kpi.LevelID }}</td>
                 <td>{{ kpi.Unit }}</td>
-                <td>
+                <td >
                   <div class="btn-group">
                     <div class="btn-group">
                       <button
@@ -110,7 +108,8 @@ export default {
       pageSize: 10,
       catID: 0,
       name: " ",
-      searchname: ""
+      searchname: "",
+      locale: $cookies.get("Lang"),
 
     };
   },
@@ -139,13 +138,12 @@ export default {
     LoadData() {
       // debugger
       let seft = this
-      axios.post(`AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}`,{
+      axios.post(`http://10.4.4.92:91/AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}/${seft.locale}`,{
         headers:{
           Authorization: 'Bearer '+ localStorage.getItem("authToken")
         }
       }).then(res => {
         console.log(res);
-        
         seft.totalPage = res.data.pageCount;
         seft.page = res.data.page;
         seft.data = res.data.data;

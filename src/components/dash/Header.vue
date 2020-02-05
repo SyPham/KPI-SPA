@@ -34,7 +34,7 @@
                   :iso="entry.flag"
                   v-bind:squared="false"
                 /> -->
-                {{ entry.title }} |
+                {{ entry.title }} 
               </li>
             </ul>
           </div>
@@ -213,6 +213,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import i18n from "../../lang/i18n";
 import signal from "../../hub";
 import EventBus from "../../utils/EventBus.js";
+import VueCookies from 'vue-cookies'
 export default {
   name: "appHeader",
   data: function() {
@@ -226,11 +227,12 @@ export default {
       data: [],
       listdata: [],
       languages: [
-        { flag: "tw", language: "tw-zh", title: "中文" },
+        { flag: "tw", language: "zh-TW", title: "中文" },
         { flag: "us", language: "en", title: "English" },
         { flag: "vn", language: "vi", title: "Vietnamese" }
-      ]
-    };
+      ],
+      locale: $cookies.get("Lang")
+    }
   },
   mounted() {
     let seft = this
@@ -366,7 +368,11 @@ export default {
       //console.log(user);
     },
     changeLocale(locale) {
+      console.log(locale)
       i18n.locale = locale;
+      $cookies.set("Lang", locale)
+      EventBus.$emit('flag', locale);
+      //flag = false click -> flag = true
     },
     getAllNotifications() {
       let seft = this;
@@ -476,9 +482,10 @@ button {
 
 .henry-pham li {
   display: inline-block;
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   cursor: pointer;
+  margin-left: 13px;
 }
 
 .henry-pham li img {

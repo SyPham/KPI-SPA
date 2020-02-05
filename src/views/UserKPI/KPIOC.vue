@@ -15,16 +15,16 @@
     <div class="card-body">
       <div class="text-center periodAll" style="display:none">
         <a class="btn bg-primary btn-sm weeklyperiod" data-period="W"
-          ><i class="fa fa-eye"></i>&#160;View all by weekly</a
+          ><i class="fa fa-eye"></i>&#160;{{$t("Viewallbyweekly")}}</a
         >
         <a class="btn bg-primary btn-sm monthlyperiod" data-period="m"
-          ><i class="fa fa-eye"></i>&#160;View all by monthly</a
+          ><i class="fa fa-eye"></i>&#160;{{$t("Viewallbymonthly")}}</a
         >
         <a class="btn bg-primary btn-sm quarterlyperiod" data-period="q"
-          ><i class="fa fa-eye"></i>&#160;View all by quarterly</a
+          ><i class="fa fa-eye"></i>&#160;{{$t("Viewallbyquarterly")}}</a
         >
         <a class="btn bg-primary btn-sm yearlyperiod" data-period="y"
-          ><i class="fa fa-eye"></i>&#160;View all by yearly</a
+          ><i class="fa fa-eye"></i>&#160;{{$t("Viewallbyyearly")}}</a
         >
       </div>
     </div>
@@ -78,7 +78,7 @@
                     item.StatusEmptyDataW
                   )"
               >
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> Weekly
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> {{$t("Weekly")}}
               </button>
               <button
                 class="btn btn-sm month"
@@ -99,7 +99,7 @@
                   )"
 
               >
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> Monthly
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> {{$t("Monthly")}}
               </button>
               <button
                 class="btn btn-sm quarter"
@@ -119,7 +119,7 @@
                     item.StatusEmptyDataQ
                   )"
               >
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> Quarterly
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> {{$t("Quarterly")}}
               </button>
               <button
                 class="btn btn-sm year"
@@ -139,7 +139,7 @@
                     item.StatusEmptyDataY
                   )"
               >
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> Yearly
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> {{$t("Yearly")}}
               </button>
             </td>
           </tr>
@@ -173,7 +173,8 @@ export default {
       data: [],
       categoryId: 0,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 10,
+      locale: $cookies.get("Lang")
     };
   },
   watch: {
@@ -181,6 +182,10 @@ export default {
       let self = this;
       self.categoryId = newVal;
       self.getAllKPILevelByCategory();
+    },
+    locale: function(newOld,oldVal){
+      this.locale = newOld
+      this.getAllKPILevelByCategory()
     }
   },
   methods: {
@@ -240,7 +245,7 @@ export default {
       });
 
       axios.get(
-        `CategoryKPILevel/getAllKPILevelByCategory/${self.categoryId}/${self.pageIndex}/${self.pageSize}`
+        `http://10.4.4.92:91/CategoryKPILevel/getAllKPILevelByCategory2/${self.categoryId}/${self.locale}/${self.pageIndex}/${self.pageSize}`
       ).then(response => {
         console.log(response);
 
@@ -460,8 +465,13 @@ export default {
     },
   },
   created() {
-    this.getAllKPILevelByCategory();
+    let self = this
+    self.getAllKPILevelByCategory();
+    EventBus.$on('flag', locale =>{
+      self.locale = locale
+    });
   }
+ 
 };
 </script>
 

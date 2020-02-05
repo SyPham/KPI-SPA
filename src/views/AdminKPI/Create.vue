@@ -15,22 +15,22 @@
             <div class="form-group col-md-6">
               <label for="exampleInputEmail1">Chinese Name</label>
               <span style="color:red">(*)</span>
-              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
-              <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
+              <input type="text" class="form-control" v-model="NameTW" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.NameTW.$error }"/>
+              <div v-if="submitted && !$v.NameTW.required" class="invalid-feedback">Name is required</div>
             </div>
 
             <div class="form-group col-md-6">
               <label for="exampleInputEmail1">English Name</label>
               <span style="color:red">(*)</span>
-              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
-              <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
+              <input type="text" class="form-control" v-model="NameEn" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.NameEn.$error }"/>
+              <div v-if="submitted && !$v.NameEn.required" class="invalid-feedback">Name is required</div>
             </div>
 
             <div class="form-group col-md-6">
               <label for="exampleInputEmail1">Vietnamese Name</label>
               <span style="color:red">(*)</span>
-              <input type="text" class="form-control" v-model="Name" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.Name.$error }"/>
-              <div v-if="submitted && !$v.Name.required" class="invalid-feedback">Name is required</div>
+              <input type="text" class="form-control" v-model="NameVI" placeholder="Enter Name" :class="{ 'is-invalid': submitted && $v.NameVI.$error }"/>
+              <div v-if="submitted && !$v.NameVI.required" class="invalid-feedback">Name is required</div>
             </div>
             <!-- <div class="form-group col-md-6">
               <label for="exampleInputEmail1">Level</label>
@@ -72,13 +72,18 @@ export default {
     return {
       data: [],
       Name: null,
+      NameVI: null,
+      NameEn: null,
+      NameTW: null,
       LevelID: 0,
       Unit: "",
       submitted: false
     };
   },
   validations: {
-    Name: { required },
+    NameVI: { required },
+    NameEn: { required },
+    NameTW: { required },
     LevelID: { required },
     Unit: { required }
   },
@@ -94,9 +99,12 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        axios.post("AdminKPI/add", {
-          Name: this.Name,
-          // LevelID: this.LevelID,
+        
+        axios.post("http://10.4.4.92:91/AdminKPI/add", {
+          // Name: this.NameEn,Co
+          NameVI: this.NameVI,
+          NameEn: this.NameEn,
+          NameTW: this.NameTW,
           Unit: this.Unit,
         },{
           headers:{

@@ -21,6 +21,11 @@
 	box-sizing: border-box;
 }
 
+.callout.bg-yellow-gradient {
+    background-color: #1b945c;
+    color: snow;
+}
+
 body, html {
 	height: 100%;
 	font-family: OpenSans-Regular, sans-serif;

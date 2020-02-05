@@ -251,10 +251,10 @@
             <div class="float-right box-tools">
               <!-- button with a dropdown -->
               <button type="button" class="btn btn-warning btn-sm fancy-collapse">
-                <i class="fas fa-compress-arrows-alt"></i> Collapse
+                <i class="fas fa-compress-arrows-alt"></i> {{$t("Collapse")}}
               </button>
               <button type="button" class="btn btn-info btn-sm fancy-expand">
-                <i class="fas fa-expand-arrows-alt"></i> Expand
+                <i class="fas fa-expand-arrows-alt"></i> {{$t("Expand")}}
               </button>
             </div>
           </div>
@@ -386,22 +386,22 @@
 
           </div>
           <div class="card-footer clearfix">
-              <Paginate
-            v-model="page3"
-            :page-count="totalPage3"
-            :prev-text="'Prev'"
-            :next-text="'Next'"
-            :page-range="3"
-            :margin-pages="2"
-            :container-class="'pagination'"
-            :page-class="'page-item'"
-            :prev-class="'page-item'"
-            :next-class="'page-item'"
-            :page-link-class="'page-link'"
-            :prev-link-class="'page-link'"
-            :next-link-class="'page-link'"
-            :click-handler="changePageTrackKPI"
-          ></Paginate>
+            <Paginate
+              v-model="page3"
+              :page-count="totalPage3"
+              :prev-text="'Prev'"
+              :next-text="'Next'"
+              :page-range="3"
+              :margin-pages="2"
+              :container-class="'pagination'"
+              :page-class="'page-item'"
+              :prev-class="'page-item'"
+              :next-class="'page-item'"
+              :page-link-class="'page-link'"
+              :prev-link-class="'page-link'"
+              :next-link-class="'page-link'"
+              :click-handler="changePageTrackKPI"
+            ></Paginate>
             </div>
         </div>
       </div>

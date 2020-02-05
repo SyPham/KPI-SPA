@@ -8,10 +8,10 @@
           <!-- LINE CHART -->
           <div class="box box-widget">
             <div class="box-header with-border">
-              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Weekly</h3>
-              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Monthly</h3>
-              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Quarterly</h3>
-              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - Yearly</h3>
+              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Weekly")}}</h3>
+              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Monthly")}}</h3>
+              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Quarterly")}}</h3>
+              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Yearly")}}</h3>
             </div>
             <div class="box-body">
 
@@ -21,7 +21,7 @@
                   <div class="row">
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startMonth">Year</label>
+                        <label class="my-1 mr-2" for="startMonth">{{$t("Year")}}</label>
                         <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="monthOfYear">
                           <option value="0" selected>Choose...</option>
                           <option
@@ -29,14 +29,14 @@
                            :key="index" 
                            :value="2000 + n"
                            > 
-                           Year {{2000 + n}}
+                           {{2000 + n}}
                            </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startMonth">Start</label>
+                        <label class="my-1 mr-2" for="startMonth">{{$t("Start")}}</label>
                         <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startMonth">
                           <option value="0" selected>Choose...</option>
                           <option value="1">Jan</option>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="endMonth">End</label>
+                        <label class="my-1 mr-2" for="endMonth">{{$t("End")}}</label>
                         <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endMonth">
                           <option value="0" selected>Choose...</option>
                           <option value="1">Jan</option>
@@ -78,7 +78,7 @@
                       <div class="form-group">
                         <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
                         <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
-                          <i class="fa fa-remove"></i> Reset
+                          <i class="fas fa-minus-circle"></i> {{$t("btnClearSearch")}}
                         </button>
                       </div>
                     </div>
@@ -109,16 +109,16 @@
                   <div class="row">
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startMonth">Year</label>
+                        <label class="my-1 mr-2" for="startMonth">{{$t("Year")}}</label>
                         <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="weekOfYear">
                           <option value="0" selected>Choose...</option>
-                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> Year {{2000 + n}}</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">  {{2000 + n}}</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startWeek">Week Start</label>
+                        <label class="my-1 mr-2" for="startWeek">{{$t("WeekStart")}}</label>
                         <select v-model="vstart" class="custom-select form-control year my-1 mr-sm-2" id="startWeek">
                           <option value="0" selected>Choose...</option>
                           <option v-for="(n, key, index) in 53" :key="index" :value="n">Week {{n}}</option>
@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="endWeek">Week End</label>
+                        <label class="my-1 mr-2" for="endWeek">{{$t("WeekEnd")}}</label>
                         <select v-model="vend" class="custom-select form-control year my-1 mr-sm-2" id="endWeek">
                           <option value="0" selected>Choose...</option>
                           <option v-for="(n, key, index) in 53" :key="index" :value=" n">Week {{ n}}</option>
@@ -138,7 +138,7 @@
                       <div class="form-group">
                         <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
                         <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
-                          <i class="fa fa-remove"></i> Reset
+                          <i class="fas fa-minus-circle"></i> {{$t("btnClearSearch")}}
                         </button>
                       </div>
                     </div>
@@ -169,16 +169,16 @@
                   <div class="row">
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startMonth">Year</label>
+                        <label class="my-1 mr-2" for="startMonth">{{$t("Year")}}</label>
                         <select v-model="searchyear" class="custom-select form-control year my-1 mr-sm-2" id="quarterOfYear">
                           <option value="0" selected>Choose...</option>
-                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n">Year {{2000 + n}}</option>
+                          <option v-for="(n, key, index) in 100" :key="index" :value="2000 + n"> {{2000 + n}}</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="startMonth">Start</label>
+                        <label class="my-1 mr-2" for="startMonth">{{$t("Start")}}</label>
                         <select v-model="vstart" class="custom-select form-control my-1 mr-sm-2" id="startQuarter">
                           <option value="0" selected>Choose...</option>
                           <option v-for="(n, key, index)  in 4" :selected="start == n ? true : false" :key="index" :value=" n">Quarter {{n}}</option>
@@ -187,7 +187,7 @@
                     </div>
                     <div class="col-md">
                       <div class="form-group">
-                        <label class="my-1 mr-2" for="endMonth">End</label>
+                        <label class="my-1 mr-2" for="endMonth">{{$t("End")}}</label>
                         <select v-model="vend" class="custom-select form-control my-1 mr-sm-2" id="endQuarter">
                           <option value="0" selected>Choose...</option>
                           <option v-for="(n, key, index)  in 4" :selected="end == n ? true : false" :key="index" :value=" n">Quarter {{n}}</option>
@@ -198,7 +198,7 @@
                       <div class="form-group">
                         <label class="my-1 mr-2" style="color:#fff" for="endMonth">asd</label>
                         <button type="button" @click="searchyear='', vstart='', vend=''" class="btn bg-teal my-1 mr-sm-2 form-control margin btnClearSearch">
-                          <i class="fa fa-remove"></i> Reset
+                          <i class="fas fa-minus-circle"></i> {{$t("btnClearSearch")}}
                         </button>
                       </div>
                     </div>
@@ -314,23 +314,23 @@
                 </div>
                 <div class="col-md-8">
                   <button type="button" class="btn btn-sm bg-navy margin">
-                    Manager:
+                    {{$t("Manager_label")}}:
                     <strong>{{OwnerManagerment}}</strong>
                   </button>
                   <button type="button" class="btn btn-sm bg-navy margin">
-                    Owner:
+                    {{$t("Owner_label")}}:
                     <strong>{{Owner}}</strong>
                   </button>
                   <button type="button" class="btn btn-sm bg-navy margin">
-                    Updater:
+                    {{$t("Updater_label")}}:
                     <strong>{{PIC}}</strong>
                   </button>
                   <button type="button" class="btn btn-sm bg-navy margin">
-                    Sponsor:
+                    {{$t("Sponsor_label")}}:
                     <strong>{{Sponsor}}</strong>
                   </button>
                   <button type="button" class="btn btn-sm bg-navy margin">
-                    Participant:
+                    {{$t("Participant_label")}}:
                     <strong>{{Participant}}</strong>
                   </button>
                 </div>
@@ -340,12 +340,12 @@
                 <div class="box box-solid">
                   <div class="box-header with-border">
                       <i class="fa fa-tag"></i>
-                      <h3 class="box-title font-weight-bold">Working Plan:</h3>
+                      <h3 class="box-title font-weight-bold">{{$t("WorkingPlan_label")}}:</h3>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
                     <blockquote>
-                      <p>Not available!</p>
+                      <p></p>
                     </blockquote>
                   </div>
                   <!-- /.box-body -->
@@ -378,12 +378,12 @@
         <div class="col-md-12">
           <div class="box box-widget">
             <div class="box-header with-border">
-              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Weekly</h3>
-              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Monthly</h3>
-              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Quarterly</h3>
-              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - Yearly</h3>
+              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Weekly")}}</h3>
+              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Monthly")}}</h3>
+              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Quarterly")}}</h3>
+              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Yearly")}}</h3>
               <div class="box-tools float-right">
-                <button @click="$router.push(`/Chartperiod/ListTasks/${kpilevelcode}`)" type="button" class="btn btn-info btn-sm listTaskBtn"><i class="fa fa-info"></i> List Tasks</button>
+                <button @click="$router.push(`/Chartperiod/ListTasks/${kpilevelcode}`)" type="button" class="btn btn-info btn-sm listTaskBtn"><i class="fa fa-info"></i> {{$t("listTaskBtn")}}</button>
               </div>
             </div>
             <!-- /.box-header -->
@@ -806,7 +806,8 @@ export default {
       keyword: ' ',
       URL: '',
       Link:'',
-      kpilevelcode: ''
+      kpilevelcode: '',
+      locale: $cookies.get("Lang")
     };
   },
   components: {
@@ -939,6 +940,9 @@ export default {
   },
   created() {
     let seft = this;
+    EventBus.$on('flag', locale =>{
+      seft.locale = locale
+    });
     seft.period = seft.$route.params.period;
     seft.vstart = seft.$route.params.start;
     seft.vend = seft.$route.params.end;
@@ -1066,6 +1070,12 @@ export default {
             self.LoadDataActionPlan(dataID, comID);
             self.loadDataComment(true);
       }
+    },
+    locale: function(newOld,oldVal){
+      this.locale = newOld
+      this.Loadchart()
+      this.getAllNotifications()
+      this.GetItem()
     }
   },
   methods: {
@@ -1087,7 +1097,7 @@ export default {
         console.log("GetItem")
         console.log(r)
         if (r.data.status) {
-          $(".working-plan blockquote p").text("");
+          // $(".working-plan blockquote p").text("");
           $(".working-plan blockquote p").text(r.data.data || "Not avaiable!");
         }
       })
@@ -2097,14 +2107,14 @@ export default {
       // EventBus.$on('hello', URL =>{
       //   seft.URL = URL
       // });
-      axios.get(`http://10.4.4.224:98/ChartPeriod/ListDatas/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`,{
+      axios.get(`http://10.4.4.92:91/ChartPeriod/ListDatas2/${seft.$route.params.kpilevelcode}/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.locale}/${seft.$route.params.year}/${seft.$route.params.start}/${seft.$route.params.end}`,{
         headers:{
           Authorization: 'Bearer '+ localStorage.getItem("authToken")
         }
       })
         .then(response=>{
           console.log('respon1')
-           console.log(response);
+          console.log(response);
 
           seft.statusfavorite = response.data.statusfavorite;
           seft.unit = response.data.Unit;
