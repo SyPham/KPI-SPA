@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     GetListAllPermissions(Userid = 0) {
-      axios.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
+      axios.get(`http://10.4.4.92:91/AdminUser/GetListAllPermissions/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);
@@ -165,7 +165,7 @@ export default {
         });
     },
     update() {
-      axios.post("AdminUser/Update",{
+      axios.post("http://10.4.4.92:91/AdminUser/Update",{
           ID: this.ID,
           Username: this.UserName,
           Email: this.Email,
@@ -174,6 +174,7 @@ export default {
           Skype: this.Skype,
           Code: this.Code,
           Permission: this.Permission,
+          Role: this.Permission
       })
         .then(r => {
           this.$router.push("/adminUser");

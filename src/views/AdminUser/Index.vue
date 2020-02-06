@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12 my3">
       <button @click="$router.push(`/adminUser/create`)" class="btn btn-success float-right">
-        <i class="fa fa-plus"></i> Add  
+        <i class="fa fa-plus"></i> {{$t('Add_btn')}}  
       </button>
     </div>
     <div class="col-md-12">
@@ -10,7 +10,7 @@
         <div class="card-header">
           <div class="row">
             <div class="col-md-4">
-              <h3 class="card-title">List Users</h3>
+              <h3 class="card-title">{{$t('User_List')}}</h3>
             </div>
             <div class="col-md-4">
               <div class="form-group">
@@ -30,15 +30,15 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Alias</th>
-                <th>FullName</th>
-                <th>Code</th>
-                <th>Skype</th>
-                <th>State</th>
-                <th>Permission</th>
-                <th>Add/Edit/Delete</th>
+                <th>{{$t('Username')}}</th>
+                <th>{{$t('Email')}}</th>
+                <th>{{$t('Alias')}}</th>
+                <th>{{$t('FullName')}}</th>
+                <th>{{$t('Code')}}</th>
+                <th>{{$t('Skype')}}</th>
+                <th>{{$t('State')}}</th>
+                <th>{{$t('Permission')}}</th>
+                <th>{{$t('AddEditDelete')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -186,10 +186,10 @@ export default {
     LoadData() {
       // debugger
       let seft = this;
-      axios.post(`AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
+      axios.post(`http://10.4.4.92:91/AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
         console.log(res);
         seft.skip = res.data.skip;
-        seft.totalPage = res.data.pageCount;
+        seft.totalPage = res.data.totalPage;
         seft.page = res.data.page;
         seft.data = res.data.data;
       });
@@ -228,7 +228,7 @@ export default {
           },
           buttonsStyling: false,
           title: "Are you sure?",
-          text: "You won't be able to revert this!",
+          text: "Are you sure to delete this user?",
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Yes, delete it!",
@@ -237,7 +237,7 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            axios.post("AdminKPI/delete/" + id)
+            axios.post("http://10.4.4.92:91/AdminUser/Delete/" + id)
               .then(r => {
                 this.LoadData();
                 $("#RemoveModal").modal("hide");
@@ -248,7 +248,7 @@ export default {
               });
             swalWithBootstrapButtons.fire(
               "Deleted!",
-              "Your file has been deleted.",
+              "User has been deleted.",
               "success"
             );
           } else if (

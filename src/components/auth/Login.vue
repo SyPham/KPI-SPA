@@ -146,7 +146,7 @@ export default {
     login(){
       let self = this
       //EventBus.$emit('event-name', self.menuSidebarmenuSidebar)
-      axios.post("api/auth/login", self.user )
+      axios.post("http://10.4.4.92:91/api/auth/login", self.user )
         .then(function(res) {
           console.log(res)
           //self.menuSidebar = res.data.user.Menus

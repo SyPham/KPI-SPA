@@ -2,7 +2,7 @@
   <div class="row" v-if="role == 1">
     <div class="col-md-12 my-3">
       <button @click="$router.push(`/adminKPI/create`)" class="btn btn-success float-right">
-        <i class="fa fa-plus"></i> Add
+        <i class="fa fa-plus"></i> {{$t('Add_btn')}}
       </button>
     </div>
     <div class="col-md-12">
@@ -33,10 +33,10 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Unit</th>
-                <th>Add/Edit/Delete</th>
+                <th>{{$t('Name')}}</th>
+                <th>{{$t('Code')}}</th>
+                <th>{{$t('Units')}}</th>
+                <th>{{$t('AddEditDelete')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -52,14 +52,14 @@
                         @click="$router.push(`/adminKPI/${kpi.ID}/edit`)"
                         class="btn btn-primary btn-sm"
                       >
-                        <i class="fa fa-edit"></i> Edit
+                        <i class="fa fa-edit"></i> {{$t('Edit')}}
                       </button>
 
                       <button
                         @click="remove(kpi.ID)"
                         class="btn btn-danger btn-sm"
                       >
-                        <i class="fa fa-trash"></i> Delete
+                        <i class="fa fa-trash"></i> {{$t('Delete')}}
                       </button>
                     </div>
                   </div>

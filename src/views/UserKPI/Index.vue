@@ -188,6 +188,7 @@ export default {
       });
     },
     getAllDataByCategory(catid, period) {
+      
       let date = new Date();
       let year = date.getFullYear();
       let week = getDateOfWeekInYear(date);

@@ -345,7 +345,7 @@
                   <!-- /.box-header -->
                   <div class="box-body">
                     <blockquote>
-                      <p></p>
+                      <p>Not available!</p>
                     </blockquote>
                   </div>
                   <!-- /.box-body -->
@@ -1098,7 +1098,7 @@ export default {
         console.log(r)
         if (r.data.status) {
           // $(".working-plan blockquote p").text("");
-          $(".working-plan blockquote p").text(r.data.data || "Not avaiable!");
+          $(".working-plan blockquote p").text(r.data.data.Content || "Not avaiable!");
         }
       })
     },

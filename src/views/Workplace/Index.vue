@@ -560,7 +560,7 @@ export default {
         if (e.which === 13) {
           var code = $(this).val();
           var teamid = Number($("#box .kpi-name .code").text());
-          workplaceController.LoadDataUser(true, code, "");
+          // self.TrackKPI(true, code, "");
         }
       });
 

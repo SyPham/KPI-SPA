@@ -107,17 +107,8 @@
             <div class="form-group col-md-6">
               <label>Permission</label>
               <span style="color:red">(*)</span>
-              <select
-                class="form-control select2bs4 select2-hidden-accessible"
-                style="width: 100%;"
-                data-select2-id="17"
-                tabindex="-1"
-                v-model="Permission"
-                aria-hidden="true"
-                :class="{ 'is-invalid': submitted && $v.Permission.$error }"
-              >
+              <select class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" v-model="Permission" aria-hidden="true" :class="{ 'is-invalid': submitted && $v.Permission.$error }">
                 <option v-for="item in data" :key="item.value" :label="item.Name" :value="item.ID"></option>
-
                 <!-- <option data-select2-id="61">2</option> -->
               </select>
               <div v-if="submitted && !$v.Permission.required" class="invalid-feedback">Permission is required</div>
@@ -153,7 +144,7 @@ export default {
       FullName: "",
       Skype: "",
       Code:"",
-      Permission: "",
+      Permission: null,
       submitted: false
     };
   },
@@ -177,15 +168,16 @@ export default {
       if (this.$v.$invalid) {
         return;
       } else {
-        axios.post("AdminUser/add", {
-          UserName: this.UserName,
+        axios.post("http://10.4.4.92:91/AdminUser/add", {
+          Username: this.UserName,
           Password: this.Password,
           Email: this.Email,
-          Alilas: this.Alilas,
+          Alias: this.Alilas,
           FullName: this.FullName,
           Skype: this.Skype,
           Code: this.Code,
-          Permission: this.Permission
+          Permission: this.Permission,
+          Role: this.Permission
         })
           .then(response => {
             this.$router.push("/adminUser");
@@ -202,7 +194,7 @@ export default {
       }
     },
     GetListAllPermissions() {
-      axios.get(`https://localhost:44371/AdminUser/GetListAllRoles/${this.Userid}`)
+      axios.get(`http://10.4.4.92:91/AdminUser/GetListAllPermissions/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);

@@ -6,9 +6,9 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item">
-              <a href="#/home">Home</a>
+              <a href="#/home">{{$t('home')}}</a>
             </li>
-            <li class="breadcrumb-item active">OC</li>
+            <li class="breadcrumb-item active">{{$t('OC')}}</li>
           </ol>
         </div>
       </div>
@@ -16,7 +16,7 @@
     
     <div class="col-md-12">
       <div class="callout bg-yellow-gradient" style="border-color:#c57901">
-        <h3>1. Organization Chart</h3>
+        <h3>1. {{$t('OC')}}</h3>
       </div>
     </div>
     <div class="col-md-12">
@@ -24,17 +24,17 @@
       <div class="float-right box-tools">
         <!-- button with a dropdown -->
         <button type="button" class="btn btn-warning btn-sm fancy-collapse">
-          <i class="fas fa-compress-arrows-alt"></i> Collapse
+          <i class="fas fa-compress-arrows-alt"></i> {{$t('Collapse')}}
         </button>
         <button type="button" class="btn btn-info btn-sm fancy-expand">
-          <i class="fas fa-expand-arrows-alt"></i> Expand
+          <i class="fas fa-expand-arrows-alt"></i> {{$t('Expand')}}
         </button>
       </div>
       <table id="tree"  class="table table-condensed table-hover table-striped fancytree-fade-expander fancytree-colorize-selected"  >
         <thead>
           <tr>
-            <th style="width:10px">Level Number</th>
-            <th class="text-right">Name</th>
+            <th style="width:60px">{{$t('levelnum')}}</th>
+            <th class="text-right">{{$t('Name')}}</th>
           </tr>
         </thead>
         <tbody>

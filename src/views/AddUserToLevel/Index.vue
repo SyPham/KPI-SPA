@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-12">
       <div class="callout bg-yellow-gradient" style="border-color:#c57901">
-        <h3> Add User Of List Each Levels</h3>
+        <h3>8. Add User Of List Each Levels</h3>
       </div>
     </div>
     <div class="col-md-4">
@@ -48,10 +48,10 @@
           <span class="code" style="display:none"></span>
           <span class="level" style="display:none"></span>
           <!-- <input v-model="searchname" class="form-control float-right searchUser" placeholder="search here..." style="width:40%" /> -->
-          <div class="input-group float-right" style="width:50%">
-            <input v-model="searchname" type="text" class="form-control searchUser" placeholder="search here...">
+          <!-- <div class="input-group float-right" style="width:50%">
+            <input   type="text" class="form-control searchUser" placeholder="search here...">
             <span class="input-group-addon clearSearch" style="cursor:pointer"><i class="fas fa-times"></i></span>
-          </div>
+          </div> -->
         </div>
         <div class="box-body">
           <div class="box-body">
@@ -64,13 +64,13 @@
                   <th>OC Name</th>
                 </tr>
               </thead>
-              <tbody v-for="(item,key,index) in events" :key="index" class="tbody" id="tbluser">
-                <tr :data-id="item.ID">
+              <tbody  class="tbody" id="tbluser">
+                <tr v-for="(item,key,index) in events" :key="index" :data-id="item.ID">
                   <td class="text-center">{{key+1}}</td>
                   <td>
                     <div class="pretty p-icon p-rotate">
-                      <input v-if="item.Status == true" checked type="checkbox" class="checkbox"  name="name" />
-                      <input  v-else type="checkbox" class="checkbox"  name="name" />
+                      <input  v-if="item.Status == true" checked type="checkbox"  class="checkbox"  name="name" />
+                      <input    v-else type="checkbox" class="checkbox"   name="name" />
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
                         <label class="black username">{{item.Username}}</label>
@@ -142,7 +142,7 @@ export default {
       totalPage: 0,
       page: 1,
       skip: 0,
-      pageSize: 6,
+      pageSize: 10,
       code: " ",
       levelID: 0,
       searchname: ""
@@ -152,7 +152,7 @@ export default {
     searchname: function(newOld, oldVal) {
       console.log(newOld)
       console.log(oldVal)
-      this.name = newOld;
+      this.code = newOld;
       this.LoadDataUser();
     }
   },
@@ -161,39 +161,26 @@ export default {
     Hierarchy,
     Paginate
   },
-  watch: {
-    searchname: function(newOld, oldVal) {
-      console.log(newOld)
-      console.log(oldVal)
-      this.code = newOld;
-      this.LoadDataUser();
-    }
-  },
   created() {
     let seft = this;
     seft.loadAll();
   },
-  mounted(){
-    let seft = this;
-    // seft.loadAll();
-  },
+
   methods: {
     registerEvent: function () {
       let self = this 
-
-      $('#box .clearSearch').off('click').on('click', function (e) {
-        var levelid = Number($('#box .code').text());
-          $('#box .searchUser').val("");
-          //self.LoadDataUser("","",levelid);
-      })
-
-      $('#box .searchUser').off('keypress').on('keypress', function (e) {
-        if (e.which === 13) {
-          var code = $(this).val();
-          var levelid = Number($('#box .code').text());
-          //self.LoadDataUser(true, code,levelid);
-        }
-      });
+      // $('#box .clearSearch').off('click').on('click', function (e) {
+      //   var levelid = Number($('#box .code').text());
+      //     $('#box .searchUser').val("");
+      //     // self.LoadDataUser("","",levelid);
+      // })
+      // $('#box .searchUser').off('keypress').on('keypress', function (e) {
+      //   if (e.which === 13) {
+      //     var code = $(this).val();
+      //     var levelid = Number($('#box .code').text());
+      //     // self.LoadDataUser(true, code,levelid);
+      //   }
+      // });
 
       $('#tbluser tr td:nth-child(2) input').change(function () {
         var id = $(this).closest('tr').data('id');
@@ -201,17 +188,13 @@ export default {
           let username = $(this).next().children('label').text();
           console.log(username)
           self.updateUser(id, levelid);
-          //self.LoadDataUser("",username,levelid);
-          $('#box .searchUser').val(username);
+          // $('#box .searchUser').val(username);
+          // self.LoadDataUser("",username,levelid);
           success("success!");
       });
 
     },
     updateUser: function (id, levelid) {
-      // var mObj = {
-      //   id: id,
-      //   levelid: levelid,
-      // };
       axios.post(`http://10.4.4.92:91/AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
       .then(result=>{
         console.log(result)
@@ -346,6 +329,7 @@ export default {
         init: function () {
           self.registerEvent();
         },
+        
         loadTree: function () {
           $.ui.fancytree.getTree("#treetable").reload().done();
         },

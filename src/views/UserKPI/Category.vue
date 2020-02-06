@@ -56,6 +56,7 @@ export default {
       EventBus.$emit("CatWasEdit", catId);
     },
     getAllCategories() {
+      
       let self = this;
       axios.get(
         `CategoryKPILevel/GetAllCategories/${self.ocID}/${self.level}/${self.pageIndex}/${self.pageSize}`

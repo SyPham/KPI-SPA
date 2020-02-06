@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12 my-3">
       <button @click="$router.push(`/adminCategory/create`)" class="btn btn-success float-right">
-        <i class="fa fa-plus"></i> Add
+        <i class="fa fa-plus"></i> {{$t('Add_btn')}}
       </button>
     </div>
 
@@ -11,7 +11,7 @@
         <div class="card-header">
           <div class="row">
             <div class="col-md-4">
-              <h3 class="card-title">List Categories</h3>
+              <h3 class="card-title">{{$t('List_Categories')}}</h3>
             </div>
             <div class="col-md-4">
               <div class="form-group">
@@ -31,10 +31,10 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Level</th>
-                <th>Add/Edit/Delete</th>
+                <th>{{$t('Name')}}</th>
+                <th>{{$t('Code')}}</th>
+                <th>{{$t('levelnum')}}</th>
+                <th>{{$t('AddEditDelete')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -50,11 +50,11 @@
                         @click="$router.push(`/adminCategory/${cate.ID}/edit`)"
                         class="btn btn-primary btn-sm"
                       >
-                        <i class="fa fa-edit"></i> Edit
+                        <i class="fa fa-edit"></i> {{$t('Edit')}}
                       </button>
 
                       <button @click="remove(cate.ID)" class="btn btn-danger btn-sm">
-                        <i class="fa fa-trash"></i> Delete
+                        <i class="fa fa-trash"></i> {{$t('Delete')}}
                       </button>
                     </div>
                   </div>

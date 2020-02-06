@@ -64,8 +64,8 @@
                   <th>Level Number</th>
                 </tr>
               </thead>
-              <tbody v-for="(item,key,index) in events" :key="index" class="tbody" id="tblCategory">
-                <tr tabindex="0" :data-id="item.ID">
+              <tbody  class="tbody" id="tblCategory">
+                <tr v-for="(item,key,index) in events" :key="index" tabindex="0" :data-id="item.ID">
                   <td class="text-center">{{key+1}}</td>
                   <td>{{item.Name}}</td>
                   <td class="text-center">{{item.LevelID}}</td>
@@ -118,14 +118,14 @@
                     <th>Period</th>
                   </tr>
               </thead>
-              <tbody v-for="(item,key,index) in dataKPILV" :key="index" class="tbody" id="tblkpilevel">
-                <tr :data-id="item.ID" >
+              <tbody  class="tbody" id="tblkpilevel">
+                <tr v-for="(item,key,index) in dataKPILV" :key="index" :data-id="item.ID" >
                   <td>{{key+1}}</td>
                   <td>
                     <div class="tooltip-css ">
                       <div class="pretty p-icon p-rotate ">
-                        <input v-if="item.CheckCategory == true" type="checkbox"  class="checkbox kpilevelID" name="checkbox" checked />
-                        <input v-else type="checkbox"  class="checkbox kpilevelID" name="checkbox"  />
+                        <input @click="focusAddCategoryLevel()" v-if="item.CheckCategory == true" type="checkbox"  class="checkbox kpilevelID" name="checkbox" checked />
+                        <input v-else type="checkbox" @click="focusAddCategoryLevel()"  class="checkbox kpilevelID" name="checkbox"  />
                         <div class="state p-success textOverflow">
                             <i class="icon fa fa-check"></i>
                             <label class="black labelOverflow">{{item.KPIName}}</label>
@@ -619,6 +619,29 @@ export default {
     }
   },
   methods: {
+    focusAddCategoryLevel(){
+      let self = this
+      
+      $('.kpilevelID').off('change').on('change', function () {
+        let config = {
+          pageSize: 6,
+          pageIndex: 1
+        };
+        var levelID = Number($('#box .levelid').val());
+        var entity = {
+            KPILevelID: $(this).closest('tr').data('id'),
+            CategoryID: Number($('#box .catid').val()),
+        };
+        self.getUserByCategoryIDAndKPILevelID(entity);
+        self.addCategoryLevel(entity);
+        config.pageIndex = Number($('#paginationKPILevel li.active a').text());
+          var catid = $('#box .catid').val();
+            self.loadDataKPILevel(false, levelID,catid);
+        if ($(this).is(':checked')) {
+            $('#modal-group-general').modal('show').fadeIn(1000);
+        }
+      })
+    },
     changePage2(pageNum) {
       this.getAllCategories(this.name,pageNum);
     },
@@ -721,20 +744,12 @@ export default {
             }
           });
         },500)
-        $(".fancy-collapse")
-          .off("click")
-          .on("click", function() {
-            $("#treetable")
-              .fancytree("getTree")
-              .expandAll(false);
-          });
-        $(".fancy-expand")
-          .off("click")
-          .on("click", function() {
-            $("#treetable")
-              .fancytree("getTree")
-              .expandAll();
-          });
+        $(".fancy-collapse").off("click").on("click", function() {
+          $("#treetable").fancytree("getTree").expandAll(false);
+        });
+        $(".fancy-expand").off("click").on("click", function() {
+          $("#treetable").fancytree("getTree").expandAll();
+        });
       });
 
       let config = {
