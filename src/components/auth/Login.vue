@@ -110,6 +110,7 @@
 
             <div class="container-login100-form-btn m-t-20">
               <button class="login100-form-btn" @click="login" @keyup.enter="login">
+                
                 Sign in
               </button>
             </div>
@@ -160,8 +161,6 @@ export default {
           }
           else{
             self.$router.push("/home");
-            //EventBus.$emit('hello', self.menuSidebar);
-            //EventBus.$emit('event-name', data)
           }
           success("success!");
       }).catch((res) => {

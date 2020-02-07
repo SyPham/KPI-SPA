@@ -956,7 +956,9 @@ export default {
   },
   destroyed() {
     // Stop listening the event hello with handler
-    EventBus.$off('hello', URL);
+    EventBus.$off('hello', this.URL);
+    EventBus.$off('hello2', this.Link);
+
     // EventBus.$off('hello2', Link);
   },
   watch: {

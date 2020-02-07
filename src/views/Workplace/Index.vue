@@ -429,6 +429,7 @@
                 do not have a template, please
                 <vs-button @click="downloadExcel" class="download btn btn-sm bg-success">click here </vs-button> to download. Thank you!
               </p>
+              <p >*If the data already exists in the month, it will be overwritten by the new data</p>
 
               <div class="form-group">
                 <label for="Upload">Choose file upload: </label>

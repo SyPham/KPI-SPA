@@ -64,7 +64,7 @@ import listoc from "../../components/AdminOCCategoryKpi/Modal";
 import { initTree } from "../../utils/Plugin-Fancytree-Vuejs/index.js";
 import Category from "./Category";
 import KPIOC from "./KPIOC";
-
+import EventBus from "../../utils/EventBus.js";
 export default {
   name: "index",
   props: [],
@@ -73,7 +73,8 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       level: 0,
-      ocID: 0
+      ocID: 0,
+      ListID: []
     };
   },
   components: {
@@ -85,6 +86,7 @@ export default {
   created() {
     let self = this;
     self.initialTree();
+    self.GetListID()
     
   },
   mounted() {
@@ -96,7 +98,12 @@ export default {
   },
 
   methods: {
-
+    GetListID(){
+      axios.get('http://10.4.4.92:91/CategoryKPILevel/GetListID').then(r=>{
+        console.log("GetListID")
+        this.ListID = r.data
+      })
+    },
     initialTree() {
       let self = this;
       initTree("http://10.4.4.224:98/AdminKPILevel/GetListTree", function(
@@ -108,14 +115,36 @@ export default {
         var level = Number($tdList.eq(0).text());
         var name = $tdList.eq(1).text();
 
-        $("#boxCategory .kpi-name h3").text("Category list - " + name);
+        let arr = self.ListID
+        let index, value, result;
+        for (index = 0; index < arr.length; index++) {
+          value = arr[index];
+          if (value == Number(data.node.key)) {
+            result = value;
+              break;
+          }
+        }
+        if (result) {
+          console.log(result)
+        }
+        else {
+          console.log('Oops!! Not found')
+        }
+        if(result)
+        {
+          $("#boxCategory .kpi-name h3").text("Category list - " + name);
+        }
+        else{
+          
+          $("#boxCategory .kpi-name h3").text("Category list - " );
+        }
         $("#boxCategory .levelID").val(data.node.key);
         $("#box .catid").val("");
         $("#box .kpi-name h3").text("KPI");
         $("#box").fadeOut();
         $("#box .periodAll").hide();
 
-
+        // self.GetListID()
         self.level = level;
         self.ocID = Number(data.node.key);
         console.log(self.level);

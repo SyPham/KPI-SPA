@@ -48,36 +48,56 @@ export default {
     return {
       data: [],
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 10,
+      ListID: []
     };
   },
   methods: {
+    GetListID(){
+      axios.get('http://10.4.4.92:91/CategoryKPILevel/GetListID').then(r=>{
+        // console.log("GetListID")
+        this.ListID = r.data
+        // console.log(this.ListID)
+      })
+    },
     changeCategoryId(catId) {
       EventBus.$emit("CatWasEdit", catId);
     },
     getAllCategories() {
-      
+      // debugger
       let self = this;
-      axios.get(
-        `CategoryKPILevel/GetAllCategories/${self.ocID}/${self.level}/${self.pageIndex}/${self.pageSize}`
-      ).then(response => {
+
+      let arr = self.ListID
+      let index, value, result;
+      for (index = 0; index < arr.length; index++) {
+          value = arr[index];
+          if (value == self.ocID) {
+            result = value;
+              break;
+          }
+      }
+      if(self.ocID == result )
+      {
+        axios.get(`CategoryKPILevel/GetAllCategories/${self.ocID}/${self.level}/${self.pageIndex}/${self.pageSize}`).then(response => {
         if (response.data.status) {
           self.data = response.data.data;
 
           console.log(response.data.data);
           self.registerEvent();
+          // success("success")
         }
       });
+      }
+      else{
+        warning("Your do not have access")
+      }
     },
     registerEvent() {
       let self = this;
-      $("#boxCategory .btnCategory")
-        .off("click")
-        .on("click", function(e) {
+      $("#boxCategory .btnCategory").off("click").on("click", function(e) {
           var catid = Number($(this).data("id"));
-          var name = $(this)
-            .find("span.name")
-            .text();
+          // console.log(catid)
+          var name = $(this).find("span.name").text();
           $("#box h3").text(name + " - KPI");
           $("#box .catid").val(catid);
           $("#box").fadeIn();
@@ -198,7 +218,8 @@ export default {
   },
   created() {
     let self = this;
-    self.getAllCategories();
+    // self.getAllCategories();
+    self.GetListID()
   },
   watch: {
     level: function(newVal, oldVal) {

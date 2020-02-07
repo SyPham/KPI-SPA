@@ -16,15 +16,15 @@
     </div>
       <div v-for="(item,key,index) in menus" :key="index" class="col-12 col-sm-6 col-md-3">
         <a :href="'#' + item.Link" style="text-decoration:none">
-          <div class="info-box">
+          <div class="info-box demo">
             <span :class="'info-box-icon' + ' ' + item.BackgroudColor+ ' ' + 'elevation-1'"
               ><i :class="item.FontAwesome"></i
             ></span>
 
-            <div class="info-box-content">
+            <div class="info-box-content ">
               <span class="info-box-text">{{item.Name}}</span>
-              <span class="info-box-number " style="color:#fff">
-                (1) 
+              <span  class="info-box-number " style="color:#fff">
+                
               </span>
             </div>
             <!-- /.info-box-content -->
