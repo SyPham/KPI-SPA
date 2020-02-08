@@ -124,7 +124,7 @@
                   <td>
                     <div class="tooltip-css ">
                       <div class="pretty p-icon p-rotate ">
-                        <input @click="focusAddCategoryLevel()" v-if="item.CheckCategory == true" type="checkbox"  class="checkbox kpilevelID" name="checkbox" checked />
+                        <input  v-if="item.CheckCategory == true" @click="focusAddCategoryLevel()" type="checkbox"  class="checkbox kpilevelID" name="checkbox" checked />
                         <input v-else type="checkbox" @click="focusAddCategoryLevel()"  class="checkbox kpilevelID" name="checkbox"  />
                         <div class="state p-success textOverflow">
                             <i class="icon fa fa-check"></i>
@@ -137,7 +137,7 @@
                   <td>
                     <!-- button Weekly -->
                     <button v-if="item.WeeklyChecked === true && (item.StatusUploadDataW === true && item.StatusEmptyDataW === true)" :data-kpilevelcode="item.KPILevelCode" data-period="W" :class='item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn btn-sm btn-success week" : (item.StatusEmptyDataW === true ? "btn btn-sm btn-warning week" : "btn btn-sm btn-success week")) : "btn btn-sm bg-navy week"'   ><i class="fas fa-chart-bar"></i> Weekly</button>
-                    <button v-if="item.WeeklyChecked === true && item.StatusUploadDataW === false " :data-kpilevelcode="item.KPILevelCode" data-period="W" :class='item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn btn-sm btn-success week" : (item.StatusEmptyDataW === true ? "btn btn-sm btn-warning week" : "btn btn-sm btn-success week")) : "btn btn-sm bg-navy week"'   ><i class="fas fa-chart-bar"></i> Weekly</button>
+                    <button v-else-if="item.WeeklyChecked === true && item.StatusUploadDataW === false " :data-kpilevelcode="item.KPILevelCode" data-period="W" :class='item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn btn-sm btn-success week" : (item.StatusEmptyDataW === true ? "btn btn-sm btn-warning week" : "btn btn-sm btn-success week")) : "btn btn-sm bg-navy week"'   ><i class="fas fa-chart-bar"></i> Weekly</button>
                     <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="W"  disabled class="btn btn-sm bg-navy  week" ><i class="fas fa-chart-bar"></i> Weekly</button>                  
                     <!-- button Monthly -->
                     <button v-if="item.MonthlyChecked === true && (item.StatusUploadDataM === true && item.StatusEmptyDataM === true)" :data-kpilevelcode="item.KPILevelCode" data-period="M" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning month" : "btn btn-sm btn-success month")) : "btn btn-sm bg-navy month"' ><i class="fas fa-chart-bar"></i> Monthly</button>
@@ -145,15 +145,31 @@
                     <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="M" disabled   class="btn btn-sm bg-navy month"><i class="fas fa-chart-bar"></i> Monthly</button>
 
                     <!-- button Quarterly -->
-                    <button v-if="item.QuarterlyChecked === true && (item.StatusUploadDataQ === true && item.StatusEmptyDataQ === true)" :data-kpilevelcode="item.KPILevelCode" data-period="Q" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning quarter" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
-                    <button v-else-if="item.QuarterlyChecked === true && item.StatusUploadDataQ === false " :data-kpilevelcode="item.KPILevelCode" data-period="Q"  :class='item.QuarterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn btn-sm btn-success month" : (item.StatusEmptyDataQ === true ? "btn btn-sm btn-warning month" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
+                    <button v-if="item.QuarterlyChecked === true && (item.StatusUploadDataQ === true && item.StatusEmptyDataQ === true)" :data-kpilevelcode="item.KPILevelCode" data-period="Q" :class='item.QuaterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn btn-sm btn-success quater" : (item.StatusEmptyDataQ === true ? "btn btn-sm btn-warning quarter" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
+                    <button v-else-if="item.QuarterlyChecked === true && item.StatusUploadDataQ === false " :data-kpilevelcode="item.KPILevelCode" data-period="Q"  :class='item.QuarterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn btn-sm btn-success quater" : (item.StatusEmptyDataQ === true ? "btn btn-sm btn-warning quater" : "btn btn-sm btn-success quarter")) : "btn btn-sm bg-navy quarter"' ><i class="fas fa-chart-bar"></i> Quarterly</button>
                     <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="Q" disabled   class="btn btn-sm bg-navy quarter"><i class="fas fa-chart-bar"></i> Quarterly</button>
                     <!-- button Yearly -->
 
-                    <button v-if="item.YearlyChecked === true && (item.StatusUploadDataY === true && item.StatusEmptyDataY=== true)" :data-kpilevelcode="item.KPILevelCode" data-period="Y" :class='item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn btn-sm btn-success year" : (item.StatusEmptyDataM === true ? "btn btn-sm btn-warning year" : "btn btn-sm btn-success year")) : "btn btn-sm bg-navy year"' ><i class="fas fa-chart-bar"></i> Yearly</button>
+                    <button v-if="item.YearlyChecked === true && (item.StatusUploadDataY === true && item.StatusEmptyDataY=== true)" :data-kpilevelcode="item.KPILevelCode" data-period="Y" :class='item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "btn btn-sm btn-success year" : (item.StatusEmptyDataY === true ? "btn btn-sm btn-warning year" : "btn btn-sm btn-success year")) : "btn btn-sm bg-navy year"' ><i class="fas fa-chart-bar"></i> Yearly</button>
                     <button v-else-if="item.YearlyChecked === true && item.StatusUploadDataY === false " :data-kpilevelcode="item.KPILevelCode" data-period="Y"  :class='item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "btn btn-sm btn-success year" : (item.StatusEmptyDataY === true ? "btn btn-sm btn-warning year" : "btn btn-sm btn-success year")) : "btn btn-sm bg-navy year"' ><i class="fas fa-chart-bar"></i> Yearly</button>
                     <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="Y" disabled   class="btn btn-sm bg-navy year"><i class="fas fa-chart-bar"></i> Yearly</button>
-                </td>
+                  </td>
+
+                  <td v-if="item.CheckCategory == true">
+                    <div class="tooltip-css ">
+                      <div class="pretty p-icon p-rotate">
+                        <input @click="showdata" class="showdata" type="checkbox">
+                        <div class="state p-success">
+                          <!-- <i class="icon far fa-edit"></i> -->
+                          <!-- <label class="label label-success">Modify</label> -->
+                        <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" class="btn-sm btn-info showdata ">
+                          <i class="far fa-edit"></i> Modify
+                        </button>
+                        </div> 
+                      </div>
+                    </div>
+                  </td>
+                  <td v-else></td>
               </tr>
             </tbody> 
           </table>
@@ -179,6 +195,7 @@
           ></Paginate>
         </div>
       </div>
+
       <!-- endkpilevellist -->
 
       <!-- modal -->
@@ -306,267 +323,6 @@
         <!-- /.modal-dialog -->
       </div>
 
-      <!-- @* update *@ -->
-      <div class="modal fade" id="modal-group2" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Update User</h4>
-            </div>
-            <div class="modal-body">
-              <div>
-                <div class="box-body" id="updateKpi">
-                  <div class="form-group" style="display:none">
-                    <label for="Name">ID</label>
-                    <input type="text" class="form-control ID" id="ID" placeholder="ID" disabled />
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Name</label>
-                    <input type="text" class="form-control Name" id="Name" placeholder="Enter Name" />
-                  </div>
-                  <div class="form-group">
-                    <label for="Code">Code</label>
-                    <input type="text" class="form-control Code" id="Code" placeholder="Enter Code" />
-                  </div>
-                  <div class="form-group">
-                    <label for="Code">Level</label>
-                    <input
-                      type="text"
-                      class="form-control LevelID"
-                      id="LevelID"
-                      placeholder="Enter Level"
-                    />
-                  </div>
-                </div>
-                <!-- /.box-body -->
-
-                <div class="box-footer">
-                  <button type="button" class="btn btn-primary" id="btnSaveUpdateModal">Update</button>
-                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <!-- @* weekly madal *@ -->
-      <div class="modal fade" id="modal-group-weekly" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Weekly</h4>
-            </div>
-            <div class="modal-body">
-              <div>
-                <div class="box-body">
-                  <div class="form-group">
-                    <label for="weekly">Day of the week</label>
-                    <select class="form-control weekly" data-id id="weekly">
-                      <option value>Choose day of the week</option>
-                      <option value="MON">Monday</option>
-                      <option value="TUE">Tuesday</option>
-                      <option value="WED">Wednesday</option>
-                      <option value="THU">Thursday</option>
-                      <option value="FRI">Friday</option>
-                      <option value="SAT">Saturday</option>
-                    </select>
-                  </div>
-                </div>
-                <!-- /.box-body -->
-
-                <div class="box-footer">
-                  <button type="button" class="btn btn-primary btnsaveweekly" id="btnsaveweekly">Save</button>
-                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <!-- @* monthly modal *@ -->
-      <div class="modal fade" id="modal-group-monthly" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Monthly</h4>
-            </div>
-            <div class="modal-body">
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="monthly">Monthly</label>
-                  <div class="input-group date monthly">
-                    <input type="text" data-id class="form-control date monthly" />
-                    <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <a href="#" class="btn btn-primary" id="btnsavemonthlymodal">Save</a>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <!-- @* Quaterly Modal *@ -->
-      <div class="modal fade" id="modal-group-quaterly" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Quaterly</h4>
-            </div>
-            <div class="modal-body">
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="quaterly">Quaterly</label>
-                  <div class="input-group date quaterly">
-                    <input type="text" data-id class="form-control date quaterly" />
-                    <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <a href="#" class="btn btn-primary" id="btnsavequaterlymodal">Save</a>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <!-- @* Yearly Modal *@ -->
-      <div class="modal fade" id="modal-group-yearly" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Yearly</h4>
-            </div>
-            <div class="modal-body">
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="yearly">Yearly</label>
-                  <div class="input-group date yearly">
-                    <input type="text" data-id class="form-control date yearly" />
-                    <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="button" class="btn btn-primary" id="btnsaveyearly">Update</button>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      
-      <!-- @* get kpi code *@ -->
-      <div class="modal fade" id="modal-group3" style="display: none">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title">Get KPI Code</h4>
-            </div>
-            <div class="modal-body">
-              <div>
-                <div class="box-body" id="updateKpi">
-                  <div class="form-group" style="display:none">
-                    <label for="Name">Get KPI Code</label>
-                    <input type="text" class="form-control ID" id="ID" placeholder="Get KPI Code" />
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Get KPI Code Weekly</label>
-                    <input
-                      type="text"
-                      class="form-control Weekly"
-                      id="Weekly"
-                      placeholder="Get KPI Code Weekly"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Get KPI Code Monthly</label>
-                    <input
-                      type="text"
-                      class="form-control Monthly"
-                      id="Monthly"
-                      placeholder="Get KPI Code Monthly"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Get KPI Code Quaterly</label>
-                    <input
-                      type="text"
-                      class="form-control Quaterly"
-                      id="Quaterly"
-                      placeholder="Get KPI Code Quaterly"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Get KPI Code Yearly</label>
-                    <input
-                      type="text"
-                      class="form-control Yearly"
-                      id="Yearly"
-                      placeholder="Get KPI Code Yearly"
-                    />
-                  </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                  <!-- @*<button type="button" class="btn btn-primary" onclick="Update();">Update</button>
-                  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>*@-->
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
       <!-- endmodal -->
     </div>
   </div>
@@ -619,22 +375,37 @@ export default {
     }
   },
   methods: {
-    focusAddCategoryLevel(){
+    showdata(){
       let self = this
-      
-      $('.kpilevelID').off('change').on('change', function () {
-        let config = {
-          pageSize: 6,
-          pageIndex: 1
-        };
+      console.log('aaaa')
+      $('#modal-group-general').modal('show').fadeIn(500);
+       $('#tblkpilevel .showdata').off('change').on('change', function () {
         var levelID = Number($('#box .levelid').val());
         var entity = {
             KPILevelID: $(this).closest('tr').data('id'),
             CategoryID: Number($('#box .catid').val()),
         };
         self.getUserByCategoryIDAndKPILevelID(entity);
+        // self.addCategoryLevel(entity);
+        var catid = $('#box .catid').val();
+        // self.loadDataKPILevel(false, levelID,catid);
+        if ($(this).is(':checked')) {
+            $('#modal-group-general').modal('show').fadeIn(1000);
+        }
+      })
+    },
+    focusAddCategoryLevel(){
+      let self = this
+      $('.kpilevelID').off('change').on('change', function () {
+        var kpilevel = $(this).closest('tr').data('id');
+        $('#modal-group-general .kpilevelInputHidden').val(kpilevel);
+        var levelID = Number($('#box .levelid').val());
+        var entity = {
+          KPILevelID: $(this).closest('tr').data('id'),
+          CategoryID: Number($('#box .catid').val()),
+        };
+        self.getUserByCategoryIDAndKPILevelID(entity);
         self.addCategoryLevel(entity);
-        config.pageIndex = Number($('#paginationKPILevel li.active a').text());
           var catid = $('#box .catid').val();
             self.loadDataKPILevel(false, levelID,catid);
         if ($(this).is(':checked')) {
@@ -757,15 +528,10 @@ export default {
         pageIndex: 1
       };
 
-      let categoryKPILevelAdmin = {
-        init: function() {
-          self.registerEvent();
-          self.getAllUser();
-        },
-        loadTree: function () {
-          $.ui.fancytree.getTree("#treetable").reload().done();
-        },
-      }
+      
+      self.registerEvent();
+      self.getAllUser();
+      
     },
     registerEvent: function () {
       let self = this
@@ -780,11 +546,6 @@ export default {
           participant: $('#modal-group-general .Participant .KPILevelSelect2').val().replace(/\@/g, ",").trim()
         }
         self.addGeneral(entity);
-      });
-
-      $('#box .kpilevelID').off('click').on('click', function () {
-        var kpilevel = $(this).closest('tr').data('id');
-        $('#modal-group-general .kpilevelInputHidden').val(kpilevel);
       });
 
       $('#boxCategory tr').off('click').on('click', function () {
@@ -806,7 +567,6 @@ export default {
         $('#boxCategory tr').removeClass('trfocus');
         $(this).addClass('trfocus');
       })
-
       $('#tbluser tr td:nth-child(2) input').change(function () {
         var id = $(this).parent().parent('td:nth-child(2)').children('div').children('span.level').data('id');
         var levelid = Number($('#box .kpi-name .code').text());
@@ -819,25 +579,9 @@ export default {
         }
 
       });
-      $('.kpilevelID').off('change').on('change', function () {
-        let config = {
-          pageSize: 6,
-          pageIndex: 1
-        };
-        var levelID = Number($('#box .levelid').val());
-        var entity = {
-            KPILevelID: $(this).closest('tr').data('id'),
-            CategoryID: Number($('#box .catid').val()),
-        };
-        self.getUserByCategoryIDAndKPILevelID(entity);
-        self.addCategoryLevel(entity);
-        config.pageIndex = Number($('#paginationKPILevel li.active a').text());
-          var catid = $('#box .catid').val();
-            self.loadDataKPILevel(false, levelID,catid);
-        if ($(this).is(':checked')) {
-            $('#modal-group-general').modal('show').fadeIn(1000);
-        }
-      })
+
+      
+      
     },
     updateUser: function (id, levelid) {
       let mObj = {
@@ -941,6 +685,7 @@ export default {
           self.dataKPILV = res.data.data;
           console.log(self.dataKPILV);
           self.registerEvent();
+          self.getAllUser();
         }
         
       })

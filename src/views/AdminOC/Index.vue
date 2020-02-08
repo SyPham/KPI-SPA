@@ -113,14 +113,14 @@
                       </div>
                     </div>
                     <div v-if="item.YearlyChecked || item.QuarterlyChecked || item.MonthlyChecked || item.WeeklyChecked === true" class="pretty p-icon p-rotate">
-                      <!-- <input @click="showdata" class="showdata" type="checkbox">
+                      <input @click="showdata" class="showdata" type="checkbox">
                       <div class="state p-success">
-                        <i class="icon far fa-edit"></i>
-                        <label class="label label-success">Modify</label> -->
-                      <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata"  class="btn-sm btn-info showdata ">
+                        <!-- <i class="icon far fa-edit"></i> -->
+                        <!-- <label class="label label-success">Modify</label> -->
+                      <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" id=""  class="btn-sm btn-info showdata ">
                         <i class="far fa-edit"></i> Modify
                       </button>
-                      <!-- </div>  -->
+                      </div> 
                     </div>
                     <div v-else class="pretty p-icon p-rotate">
                       
@@ -667,7 +667,7 @@ export default {
       });
 
       //----------------------------------------------------------------------------------------------
-      //update showdata modal
+      //save showdata modal weekly
       $('#modal-group-showdata #btnsaveweekly1').off('click').on('click', function () {
         // debugger
           var ID = Number($('#modal-group-showdata .KPILevelID').val());
@@ -702,7 +702,7 @@ export default {
 
       });
 
-      //update showdata modal
+      //save showdata modal monthly
       $("#modal-group-showdata #btnsavemonthlymodal").off('click').on('click', function (e) {
 
           e.preventDefault();
@@ -734,7 +734,7 @@ export default {
 
       });
 
-      //update showdata modal
+      //save showdata modal quaterly
       $("#modal-group-showdata #btnsavequaterlymodal").off('click').on('click', function (e) {
           e.preventDefault();
           var ID = Number($('#modal-group-showdata .KPILevelID').val());
@@ -765,8 +765,9 @@ export default {
           $('#modal-group-quarterly').modal('hide');
       });
 
-      //update showdata modal
-      $("#modal-group-showdata #btnsaveyearly").off('click').on('click', function () {
+      // save modal yearly
+      $("#modal-group-showdata #btnsaveyearly").off('click').on('click', function (e) {
+          e.preventDefault();
           var ID = Number($('#modal-group-showdata .KPILevelID').val());
           var Target = $('#modal-group-showdata .target4').val();
           var Period = "Y";
@@ -795,6 +796,7 @@ export default {
           $('#modal-group-yearly').modal('hide');
 
       });
+
 
       //update weekly modal
       $('#btnsaveweekly').off('click').on('click', function () {
@@ -834,7 +836,6 @@ export default {
       //update monthly modal
       $("#btnsavemonthlymodal").off('click').on('click', function (e) {
 
-          e.preventDefault();
           var ID = Number($('#modal-group-monthly .KPILevelID').val());
           var Target = $('#modal-group-monthly .target').val();
           var Period = "M";

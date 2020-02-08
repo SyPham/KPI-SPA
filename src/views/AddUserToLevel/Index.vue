@@ -200,6 +200,7 @@ export default {
         console.log(result)
           if (result) {
             success("success!");
+            this.LoadDataUser();
           }
       })
       
