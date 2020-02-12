@@ -9,7 +9,7 @@
           <div class="box box-widget">
             <div class="box-header with-border">
               <h3 v-if="period == 'W'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Weekly")}}</h3>
-              <h3 v-if="period == 'M'" class="box-title1" id="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Monthly")}}</h3>
+              <h3 v-if="period == 'M'" ref="message"  class="box-title1" id="box-title1" style="font-weight:bold">KPI Chart - {{name}} - {{$t("Monthly")}}</h3>
               <h3 v-if="period == 'Q'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Quarterly")}}</h3>
               <h3 v-if="period == 'Y'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Yearly")}}</h3>
             </div>
@@ -511,6 +511,7 @@
                   <h4 class="modal-title">
                       <i class="fa fa-tags"></i>&#32;
                       <span class="RemarkChart"></span>
+                     
                   </h4>
                   <button type="button" class="close" data-dismiss="modal">
                       <span aria-hidden="true">&times;</span>
@@ -532,7 +533,7 @@
                                       <div class="clearfix"></div>
                                       <hr />
                                       <button type="button" @click="addcomment" class="btn btn-info pull-right btnComment">
-                                          <i class="far fa-paper-plane"></i> Post
+                                          <i class="far fa-paper-plane"></i> Save
                                       </button>
                                       <hr />
                                       <ul class="media-list" id="media-list">
@@ -562,6 +563,7 @@
                     </a>
                     &#32;
                     <span class="ActionPlanChart"></span>
+                    <span class="kpiname-demo"></span>
                   </h4>
                   <span class="commentid" style="display:none"></span>
 
@@ -691,6 +693,7 @@ export default {
   data() {
     return {
       title: null,
+      name:"",
       comID: 0,
       seachActionPlan: "",
       date: '',
@@ -830,23 +833,30 @@ export default {
     seft.searchyear = seft.$route.params.year;
     seft.kpilevelcode = seft.$route.params.kpilevelcode
     // console.log("1")
-    // seft.Loadchart();
+    seft.Loadchart();
     seft.getAllNotifications();
     seft.GetItem();
+    
+  
+    console.log("created")
+    console.log(seft.name)
     
   },
   mounted() {
     let seft = this
+    
     console.log(seft.$el)
-    console.log(document.getElementById('box-title1').innerHTML)
-    // console.log("2")
+    seft.Loadchart();
+    
+    console.log("mounted")
+    console.log(seft.name)
     // setTimeout(function(){
     //   seft.Loadchart();
     // },500)
-    console.log("seft.kpiname")
-    console.log(seft.kpiname)
     console.log($("#chartperiod .box-title1").text())
-
+    console.log(seft.$refs);
+    console.log(seft.$refs.message.innerText);
+    console.log(seft.$refs.message.innerHTML);
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
 
     let comID = Number(seft.$route.params.comID);
@@ -856,7 +866,7 @@ export default {
     let type = seft.$route.params.type;
 
     if (comID > 0 && dataID > 0 && title != "" && type === "task") {
-      
+   
       let boxTitle = $("#chartperiod .box-title1").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
@@ -866,14 +876,14 @@ export default {
 
       $("#modal-group-comment-data2").modal("show");
       seft.remark(dataID);
-
       seft.loadDataComment(true);
       seft.LoadDataActionPlan(dataID, comID);
       activaTab('pills-home');
     }
     if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-      console.log("seft.kpi")
-       let boxTitle = $("#chartperiod .box-title1").text();
+      console.log("seft.kpiname")
+      console.log(seft.kpiname)
+      let boxTitle = $("#chartperiod .box-title1").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
       $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
@@ -885,6 +895,8 @@ export default {
     }
     // EventBus AddTask
     EventBus.$on('hello', URL =>{
+      console.log("EventBus");
+      console.log(URL);
       seft.URL = URL
       let currentUrl = seft.$router.currentRoute;
       let comID = Number(seft.$route.params.comID);
@@ -899,8 +911,7 @@ export default {
         $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
         $("#modal-group-comment-data2").modal("show");
-            seft.remark(dataID);
-
+        seft.remark(dataID);
         seft.loadDataComment(true);
         seft.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
@@ -922,7 +933,6 @@ export default {
     // EventBus addComment
     EventBus.$on('hello2',Link=>{
       seft.Link = Link
-   
       let currentUrl = seft.$router.currentRoute;
       let comID = Number(seft.$route.params.comID);
       let dataID = Number(seft.$route.params.dataID);
@@ -932,11 +942,11 @@ export default {
         let boxTitle = $("#chartperiod .box-title1").text();
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
+        alert(seft.name);
         $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
         $("#modal-group-comment-data2").modal("show");
-            seft.remark(dataID);
-
+        seft.remark(dataID);
         seft.loadDataComment(true);
         seft.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
@@ -954,22 +964,9 @@ export default {
             seft.loadDataComment(true);
       }
     })
-
-
-    // $('#modal-group-comment-data').off('hidden.bs.modal').on('hidden.bs.modal', function () {
-    //     seft.$router.replace({
-    //     name: "chart" ,
-    //   });
-    //   console.log('close')
-    // });
   },
- 
   destroyed() {
-    // Stop listening the event hello with handler
-    EventBus.$off('hello', this.URL);
-    // EventBus.$off('hello2', this.Link);
-
-    // EventBus.$off('hello2', Link);
+    
   },
   watch: {
     searchyear: function(newOld, oldVal) {
@@ -1007,17 +1004,16 @@ export default {
       });
       // self.Loadchart();
       let currentUrl = self.$router.currentRoute;
-      console.log("currentUrl");
-      console.log(currentUrl);
+     
       let comID = Number(self.$route.params.comID);
       let dataID = Number(self.$route.params.dataID);
       let title = self.$route.params.title;
       let type = self.$route.params.type;
       
       if (comID > 0 && dataID > 0 && title != "" && type === "task") {
-        console.log("1")
+       
         let boxTitle =  $("#chartperiod .box-title1").text();
-        console.log(boxTitle)
+      
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
         $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
@@ -1031,9 +1027,9 @@ export default {
         activaTab('pills-home');
       }
       if (comID > 0 && dataID > 0 && title != "" & type === "remark") {
-        console.log("2")
+       
         let boxTitle =  $("#chartperiod .box-title1").text();
-        console.log(boxTitle)
+       
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
            $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
@@ -1052,8 +1048,7 @@ export default {
       });
       // self.Loadchart();
       let currentUrl = self.$router.currentRoute;
-      console.log("currentUrl");
-      console.log(currentUrl);
+   
       let comID = Number(self.$route.params.comID);
       let dataID = Number(self.$route.params.dataID);
       let title = self.$route.params.title;
@@ -1066,7 +1061,7 @@ export default {
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
         $("#modal-group-comment-data2").modal("show");
-            self.remark(dataID);
+        self.remark(dataID);
 
         self.loadDataComment(true);
         self.LoadDataActionPlan(dataID, comID);
@@ -1090,7 +1085,12 @@ export default {
       this.Loadchart()
       this.getAllNotifications()
       this.GetItem()
-    }
+    },
+    kpiname: function(newOld,oldVal){
+      var item = $(".ActionPlanChart").text().replace("-  -",' - '+newOld + ' - ');
+      $(".ActionPlanChart").text(item);
+    },
+    
   },
   methods: {
     closechart(){
@@ -2116,8 +2116,8 @@ export default {
         }
       })
         .then(response=>{
-          console.log('respon1')
           console.log(response);
+          console.log(response.data.kpiname);
 
           seft.statusfavorite = response.data.statusfavorite;
           seft.unit = response.data.Unit;
@@ -2125,8 +2125,9 @@ export default {
           seft.labels = response.data.labels;
           seft.label = response.data.label;
           seft.kpiname = response.data.kpiname;
+          seft.name = response.data.kpiname;
           seft.PIC = response.data.PIC;
-          // console.log(seft.statusfavorite)
+          
           seft.Owner = response.data.Owner;
           seft.OwnerManagerment = response.data.OwnerManagerment;
           seft.Sponsor = response.data.Sponsor;

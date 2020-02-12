@@ -576,8 +576,7 @@ export default {
     // EventBus AddTask
     EventBus.$on('hello', URL =>{
       self.URL = URL
-      console.log('self.URL')
-      console.log(self.URL)
+   
       let currentUrl = self.$router.currentRoute;
       let comID = Number(self.$route.params.comID);
       let dataID = Number(self.$route.params.dataID);
@@ -614,8 +613,7 @@ export default {
     // EventBus addComment
     EventBus.$on('hello2',Link=>{
       self.Link = Link
-      console.log('self.Link')
-      console.log(self.Link)
+    
       let currentUrl = self.$router.currentRoute;
       let comID = Number(self.$route.params.comID);
       let dataID = Number(self.$route.params.dataID);

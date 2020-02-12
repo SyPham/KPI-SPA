@@ -32,12 +32,6 @@
                 <td>
                   <div class="btn-group">
                     <div class="btn-group">
-                      <button
-                        @click="$router.push(`/adminKPI/${kpi.ID}/edit`)"
-                        class="btn btn-primary btn-sm"
-                      >
-                        <i class="fa fa-edit"></i> Edit
-                      </button>
 
                       <button @click="remove(kpi.ID)" class="btn btn-danger btn-sm">
                         <i class="fa fa-trash"></i> Delete
