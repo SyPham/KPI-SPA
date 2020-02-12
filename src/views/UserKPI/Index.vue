@@ -106,7 +106,7 @@ export default {
     },
     initialTree() {
       let self = this;
-      initTree("http://10.4.4.224:98/AdminKPILevel/GetListTree", function(
+      initTree("http://10.4.4.92:91/AdminKPILevel/GetListTree", function(
         event,
         data
         ) {
@@ -116,6 +116,7 @@ export default {
         var name = $tdList.eq(1).text();
 
         let arr = self.ListID
+
         let index, value, result;
         for (index = 0; index < arr.length; index++) {
           value = arr[index];
@@ -130,20 +131,13 @@ export default {
         else {
           console.log('Oops!! Not found')
         }
-        if(result)
-        {
-          $("#boxCategory .kpi-name h3").text("Category list - " + name);
-        }
-        else{
-          
-          $("#boxCategory .kpi-name h3").text("Category list - " );
-        }
+        
+        $("#boxCategory .kpi-name h3").text("Category list - " + name);
         $("#boxCategory .levelID").val(data.node.key);
         $("#box .catid").val("");
         $("#box .kpi-name h3").text("KPI");
         $("#box").fadeOut();
         $("#box .periodAll").hide();
-
         // self.GetListID()
         self.level = level;
         self.ocID = Number(data.node.key);
@@ -379,7 +373,7 @@ export default {
           var catid = Number($("#box .catid").val());
           self.getAllDataByCategory(catid, period);
         });
-    }
+    },
   }
 };
 </script>

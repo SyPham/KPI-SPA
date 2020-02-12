@@ -92,7 +92,7 @@ export default {
       seft.getAllNotifications();
     },500)
     const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://10.4.4.224:98/henry-hub")
+    .withUrl("http://10.4.4.92:91/henry-hub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
     connection.start().then(function () {
@@ -116,7 +116,7 @@ export default {
   methods: {
     getall2(){
     let seft = this
-    axios.get(`http://10.4.4.92:91/Menus/Getall2/${seft.locale}`).then(r=>{
+    axios.get(`/Menus/Getall2/${seft.locale}`).then(r=>{
         seft.menus = r.data
         console.log("menus")
         console.log(seft.menus)
@@ -125,7 +125,7 @@ export default {
     getAllNotifications() {
       let seft = this;
 
-      axios.get("http://10.4.4.224:98/Home/GetNotifications").then(r=>{
+      axios.get("/Home/GetNotifications").then(r=>{
          seft.arrayID = r.data.arrayID;
         seft.data = r.data.data;
         seft.listdata = r.data;
@@ -135,7 +135,7 @@ export default {
     },
     loadmenu(){
         let seft = this
-        axios.get('http://10.4.4.92:91/Menus/Getall').then(r=>{
+        axios.get('/Menus/Getall').then(r=>{
           seft.menus = r.data
           console.log(seft.menus)
         })

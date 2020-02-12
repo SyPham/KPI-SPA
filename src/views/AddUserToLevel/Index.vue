@@ -47,11 +47,7 @@
           <span class="id" style="display:none"></span>
           <span class="code" style="display:none"></span>
           <span class="level" style="display:none"></span>
-          <!-- <input v-model="searchname" class="form-control float-right searchUser" placeholder="search here..." style="width:40%" /> -->
-          <!-- <div class="input-group float-right" style="width:50%">
-            <input   type="text" class="form-control searchUser" placeholder="search here...">
-            <span class="input-group-addon clearSearch" style="cursor:pointer"><i class="fas fa-times"></i></span>
-          </div> -->
+         
         </div>
         <div class="box-body">
           <div class="box-body">
@@ -66,11 +62,11 @@
               </thead>
               <tbody  class="tbody" id="tbluser">
                 <tr v-for="(item,key,index) in events" :key="index" :data-id="item.ID">
-                  <td class="text-center">{{key+1}}</td>
+                  <td class="text-center">{{key+1+skip}}</td>
                   <td>
-                    <div class="pretty p-icon p-rotate">
-                      <input  v-if="item.Status == true" checked type="checkbox"  class="checkbox"  name="name" />
-                      <input    v-else type="checkbox" class="checkbox"   name="name" />
+                    <div class="pretty p-switch p-fill">
+                      <input @click="update(item,index)" :checked='item.Status == true ? "checked" : ""' type="checkbox"  class="checkbox levelID"  name="name" />
+                      <!-- <input v-else type="checkbox" @click="update()" class="checkbox levelID"   name="name" /> -->
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
                         <label class="black username">{{item.Username}}</label>
@@ -145,7 +141,9 @@ export default {
       pageSize: 10,
       code: " ",
       levelID: 0,
-      searchname: ""
+      searchname: "",
+      count: null,
+      ID: null
     };
   },
   watch: {
@@ -167,44 +165,24 @@ export default {
   },
 
   methods: {
-    registerEvent: function () {
-      let self = this 
-      // $('#box .clearSearch').off('click').on('click', function (e) {
-      //   var levelid = Number($('#box .code').text());
-      //     $('#box .searchUser').val("");
-      //     // self.LoadDataUser("","",levelid);
-      // })
-      // $('#box .searchUser').off('keypress').on('keypress', function (e) {
-      //   if (e.which === 13) {
-      //     var code = $(this).val();
-      //     var levelid = Number($('#box .code').text());
-      //     // self.LoadDataUser(true, code,levelid);
-      //   }
-      // });
-
-      $('#tbluser tr td:nth-child(2) input').change(function () {
-        var id = $(this).closest('tr').data('id');
-        var levelid = Number($('#box .kpi-name .code').text());
-          let username = $(this).next().children('label').text();
-          console.log(username)
-          self.updateUser(id, levelid);
-          // $('#box .searchUser').val(username);
-          // self.LoadDataUser("",username,levelid);
-          success("success!");
-      });
-
-    },
-    updateUser: function (id, levelid) {
-      axios.post(`http://10.4.4.92:91/AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
-      .then(result=>{
+    update: function(item,index){ 
+      let self = this
+      self.ID = item.ID
+      $('.levelID').off('change').on('change', function () {
+      let id = self.ID;
+      let levelid = Number($('#box .kpi-name .code').text());
+        axios.post(`http://10.4.4.92:91/AddUserToLevel/AddUserToLevel/${id}/${levelid}`)
+        .then(result=>{
         console.log(result)
           if (result) {
             success("success!");
-            this.LoadDataUser();
+            self.LoadDataUser();
           }
+        })
       })
       
     },
+   
     LoadDataUser() {
       let self = this
       var levelid = Number($('#box .kpi-name .code').text());
@@ -216,10 +194,20 @@ export default {
             self.events = response.data.data;
             self.totalPage = response.data.totalPage;
             self.page = response.data.page;
+            self.skip = response.data.skip;
             self.data = response.data.data;
             self.pageSize = response.data.pageSize;
-            self.registerEvent();
+            
+            // self.registerEvent();
+            
           }
+          $('#box .searchUser').off('keypress').on('keypress', function (e) {
+            if (e.which === 13) {
+                var code = $(this).val();
+                var levelid = Number($('#box .code').text());
+                self.LoadDataUser(true, code,levelid);
+            }
+        });
       })
     },
     changePage(pageNum) {
@@ -227,6 +215,7 @@ export default {
     },
     loadAll() {
       let self = this;
+      var CLIPBOARD = null;
       let glyph_opts = {
         preset: "bootstrap3",
         map: {}
@@ -262,7 +251,7 @@ export default {
               }
             },
             glyph: glyph_opts,
-            source: { url: "http://10.4.4.224:98/AdminKPILevel/GetListTree", debugDelay: 1000 },
+            source: { url: "http://10.4.4.92:91/AdminKPILevel/GetListTree", debugDelay: 1000 },
             table: {
               indentation: 20,
               nodeColumnIdx: 1,
@@ -281,7 +270,6 @@ export default {
               //$('#tbluser tr td:nth-child(2)').data('teamid',data.node.title);
               
               self.LoadDataUser(true, "", Number(data.node.key),true,true);
-  
   
               $('html, body').animate({
                   scrollTop: $("#box").offset().top
@@ -321,14 +309,9 @@ export default {
         });
 
       });
-      var config = {
-        pageSize: 6,
-        pageIndex: 1,
-        code: ' '
-      };
       var AddUserToLevelController = {
         init: function () {
-          self.registerEvent();
+          // self.registerEvent();
         },
         
         loadTree: function () {

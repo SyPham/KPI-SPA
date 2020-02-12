@@ -47,7 +47,7 @@ Vue.use(Auth);
 Vue.use(VueResource);
 
 // VueJwtDecode.decode(localStorage.getItem("authToken"))
-axios.defaults.baseURL = 'http://10.4.4.224:98/'
+axios.defaults.baseURL = 'http://10.4.4.92:91'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8'
 axios.interceptors.request.use(function (config) {

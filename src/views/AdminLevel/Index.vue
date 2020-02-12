@@ -95,7 +95,7 @@ export default {
             titlesTabbable: true, // Add all node titles to TAB chain
             //quicksearch: true, // Jump to nodes when pressing first character
             // source: SOURCE,
-            source: { url: "http://10.4.4.224:98/AdminLevel/GetListTree" },
+            source: { url: "http://10.4.4.92:91/AdminLevel/GetListTree" },
             extensions: ["edit", "dnd5", "glyph", "table", "gridnav"],
             glyph: glyph_opts,
             dnd5: {
@@ -156,7 +156,7 @@ export default {
                   }
                   //console.log(obj)
                   // Save data.input.val() or return false to keep the editor open
-                  axios.post("http://10.4.4.224:98/AdminLevel/Rename",obj)
+                  axios.post("/AdminLevel/Rename",obj)
                   .then(result =>{
 
                   })
@@ -164,7 +164,7 @@ export default {
                       node.setTitle(data.orgTitle);
                   })
                   // $.ajax({
-                  //   url: "http://10.4.4.224:98/AdminLevel/Rename",
+                  //   url: "/AdminLevel/Rename",
                   //   data: obj
                   // }).done(function (result) {
                   // }).fail(function (result) {
@@ -196,7 +196,7 @@ export default {
                 handleCursorKeys: true,
               },
               lazyLoad: function (event, data) {
-                data.result = { url: "http://10.4.4.224:98/AdminLevel/GetListTree" };
+                data.result = { url: "/AdminLevel/GetListTree" };
               },
               createNode: function (event, data) {
 
@@ -487,7 +487,7 @@ export default {
               Authorization: 'Bearer '+ localStorage.getItem("authToken")
             }
           };
-          axios.post("http://10.4.4.224:98/AdminLevel/Rename",JSON.stringify(level))
+          axios.post("/AdminLevel/Rename",JSON.stringify(level))
           .then(result=>{
             if (result) {
                 success('Edit successfully!');
@@ -500,7 +500,7 @@ export default {
               console.log("err");
           })
           // $.ajax({
-          //   url: "http://10.4.4.224:98/AdminLevel/Rename",
+          //   url: "/AdminLevel/Rename",
           //   data: JSON.stringify(level),
           //   type: "POST",
           //   contentType: "application/json;charset=utf-8",
@@ -532,7 +532,7 @@ export default {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.value) {
-              axios.get(`http://10.4.4.224:98/AdminLevel/Remove/${JSON.stringify(value)}`,{
+              axios.get(`/AdminLevel/Remove/${JSON.stringify(value)}`,{
                 headers:{
                   Authorization: 'Bearer '+ localStorage.getItem("authToken")
                 }
@@ -562,7 +562,7 @@ export default {
               Authorization: 'Bearer '+ localStorage.getItem("authToken")
             }
           };
-          axios.post("http://10.4.4.224:98/AdminLevel/Add",JSON.stringify(mObj))
+          axios.post("/AdminLevel/Add",JSON.stringify(mObj))
           .then(result=>{
             if (result) {
                 success('Add successfully!');
@@ -588,7 +588,7 @@ export default {
               Authorization: 'Bearer '+ localStorage.getItem("authToken")
             }
           };
-          axios.post("http://10.4.4.224:98/AdminLevel/AddOrUpdate",JSON.stringify(mObj)).then(result =>{
+          axios.post("/AdminLevel/AddOrUpdate",JSON.stringify(mObj)).then(result =>{
             if (result) {
                 success('Add successfully!');
                 levelAdminController.loadData();
@@ -601,7 +601,7 @@ export default {
             console.log(err);
           })
           // $.ajax({
-          //   url: "http://10.4.4.224:98/AdminLevel/AddOrUpdate",
+          //   url: "/AdminLevel/AddOrUpdate",
           //   data: JSON.stringify(mObj),
           //   type: "POST",
           //   contentType: "application/json;charset=utf-8",
@@ -629,7 +629,7 @@ export default {
         loadDetail(id) {
           var value = id;
           $.ajax({
-            url: 'http://10.4.4.224:98/AdminLevel/GetByID',
+            url: '/AdminLevel/GetByID',
             data: {
               id: Number(value)
             },

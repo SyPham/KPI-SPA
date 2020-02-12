@@ -56,7 +56,11 @@
                 <tr>
                   <th>#</th>
                   <th>KPI Organization Chart</th>
-                  <th>Period</th>
+                  <th>Weekly</th>
+                  <th>Monthly</th>
+                  <th>Quaterly</th>
+                  <th>Yearly</th>
+                  <th>Modify</th>
                 </tr>
               </thead>
               <tbody  class="tbody" id="tblkpilevel">
@@ -68,7 +72,7 @@
                       <i></i>
                     </div>
 
-                    <div class="pretty p-icon p-rotate">
+                    <div class="pretty p-switch p-fill">
                       <input v-if="item.Checked == true" type="checkbox" :data-code="item.KPICode" :value="item.KPIID" checked/>
                       <input v-else type="checkbox" :data-code="item.KPICode" :value="item.KPIID" />
                       <span class="level" :data-level="item.LevelNumber" style="display:none"></span>
@@ -80,45 +84,58 @@
                     </div>
                   </td>
                   <td>
-                    <div  class="pretty p-icon p-rotate">
+                     <div  class="pretty p-switch p-fill">
                       <input v-if="item.WeeklyChecked === true"  class="weekly" :data-code="item.KPICode " :value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="weekly"  :data-code="item.KPICode" :value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
-                        <label class="black">Weekly</label>
+                        <label class="black"></label>
                       </div>
                     </div>
-                    <div class="pretty p-icon p-rotate">
+                  </td>
+                  <td>
+                    <div class="pretty p-switch p-fill">
                       <input v-if="item.MonthlyChecked === true" class="monthly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="monthly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
-                        <label class="black">Monthly</label>
+                        <label class="black"></label>
                       </div>
                     </div>
-                    <div class="pretty p-icon p-rotate">
+                  </td>
+                  <td>
+                    <div class="pretty p-switch p-fill">
                       <input v-if="item.QuarterlyChecked === true" class="quaterly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="quaterly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
-                        <label class="black">Quarterly</label>
+                        <label class="black"></label>
                       </div>
                     </div>
-                    <div class="pretty p-icon p-rotate">
+                  </td>
+
+                  <td>
+                   
+                    
+                    
+                    <div class="pretty p-switch p-fill">
                       <input v-if="item.YearlyChecked === true" class="yearly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="yearly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
                         <i class="icon fa fa-check"></i>
-                        <label class="black">Yearly</label>
+                        <label class="black"></label>
                       </div>
                     </div>
+                  </td>
+
+                  <td>
                     <div v-if="item.YearlyChecked || item.QuarterlyChecked || item.MonthlyChecked || item.WeeklyChecked === true" class="pretty p-icon p-rotate">
                       <input @click="showdata" class="showdata" type="checkbox">
                       <div class="state p-success">
                         <!-- <i class="icon far fa-edit"></i> -->
                         <!-- <label class="label label-success">Modify</label> -->
                       <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" id=""  class="btn-sm btn-info showdata ">
-                        <i class="far fa-edit"></i> Modify
+                        <i class="far fa-edit"></i>
                       </button>
                       </div> 
                     </div>
@@ -279,7 +296,7 @@ export default {
             },
             glyph: glyph_opts,
             source: {
-              url: "http://10.4.4.224:98/AdminKPILevel/GetListTree",
+              url: "http://10.4.4.92:91/AdminKPILevel/GetListTree",
               debugDelay: 1000
             },
             table: {

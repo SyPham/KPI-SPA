@@ -92,8 +92,8 @@ const router = new VueRouter({
       component: Dash,
       children: [ 
         {path: "/adminKPI",component: AdminKPI , meta: { requiresAuth: true } },
-        { path: "/adminKPI/create",component: CreateKPI  },
-        { path: "/adminKPI/:id/edit", component: UpdateKPI  }
+        { path: "/adminKPI/create",component: CreateKPI ,meta:{ requiresAuth: true} },
+        { path: "/adminKPI/:id/edit", component: UpdateKPI ,meta:{ requiresAuth: true} }
       ]
     },
 
@@ -102,9 +102,9 @@ const router = new VueRouter({
       path: "/adminUser",
       component: Dash,
       children: [ 
-        {path: "/adminUser",component: AdminUser },
-        { path: "/adminUser/create",component: CreateUser },
-        { path: "/adminUser/:id/edit", component: UpdateUser }
+        {path: "/adminUser",component: AdminUser ,meta:{ requiresAuth: true} },
+        { path: "/adminUser/create",component: CreateUser ,meta:{ requiresAuth: true} },
+        { path: "/adminUser/:id/edit", component: UpdateUser, meta:{ requiresAuth: true} }
       ]
     },
 
@@ -114,9 +114,9 @@ const router = new VueRouter({
       name:"adminCategory",
       component: Dash,
       children: [
-        { path: "/adminCategory",component: AdminCategory,},
-        { path: "/adminCategory/create", component: CreateCategory,},
-        { path: "/adminCategory/:id/edit",component: UpdateCategory,}
+        { path: "/adminCategory",component: AdminCategory,meta:{ requiresAuth: true}},
+        { path: "/adminCategory/create", component: CreateCategory,meta:{ requiresAuth: true}},
+        { path: "/adminCategory/:id/edit",component: UpdateCategory,meta:{ requiresAuth: true}}
       ]
     },
     //adminMenu
@@ -124,9 +124,9 @@ const router = new VueRouter({
       path: "/Menus",
       component: Dash,
       children: [
-        { path: "/Menus",component: AdminMenu,},
-        { path: "/Menus/create", component: CreateMenu,},
-        { path: "/Menus/:id/edit",component: UpdateMenu,}
+        { path: "/Menus",component: AdminMenu,meta:{ requiresAuth: true}},
+        { path: "/Menus/create", component: CreateMenu,meta:{ requiresAuth: true}},
+        { path: "/Menus/:id/edit",component: UpdateMenu,meta:{ requiresAuth: true}}
       ]
     },
 
@@ -135,7 +135,7 @@ const router = new VueRouter({
       path: "/adminOC",
       component: Dash,
       children: [
-        { path: "/adminOC",component: AdminOC}
+        { path: "/adminOC",component: AdminOC,meta:{ requiresAuth: true} }
       ]
     },
 
@@ -144,7 +144,7 @@ const router = new VueRouter({
       path: "/AddUserToLevel",
       component: Dash,
       children: [
-        { path: "/AddUserToLevel",component: AddUserToLevel}
+        { path: "/AddUserToLevel",component: AddUserToLevel,meta:{ requiresAuth: true} }
       ]
     },
 
@@ -153,7 +153,7 @@ const router = new VueRouter({
       path: "/adminLevel",
       component: Dash,
       children: [
-        { path: "/adminLevel",component: AdminLevel}
+        { path: "/adminLevel",component: AdminLevel,meta:{ requiresAuth: true} }
       ]
     },
 
@@ -162,7 +162,7 @@ const router = new VueRouter({
       path: "/OCCategories",
       component: Dash,
       children: [
-        { path: "/OCCategories",component: AdminCategoryOC,}
+        { path: "/OCCategories",component: AdminCategoryOC,meta:{ requiresAuth: true}}
       ]
     },
     
@@ -171,7 +171,7 @@ const router = new VueRouter({
       path: "/CategoryKPILevelAdmin",
       component: Dash,
       children: [
-        { path: "/CategoryKPILevelAdmin",component: AdminOCCategoryKpi }
+        { path: "/CategoryKPILevelAdmin",component: AdminOCCategoryKpi ,meta:{ requiresAuth: true} }
       ]
     },
     //Login
@@ -190,7 +190,7 @@ const router = new VueRouter({
       path: "/Favourite",
       component: Dash,
       children: [
-        { path: "/Favourite",component: UserFavourite  }
+        { path: "/Favourite",component: UserFavourite, meta:{ requiresAuth: true}  }
         
       ]
     },
@@ -220,7 +220,7 @@ const router = new VueRouter({
       path: "/ChartPeriod/ListTasks",
       component: Dash,
       children: [
-        {  path: "/ChartPeriod/ListTasks/:kpilevelcode",component: ListTask},
+        {  path: "/ChartPeriod/ListTasks/:kpilevelcode",component: ListTask,meta:{ requiresAuth: true}},
       ]
     },
 
@@ -231,7 +231,7 @@ const router = new VueRouter({
       
       children: [
         { name: 'dataset', path: "/Dataset/:catid/:period/:start/:end/:year/",component: Dataset},
-        { name: 'dataset2', path: "/Dataset/:catid/:period/:start/:end/:year/:type/:comID/:dataID/:title",component: Dataset}
+        { name: 'dataset2', path: "/Dataset/:catid/:period/:start/:end/:year/:type/:comID/:dataID/:title",component: Dataset,meta:{ requiresAuth: true}}
       ]
     },
 
@@ -240,7 +240,7 @@ const router = new VueRouter({
       path: "/Workplace",
       component: Dash,
       children: [
-        { path: "/Workplace",component: Workplace}
+        { path: "/Workplace",component: Workplace,meta:{ requiresAuth: true}}
       ]
     },
 
@@ -250,7 +250,7 @@ const router = new VueRouter({
       component: Dash,
       
       children: [
-        { name: 'compare', path: "/compare/:obj",component: Compare},
+        { name: 'compare', path: "/compare/:obj",component: Compare,meta:{ requiresAuth: true}},
       ]
     },
     
@@ -260,16 +260,16 @@ const router = new VueRouter({
       path: "/LateOnUpload",
       component: Dash,
       children: [
-        { name: 'notification', path: "/LateOnUpload/:notification",component: LateOnUpload}
+        { name: 'notification', path: "/LateOnUpload/:notification",component: LateOnUpload,meta:{ requiresAuth: true}}
       ]
     },
 
-    //Workplace
+    //ListHistoryNotification
     {
       path: "/ListHistoryNotification",
       component: Dash,
       children: [
-        { path: "/ListHistoryNotification",component: ListHistoryNotification}
+        { path: "/ListHistoryNotification",component: ListHistoryNotification,meta:{ requiresAuth: true}}
       ]
     },
 

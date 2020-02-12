@@ -479,7 +479,7 @@ export default {
         let boxTitle = $(".box-title").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -519,7 +519,7 @@ export default {
         let boxTitle = $(".box-title").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -535,25 +535,19 @@ export default {
   mounted(){
     let self = this 
     let currentUrl = self.$router.currentRoute;
-    console.log("currentUrl");
-    console.log(currentUrl);
     let comID = Number(self.$route.params.comID);
-    console.log(comID)
     let dataID = Number(self.$route.params.dataID);
-    console.log(dataID)
     let title = self.$route.params.title;
-    console.log(title)
     let type = self.$route.params.type;
-    console.log(type)
 
-    if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
+    if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
 
       let boxTitle = $(".box-title").text();
       // $('.kpilevelcode').text(getUrlParameter("kpilevelcode"));
 
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
-      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark", "Action Plan") + boxTitle);
+      $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
       $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
       $("#modal-group-comment-data").modal("show");
@@ -563,7 +557,7 @@ export default {
 
     }
 
-    if (comID > 0 && dataID > 0 && title !== "" && type === "task") {
+    if (comID > 0 && dataID > 0 && title != "" && type == "task") {
       let boxTitle = $(".box-title").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
@@ -644,7 +638,7 @@ export default {
         let boxTitle = $(".box-title").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".RemarkChart").text(title.replace(/-/g, " ")+ boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -770,7 +764,8 @@ export default {
         id: id,
         userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
         KPILevelCode: seft.$route.params.kpilevelcode,
-        CategoryID: Number(seft.$route.params.catid)
+        CategoryID: Number(seft.$route.params.catid),
+        url: window.location.href
       };
 
       axios.post("ChartPeriod/Done",JSON.stringify(data))
@@ -806,7 +801,7 @@ export default {
         CommentMsg: CommentMsg,
         UserID: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
         Tag: Tag,
-        Link: this.$route.path,
+        Link: window.location.href,
         Title: $(".RemarkChart").text(),
         KPILevelCode: this.KPILevelCode,
         CategoryID: Number(this.$route.params.catid)
@@ -912,7 +907,7 @@ export default {
     },
     LoadDataActionPlan(dataid, commentid) {
       let seft = this;
-      axios.post(`http://10.4.4.92:91/ChartPeriod/getallpaging/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
+      axios.post(`/ChartPeriod/getallpaging/${dataid}/${commentid}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}/${seft.keyword}/${seft.page}/${seft.pageSize}`)
       .then(res => {
         console.log(res);
         //  var res = res.data;
@@ -985,7 +980,7 @@ export default {
                             <td>${(i + 1)}</td>
                             <td>${item.ID}</td>
                             <td class="text-bold" style="padding-left:15px;">
-                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
+                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
                             </td>
                             <td>
                                 <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
@@ -1001,7 +996,7 @@ export default {
                                 <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
                             </td>
                             <td class="text-bold" style="padding-left:15px;">
-                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
+                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
                             </td>
                             <td>
                                 ${statusContent}
@@ -1060,7 +1055,7 @@ export default {
 
               $.ajax({
                 type: "Post",
-                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+                url: "http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate",
                 data: {
                   name: "DeadLine",
                   value: value,
@@ -1083,39 +1078,36 @@ export default {
             });
           $.fn.editable.defaults.mode = "inline";
 
-          $("#modal-group-comment-data2 input[name=UpdateSheduleDate]")
-            .off("change")
-            .on("change", function() {
-              var id = $(this).data("id"),
-                value = $(this).val(),
-                userid = VueJwtDecode.decode(localStorage.getItem("authToken"))
-                  .nameid;
-              name = $(this).attr("name");
-              $.ajax({
-                type: "Post",
-                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
-                data: {
-                  name: name,
-                  value: value,
-                  pk: id,
-                  userid: userid
-                },
-                success: function(res) {
-                  success("Successfully!");
-                  var commentid = Number($(".commentid").text());
+          $("#modal-group-comment-data2 input[name=UpdateSheduleDate]").off("change").on("change", function() {
+            var id = $(this).data("id"),
+              value = $(this).val(),
+              userid = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
+            name = $(this).attr("name");
+            $.ajax({
+              type: "Post",
+              url: "http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate",
+              data: {
+                name: name,
+                value: value,
+                pk: id,
+                userid: userid
+              },
+              success: function(res) {
+                success("Successfully!");
+                var commentid = Number($(".commentid").text());
 
-                  var dataid = Number($(".dataid").text());
+                var dataid = Number($(".dataid").text());
 
-                  seft.LoadDataActionPlan(dataid, commentid);
-                }
-              });
+                seft.LoadDataActionPlan(dataid, commentid);
+              }
             });
+          });
 
           $("#modal-group-comment-data2 .TitleEdit").editable({
             placement: "right",
             type: "text",
             // pk: $(this).data("item-id"),
-            url:"http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" ,
+            url:"http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate" ,
             params: function(params) {
               var data = {};
               data["name"] = params.name;
@@ -1127,6 +1119,7 @@ export default {
               //  abc=params;
               data.item = { value: data.value };
               console.log(data);
+              console.log(params)
               return data;
             },
             display: function(value, response) {
@@ -1147,7 +1140,7 @@ export default {
             type: "text",
             //pk: $(this).data("item-id"),
             url:
-              "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+              "http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate",
             params: function(params) {
               // debugger
               var data = {};
@@ -1160,6 +1153,7 @@ export default {
               //  abc=params;
               data.item = { value: data.value };
               console.log(data);
+              console.log(params)
               return data;
             },
             display: function(value, response) {
@@ -1183,13 +1177,13 @@ export default {
             placement: "right",
             type: "text",
             pk: $(this).data("item-id"),
-            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            url: 'http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate',
             params: function(params) {
               var data = {};
               data['name'] = params.name;
               data['value'] = params.value;
               data['pk'] = params.pk;
-              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+              data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
             //  abc=params; 
               data.item = { value: data.value}
               console.log(data)
@@ -1284,7 +1278,7 @@ export default {
         Description: Description,
         Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
         SubmitDate: convertDate(new Date),
-        Link: this.$route.path,
+        Link: window.location.href,
         Subject: $('.ActionPlanChart').text(),
         Auditor: Auditor,
         CategoryID: Number(seft.$route.params.catid),
@@ -1335,7 +1329,7 @@ export default {
     loadDataComment() {
       let seft = this;
       $.ajax({
-        url: `http://10.4.4.224:98/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
+        url: `http://10.4.4.92:91/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
         //url: '/ChartPeriod/GetAllComments',
         type: "GET",
         // data: {
@@ -1466,7 +1460,7 @@ export default {
     },
     LoadDataset() {
       let seft = this;
-      axios.get(`http://10.4.4.224:98/Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`)
+      axios.get(`Dataset/getalldatabycategory/${seft.$route.params.catid}/${seft.$route.params.period}/${seft.$route.params.start}/${seft.$route.params.end}/${seft.$route.params.year}`)
       .then(response => {
         seft.data = response.data;
         seft.data2 = response.data[0].Datasets;

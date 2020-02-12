@@ -151,13 +151,21 @@ export default {
         .then(function(res) {
           console.log(res)
           //self.menuSidebar = res.data.user.Menus
-          self.$auth.setToken(res.data.token, Date.now() + 14400000 ,res.data.user.Menus ,res.data.user.User.Alias); // + 4 hours
+          self.$auth.setToken(res.data.token, Date.now() + 14400000 ,res.data.user.Menus ,res.data.user.User.Alias,res.data.user.User.Role); // + 4 hours
           console.log("res.data.user.User")
           console.log(res.data.user.User)
+          var routerArr = ["/CategoryKPILevel", "/Dataset"];
           var uri = self.$route.query.redirect || "";
           if(self.$route.query.redirect.length != 0 )
           {
-            self.$router.push(uri);    
+            var n = routerArr.includes(uri);
+            if (localStorage.getItem("Role") == 2 && n) {
+              self.$router.push(uri);
+            } else if (localStorage.getItem("Role") == 1 && !n) {
+              self.$router.push(uri);
+            } else {
+              self.$router.push("/home");
+            }    
           }
           else{
             self.$router.push("/home");

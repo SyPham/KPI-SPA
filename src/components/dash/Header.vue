@@ -84,7 +84,7 @@
                     </a>
 
                     <!-- Done -->
-                    <a v-if="item.Action == 'Done' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <a v-if="item.Action == 'Done' && item.SenderID !== userid " @click="gettask(item.URL)" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <h6 v-else> Update Task Status <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.Sender}} has finished the task {{item.TaskName}}</p>
@@ -93,14 +93,14 @@
                     </a>
 
                     <!-- Approval -->
-                    <a v-if="item.Action == 'Approval' && item.SenderID !== userid " :href="item.URL" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <a v-if="item.Action == 'Approval' && item.SenderID !== userid " @click="gettask(item.URL)" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <h6 v-else> Approval Task  <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">Your task {{item.TaskName}} was approved by {{item.Sender}}</p>
                     </a>
 
                     <!-- UpdateApproval -->
-                    <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " href="#/Workplace" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
+                    <a v-if="item.Action == 'UpdateApproval' && item.SenderID !== userid " @click="gettask(item.URL)" class="dropdown-item" style="cursor: pointer" :data-id="item.ID" >
                       <h6 v-if="item.Seen === false"><span  class="badge bg-green">New</span> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <h6 v-else> Update Approval Task <i class="fas fa-tasks"></i><small class="float-right"><i class="far fa-clock"></i> {{JSONDateWithTime(item.CreateTime)}} </small></h6>
                       <p style="font-size:14px">The account {{item.Sender}} hasn't approved status the task {{item.TaskName}}</p>
@@ -247,7 +247,7 @@ export default {
      seft.getAllNotifications();
     // Listen to score changes coming from SignalR events
     const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://10.4.4.224:98/henry-hub")
+    .withUrl("http://10.4.4.92:91/henry-hub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
     connection.start().then(function () {
@@ -378,7 +378,7 @@ export default {
       let seft = this;
       
 
-      axios.get("http://10.4.4.224:98/Home/GetNotifications").then(r=>{
+      axios.get("/Home/GetNotifications").then(r=>{
         console.log(r);
          seft.arrayID = r.data.arrayID;
         

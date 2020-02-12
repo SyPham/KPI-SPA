@@ -56,7 +56,7 @@
                 <tr tabindex="0" :data-id="item.ID">
                   <td class="text-center">{{key+1}}</td>
                   <td>
-                    <div class="pretty p-icon p-rotate ">
+                    <div class="pretty p-switch p-fill">
                       <input v-if="item.Status == true" type="checkbox" class="addOCCategoryCheckbox" name="checkbox" checked />
                       <input v-else type="checkbox" class="addOCCategoryCheckbox" name="checkbox"  />
                       <div class="state p-success">
@@ -170,7 +170,7 @@ export default {
             },
             glyph: glyph_opts,
             source: {
-              url: "http://10.4.4.224:98/OCCategories/GetListTree",
+              url: "http://10.4.4.92:91/OCCategories/GetListTree",
               debugDelay: 1000
             },
             table: {
@@ -310,7 +310,7 @@ export default {
           //   OCID: ocId,
           //   CategoryID: catId,
           // };
-          axios.get(`http://10.4.4.224:98/OCCategories/AddOCCategory/${ocId}/${catId}`,{
+          axios.get(`/OCCategories/AddOCCategory/${ocId}/${catId}`,{
             headers:{
               Authorization: 'Bearer '+ localStorage.getItem("authToken")
             }

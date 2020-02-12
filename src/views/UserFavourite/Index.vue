@@ -15,20 +15,20 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>KPI Name</th>
-                <th>Dept head</th>
-                <th>Team</th>
-                <th>Level</th>
-                <th>Delete</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Organization Chart</th>
+                <th>Level Number</th>
+                <th>Option</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(kpi,key,index) in data" :key="index">
                 <td>{{key+1}}</td>
-                <td>{{kpi.Name}}</td>
-                <td>{{kpi.Code}}</td>
-                <td>{{kpi.LevelID}}</td>
-                <td>{{kpi.Unit}}</td>
+                <td>{{kpi.KPIName}}</td>
+                <td>{{kpi.Username}}</td>
+                <td>{{kpi.TeamName}}</td>
+                <td>{{kpi.Level}}</td>
                 <td>
                   <div class="btn-group">
                     <div class="btn-group">
@@ -143,6 +143,8 @@ export default {
   created() {
     let seft = this;
     // seft.getAll();
+    console.log(window.location.href)
+    console.log(seft.$route.path)  
     seft.LoadData();
     // seft.ID = seft.$route.params.id;
     // console.log(seft.ID);

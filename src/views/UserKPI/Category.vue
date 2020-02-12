@@ -11,18 +11,8 @@
         <input type="text" class="form-control levelID" style="display:none" />
         <!-- <select class="form-control pull-right" style="width:50%"></select> -->
       </div>
-      <div
-        class="card-body pb-3"
-        id="btnCategory"
-        style="max-height:210px;overflow-y:scroll"
-      >
-        <button
-          v-for="(item, key, index) in data"
-          :key="index"
-          class="btn mb-2 btn-sm btnCategory category2 ml-2 rounded-pill text-white font-weight-bold"
-          :data-id="item.ID"
-          @click="changeCategoryId(item.ID)"
-        >
+      <div class="card-body pb-3" id="btnCategory" style="max-height:210px;overflow-y:scroll" >
+        <button v-for="(item, key, index) in data" :key="index" class="btn mb-2 btn-sm btnCategory category2 ml-2 rounded-pill text-white font-weight-bold" :data-id="item.ID" @click="changeCategoryId(item.ID)">
           <span v-if="item.Total > 1" class="name"
             >{{ item.Name }} {{ item.Total }} (items)</span
           >
@@ -31,6 +21,13 @@
           >
         </button>
       </div>
+      <div class="card-body pb-3 text-danger" id="btnCategory2" style="max-height:210px;overflow-y:scroll;text-align:center;" >
+        <span >You need permission to enter this area. Contact Lab Team room for further instructions</span>
+      </div>
+      <div class="card-body pb-3 text-success" id="showerror" style="max-height:210px;overflow-y:scroll;text-align:center;" >
+        <span  style="text-align:center;" class="showerror">No data yet</span>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -49,8 +46,14 @@ export default {
       data: [],
       pageIndex: 1,
       pageSize: 10,
-      ListID: []
+      ListID: [],
+      length: 0,
     };
+  },
+  mounted(){
+    $('#btnCategory').hide();
+    $('#btnCategory2').hide();
+    $('#showerror').hide();
   },
   methods: {
     GetListID(){
@@ -66,7 +69,7 @@ export default {
     getAllCategories() {
       // debugger
       let self = this;
-
+      
       let arr = self.ListID
       let index, value, result;
       for (index = 0; index < arr.length; index++) {
@@ -79,16 +82,29 @@ export default {
       if(self.ocID == result )
       {
         axios.get(`CategoryKPILevel/GetAllCategories/${self.ocID}/${self.level}/${self.pageIndex}/${self.pageSize}`).then(response => {
-        if (response.data.status) {
-          self.data = response.data.data;
-
-          console.log(response.data.data);
-          self.registerEvent();
-          // success("success")
-        }
-      });
+          if (response.data.status) {
+            if(response.data.data.length == 0){
+              $('#showerror').show();
+              $('#btnCategory2').hide();
+              $('#btnCategory').hide();
+            }
+            else{
+              self.data = response.data.data;
+              console.log(response.data.data);
+              $('#btnCategory').show();
+              $('#btnCategory2').hide();
+              $('#showerror').hide();
+              self.registerEvent();
+            }
+            // self.length = response.data.data.length
+            // success("success")
+          }
+        });
       }
       else{
+        $('#btnCategory').hide();
+        $('#btnCategory2').show();
+        $('#showerror').hide();
         warning("Your do not have access")
       }
     },
@@ -230,6 +246,7 @@ export default {
     ocID: function(newVal, oldVal) {
       let self = this;
       self.ocID = newVal;
+     
       self.getAllCategories();
     }
   }

@@ -54,7 +54,7 @@
               >Email is required</div>
             </div>
             <div class="form-group col-md-6">
-              <label for="exampleInputEmail1">Alilas</label>
+              <label for="exampleInputEmail1">Display Name</label>
               <span style="color:red">(*)</span>
               <input
                 :class="{ 'is-invalid': submitted && $v.Alilas.$error }"

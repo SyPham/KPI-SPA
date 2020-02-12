@@ -481,7 +481,7 @@ export default {
       skip3: 0,
       pageSize3: 6,
       changePageSize: " ",
-      url:"http://10.4.4.224:98/Workplace/ExcelExport/" + VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
+      url:"http://10.4.4.92:91/Workplace/ExcelExport/" + VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
     };
   },
   components: {
@@ -684,7 +684,7 @@ export default {
       var formData = new FormData();
       var fileUpload = document.querySelector("#UploadedFile");
       formData.append("UploadedFile", fileUpload.files[0]);
-      axios.post("Workplace/Import", formData, {
+      axios.post("/Workplace/Import", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -756,7 +756,7 @@ export default {
             },
             glyph: glyph_opts,
             source: {
-              url:"http://10.4.4.224:98/KPI/GetListTreeClient/" +VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
+              url:"http://10.4.4.92:91/KPI/GetListTreeClient/" +VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
               debugDelay: 1000
             },
             table: {
@@ -789,7 +789,7 @@ export default {
             },
             lazyLoad: function(event, data) {
               data.result = {
-                url:"http://10.4.4.224:98/KPI/GetListTreeClient/" +
+                url:"http://10.4.4.92:91/KPI/GetListTreeClient/" +
                   VueJwtDecode.decode(localStorage.getItem("authToken")).nameid,
                 debugDelay: 1000
               };

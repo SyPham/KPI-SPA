@@ -114,6 +114,7 @@
               <thead>
                   <tr>
                     <th>#</th>
+                    <th>Modify</th>
                     <th>KPI Organization Chart</th>
                     <th>Period</th>
                   </tr>
@@ -121,13 +122,28 @@
               <tbody  class="tbody" id="tblkpilevel">
                 <tr v-for="(item,key,index) in dataKPILV" :key="index" :data-id="item.ID" >
                   <td>{{key+1}}</td>
+                  <td v-if="item.CheckCategory == true">
+                    <div class="tooltip-css ">
+                      <div class="pretty p-icon p-rotate">
+                        <input @click="showdata" class="showdata" type="checkbox">
+                        <div class="state p-success">
+                          <!-- <i class="icon far fa-edit"></i> -->
+                          <!-- <label class="label label-success">Modify</label> -->
+                        <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" class="btn-sm btn-info showdata ">
+                          <i class="far fa-edit"></i> 
+                        </button>
+                        </div> 
+                      </div>
+                    </div>
+                  </td>
+                  <td v-else></td>
                   <td>
                     <div class="tooltip-css ">
-                      <div class="pretty p-icon p-rotate ">
+                      <div class="pretty p-switch p-fill">
                         <input  v-if="item.CheckCategory == true" @click="focusAddCategoryLevel()" type="checkbox"  class="checkbox kpilevelID" name="checkbox" checked />
                         <input v-else type="checkbox" @click="focusAddCategoryLevel()"  class="checkbox kpilevelID" name="checkbox"  />
-                        <div class="state p-success textOverflow">
-                            <i class="icon fa fa-check"></i>
+                        <div class="state p-success">
+                            <i class="icon fa fa-check "></i>
                             <label class="black labelOverflow">{{item.KPIName}}</label>
                         </div>
                       </div>
@@ -154,22 +170,6 @@
                     <button v-else-if="item.YearlyChecked === true && item.StatusUploadDataY === false " :data-kpilevelcode="item.KPILevelCode" data-period="Y"  :class='item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "btn btn-sm btn-success year" : (item.StatusEmptyDataY === true ? "btn btn-sm btn-warning year" : "btn btn-sm btn-success year")) : "btn btn-sm bg-navy year"' ><i class="fas fa-chart-bar"></i> Yearly</button>
                     <button v-else :data-kpilevelcode="item.KPILevelCode" data-period="Y" disabled   class="btn btn-sm bg-navy year"><i class="fas fa-chart-bar"></i> Yearly</button>
                   </td>
-
-                  <td v-if="item.CheckCategory == true">
-                    <div class="tooltip-css ">
-                      <div class="pretty p-icon p-rotate">
-                        <input @click="showdata" class="showdata" type="checkbox">
-                        <div class="state p-success">
-                          <!-- <i class="icon far fa-edit"></i> -->
-                          <!-- <label class="label label-success">Modify</label> -->
-                        <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" class="btn-sm btn-info showdata ">
-                          <i class="far fa-edit"></i> Modify
-                        </button>
-                        </div> 
-                      </div>
-                    </div>
-                  </td>
-                  <td v-else></td>
               </tr>
             </tbody> 
           </table>
@@ -458,7 +458,7 @@ export default {
               }
             },
             glyph: glyph_opts,
-            source: { url: "http://10.4.4.224:98/AdminKPILevel/GetListTree", debugDelay: 1000 },
+            source: { url: "http://10.4.4.92:91/AdminKPILevel/GetListTree", debugDelay: 1000 },
             table: {
               indentation: 20,
               nodeColumnIdx: 1,

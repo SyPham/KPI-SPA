@@ -8,10 +8,10 @@
           <!-- LINE CHART -->
           <div class="box box-widget">
             <div class="box-header with-border">
-              <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Weekly")}}</h3>
-              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Monthly")}}</h3>
-              <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Quarterly")}}</h3>
-              <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Yearly")}}</h3>
+              <h3 v-if="period == 'W'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Weekly")}}</h3>
+              <h3 v-if="period == 'M'" class="box-title1" id="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Monthly")}}</h3>
+              <h3 v-if="period == 'Q'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Quarterly")}}</h3>
+              <h3 v-if="period == 'Y'" class="box-title1" style="font-weight:bold">KPI Chart - {{kpiname}} - {{$t("Yearly")}}</h3>
             </div>
             <div class="box-body">
 
@@ -379,7 +379,7 @@
           <div class="box box-widget">
             <div class="box-header with-border">
               <h3 v-if="period == 'W'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Weekly")}}</h3>
-              <h3 v-if="period == 'M'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Monthly")}}</h3>
+              <h3 v-if="period == 'M'" class="box-title" id="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Monthly")}}</h3>
               <h3 v-if="period == 'Q'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Quarterly")}}</h3>
               <h3 v-if="period == 'Y'" class="box-title" style="font-weight:bold">Data - {{kpiname}} - {{$t("Yearly")}}</h3>
               <div class="box-tools float-right">
@@ -690,6 +690,7 @@ import EventBus from "../../utils/EventBus.js";
 export default {
   data() {
     return {
+      title: null,
       comID: 0,
       seachActionPlan: "",
       date: '',
@@ -816,31 +817,51 @@ export default {
     Paginate,
 
   },
+  created() {
+    let seft = this;
+    EventBus.$on('flag', locale =>{
+      seft.locale = locale
+    });
+    let boxTitle = $("#chartperiod .box-title1").text();
+    console.log(boxTitle)
+    seft.period = seft.$route.params.period;
+    seft.vstart = seft.$route.params.start;
+    seft.vend = seft.$route.params.end;
+    seft.searchyear = seft.$route.params.year;
+    seft.kpilevelcode = seft.$route.params.kpilevelcode
+    // console.log("1")
+    // seft.Loadchart();
+    seft.getAllNotifications();
+    seft.GetItem();
+    
+  },
   mounted() {
     let seft = this
-    var ab = null;
-    console.log("parseFloat"+ (ab || 0))
-    // seft.createChart("planet-chart");
-    setTimeout(function(){
-      seft.Loadchart();
-    },500)
+    console.log(seft.$el)
+    console.log(document.getElementById('box-title1').innerHTML)
+    // console.log("2")
+    // setTimeout(function(){
+    //   seft.Loadchart();
+    // },500)
+    console.log("seft.kpiname")
+    console.log(seft.kpiname)
+    console.log($("#chartperiod .box-title1").text())
+
     seft.createChart("planet-chart", seft.datasets, seft.targets, seft.labels);
 
     let comID = Number(seft.$route.params.comID);
-    console.log(comID)
+ 
     let dataID = Number(seft.$route.params.dataID);
-    console.log(dataID)
     let title = seft.$route.params.title;
-    console.log(title)
     let type = seft.$route.params.type;
-    console.log(type)
 
-    if (comID > 0 && dataID > 0 && title != "" && type == "task") {
-      console.log("1")
-      let boxTitle = $(".box-title").text();
+    if (comID > 0 && dataID > 0 && title != "" && type === "task") {
+      
+      let boxTitle = $("#chartperiod .box-title1").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
-      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+      //$(".RemarkChart").text( "Remark on " + 'dasdasd' + " - " + " KPI Chart " + " - " + seft.kpiname + " - " + seft.convertPeriod(this.period, false));
+      $(".RemarkChart").text(title.replace(/-/g, " ")+ boxTitle);
       $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
       $("#modal-group-comment-data2").modal("show");
@@ -851,13 +872,12 @@ export default {
       activaTab('pills-home');
     }
     if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-      console.log("2")
-      let boxTitle = $(".box-title").text();
+      console.log("seft.kpi")
+       let boxTitle = $("#chartperiod .box-title1").text();
       $('.dataid').text(dataID);
       $('.commentid').text(comID)
-      $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
-      $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
-
+      $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
+      //$(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
       $("#modal-group-comment-data").modal("show");
         seft.remark(dataID);
         seft.LoadDataActionPlan(dataID, comID);
@@ -866,19 +886,17 @@ export default {
     // EventBus AddTask
     EventBus.$on('hello', URL =>{
       seft.URL = URL
-      console.log('self.URL')
-      console.log(seft.URL)
       let currentUrl = seft.$router.currentRoute;
       let comID = Number(seft.$route.params.comID);
       let dataID = Number(seft.$route.params.dataID);
       let title = seft.$route.params.title;
       let type = seft.$route.params.type;
       
-      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" && type === "task") {
+        let boxTitle = $("#chartperiod .box-title1").text();
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
-        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
         $("#modal-group-comment-data2").modal("show");
             seft.remark(dataID);
@@ -887,11 +905,11 @@ export default {
         seft.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
       }
-      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" & type === "remark") {
+        let boxTitle = $("#chartperiod .box-title1").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+           $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -904,18 +922,17 @@ export default {
     // EventBus addComment
     EventBus.$on('hello2',Link=>{
       seft.Link = Link
-      console.log('self.Link')
-      console.log(seft.Link)
+   
       let currentUrl = seft.$router.currentRoute;
       let comID = Number(seft.$route.params.comID);
       let dataID = Number(seft.$route.params.dataID);
       let title = seft.$route.params.title;
       let type = seft.$route.params.type;
-      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" && type === "task") {
+        let boxTitle = $("#chartperiod .box-title1").text();
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
-        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
         $("#modal-group-comment-data2").modal("show");
             seft.remark(dataID);
@@ -924,11 +941,11 @@ export default {
         seft.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
       }
-      if (comID > 0 && dataID > 0 && title !== "" & type === "remark") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" & type === "remark") {
+        let boxTitle = $("#chartperiod .box-title1").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+          $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -937,23 +954,16 @@ export default {
             seft.loadDataComment(true);
       }
     })
+
+
+    // $('#modal-group-comment-data').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    //     seft.$router.replace({
+    //     name: "chart" ,
+    //   });
+    //   console.log('close')
+    // });
   },
-  created() {
-    let seft = this;
-    EventBus.$on('flag', locale =>{
-      seft.locale = locale
-    });
-    seft.period = seft.$route.params.period;
-    seft.vstart = seft.$route.params.start;
-    seft.vend = seft.$route.params.end;
-    seft.searchyear = seft.$route.params.year;
-    seft.kpilevelcode = seft.$route.params.kpilevelcode
-    console.log("kpilevelcode")
-    console.log(seft.kpilevelcode)
-    seft.Loadchart();
-    seft.getAllNotifications();
-    seft.GetItem();
-  },
+ 
   destroyed() {
     // Stop listening the event hello with handler
     EventBus.$off('hello', this.URL);
@@ -1004,12 +1014,13 @@ export default {
       let title = self.$route.params.title;
       let type = self.$route.params.type;
       
-      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
+      if (comID > 0 && dataID > 0 && title != "" && type === "task") {
         console.log("1")
-        let boxTitle = $(".box-title").text();
+        let boxTitle =  $("#chartperiod .box-title1").text();
+        console.log(boxTitle)
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
-        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
         $("#modal-group-comment-data2").modal("show");
@@ -1019,12 +1030,13 @@ export default {
         self.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
       }
-      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
+      if (comID > 0 && dataID > 0 && title != "" & type === "remark") {
         console.log("2")
-        let boxTitle = $(".box-title").text();
+        let boxTitle =  $("#chartperiod .box-title1").text();
+        console.log(boxTitle)
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+           $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -1046,11 +1058,11 @@ export default {
       let dataID = Number(self.$route.params.dataID);
       let title = self.$route.params.title;
       let type = self.$route.params.type;
-      if (comID > 0 && dataID > 0 && title != "" && type == "task") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" && type === "task") {
+        let boxTitle =  $("#chartperiod .box-title1").text();
         $('.dataid').text(dataID);
         $('.commentid').text(comID)
-        $(".RemarkChart").text(title.replace(/-/g, " ").replace("Action Plan","Remark") + boxTitle);
+        $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
         $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
         $("#modal-group-comment-data2").modal("show");
@@ -1060,11 +1072,11 @@ export default {
         self.LoadDataActionPlan(dataID, comID);
         activaTab('pills-home');
       }
-      if (comID > 0 && dataID > 0 && title != "" & type == "remark") {
-        let boxTitle = $(".box-title").text();
+      if (comID > 0 && dataID > 0 && title != "" & type === "remark") {
+        let boxTitle =  $("#chartperiod .box-title1").text();
           $('.dataid').text(dataID);
           $('.commentid').text(comID)
-          $(".RemarkChart").text(title.replace(/-/g, " ").replace("Remark","Action Plan") + boxTitle);
+           $(".RemarkChart").text(title.replace(/-/g, " ") + boxTitle);
           $(".ActionPlanChart").text(title.replace(/-/g, " ") + boxTitle);
 
           $("#modal-group-comment-data").modal("show");
@@ -1236,7 +1248,7 @@ export default {
     addFavourite() {
       let seft = this
       // debugger
-      var UserID = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid 
+      var UserID = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid) 
       if (UserID === 0 || UserID === "" || UserID === undefined) {
           Swal.fire({
               title: 'Warning!',
@@ -1251,15 +1263,14 @@ export default {
           Period: seft.$route.params.period,
           UserID: UserID,
       };
-      axios.post("ChartPeriod/AddFavourite",{
-        data: JSON.stringify(mObj)
-      }).then(result=>{
+      axios.post("ChartPeriod/AddFavourite",mObj).then(result=>{
         Swal.fire({
             title: 'success!',
             text: 'Add success!',
             type: 'success',
             confirmButtonText: 'OK'
         });
+        seft.Loadchart();
       })
       
     },
@@ -1312,7 +1323,7 @@ export default {
         KPILevelCode: seft.$route.params.kpilevelcode,
         CategoryID: Number(seft.$route.params.catid)
       }
-      axios.post("ChartPeriod/Approval",JSON.stringify(data))
+      axios.post("/ChartPeriod/Approval",JSON.stringify(data))
       .then(data => {
         console.log(data)
         success("Successfully!")
@@ -1338,7 +1349,7 @@ export default {
         var dataid = Number($('.dataid').text());
         seft.LoadDataActionPlan(dataid, commentid);
       })
-      // let promise = axios.post("http://10.4.4.224:98/ChartPeriod/Done", JSON.stringify(data))
+      // let promise = axios.post("/ChartPeriod/Done", JSON.stringify(data))
       // promise.then(data => {
       //   success("Successfully!")
       //   var commentid = Number($('.commentid').text());
@@ -1395,14 +1406,14 @@ export default {
           Description: $('.Description').val(),
           Deadline: $('.addTask .datepicker').datepicker({ dateFormat: 'mm-dd-yy' }).val(),
           SubmitDate: convertDate(new Date),
-          Link: this.$route.path,
+          Link: window.location.href,
           Subject: $('.ActionPlanChart').text(),
           Auditor: Auditor,
           CategoryID: Number(seft.$route.params.catid),
           KPILevelCode: seft.$route.params.kpilevelcode,
         };
         
-        axios.post('http://10.4.4.92:91/ChartPeriod/Add', obj ).then(res=>{
+        axios.post('ChartPeriod/Add', obj ).then(res=>{
         console.log("res");
         console.log(res);
         if (res.data.status === true ) {
@@ -1463,7 +1474,7 @@ export default {
 
           //Kiểm tra Finish Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
           if (item.Status) {
-            statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+            statusContent += `<div style="${item.ApprovedStatus == false ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
                                     <input type="checkbox" class="updateStatus" checked>
                                     <div class="state p-success"><i class="icon fa fa-check"></i>
                                         <label>Finished</label>
@@ -1471,7 +1482,7 @@ export default {
                                 </div>`;
           }
           else {
-            statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+            statusContent += `<div style="${item.ListUserIDs.indexOf(currentUser) != -1 && item.ApprovedStatus == false ? "" : "pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
                                   <input type="checkbox" class="updateStatus">
                                   <div class="state p-danger"><i class="icon fa fa-check"></i>
                                       <label>Not Finished</label>
@@ -1481,7 +1492,7 @@ export default {
           //Kiểm tra Approved Tag. Nếu hoàn thành thì màu xanh, Ngược lại đỏ
 
           if (item.ApprovedStatus) {
-            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
                                     <input type="checkbox" class="btnApproveActionPlan" checked>
                                     <div class="state p-success"><i class="icon fa fa-check"></i>
                                         <label>Approved</label>
@@ -1489,7 +1500,7 @@ export default {
                                 </div>`;
           }
           else {
-            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-icon p-round p-pulse">
+            aprovedContent += `<div style="${item.CreatedBy == currentUser || item.Auditor == currentUser ?"":"pointer-events: none;opacity: 0.5;cursor: not-allowed"}" class="pretty p-switch p-fill">
                                   <input type="checkbox" class="btnApproveActionPlan">
                                   <div class="state p-danger"><i class="icon fa fa-check"></i>
                                       <label>Not Approved</label>
@@ -1502,7 +1513,7 @@ export default {
                             <td>${(i + 1)}</td>
                             <td>${item.ID}</td>
                             <td class="text-bold" style="padding-left:15px;">
-                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
+                                <span style="font-weight: 700;cursor: pointer;" class="TitleEdit" data-url="http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Title" data-pk="${item.ID}" data-value="${item.Title}">${item.Title}</span>
                             </td>
                             <td>
                                 <div class="DescriptionEdit" style="font-weight: 700;cursor: pointer;" data-type="textarea" data-name="Description" data-value="${item.Description}" data-pk="${item.ID}">${item.Description}</div>
@@ -1518,7 +1529,7 @@ export default {
                                 <input autocomplete="off" data-id="${item.ID}" type="text" class="datepickerEdit" style="border: none;font-weight: 700;cursor: pointer;" value="${item.ActualFinishDate}">
                             </td>
                             <td class="text-bold" style="padding-left:15px;">
-                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
+                              <span style="font-weight: 700;cursor: pointer;" class="RemarkActionPlan" data-url="http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate" data-type="textarea" data-name="Remark" data-pk="${item.ID}" data-value="${item.Remark || "#N/A"}">${item.Remark || "#N/A"}</span>
                             </td>
                             <td>
                                 ${statusContent}
@@ -1576,7 +1587,7 @@ export default {
 
               $.ajax({
                 type: "Post",
-                url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+                url: "http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate",
                 data: {
                   name:"DeadLine",
                   value:value,
@@ -1607,7 +1618,7 @@ export default {
               name = $(this).attr("name");
             $.ajax({
               type: "Post",
-              url: "http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate",
+              url: "http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate",
               data:
               {
                 name: name, value: value, pk: id, userid: userid
@@ -1627,7 +1638,7 @@ export default {
             placement: "right",
             type: "text",
             // pk: $(this).data("item-id"),
-            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            url: '/http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate',
             params: function(params) {
               var data = {};
               data['name'] = params.name;
@@ -1642,7 +1653,7 @@ export default {
             display: function (value, response) {
               if (response) {
               var commentid = Number($('.commentid').text()),
-                dataid = Number($('.dataid').text());
+              dataid = Number($('.dataid').text());
               seft.LoadDataActionPlan(dataid, commentid);
               $(this).attr("data-value", value);
               
@@ -1658,7 +1669,7 @@ export default {
           $('#modal-group-comment-data2 .DescriptionEdit').editable({
             type: "text",
             //pk: $(this).data("item-id"),
-            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            url: 'http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate',
             params: function (params) {
               // debugger
               var data = {};
@@ -1669,6 +1680,7 @@ export default {
             //  abc=params; 
               data.item = { value: data.value,}
               console.log(data)
+              console.log(params)
               return data;
                 
             },
@@ -1693,13 +1705,13 @@ export default {
             placement: "right",
             type: "text",
             pk: $(this).data("item-id"),
-            url: 'http://10.4.4.224:98/ChartPeriod/UpdateSheduleDate',
+            url: '/http://10.4.4.92:91/ChartPeriod/UpdateSheduleDate',
             params: function(params) {
               var data = {};
               data['name'] = params.name;
               data['value'] = params.value;
               data['pk'] = params.pk;
-              data['userid'] = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+              data['userid'] = VueJwtDecode.decode(localStorage.getItem("authToken")).nameid;
             //  abc=params; 
               data.item = { value: data.value}
               console.log(data)
@@ -1752,18 +1764,13 @@ export default {
     loadDataComment() {
       let seft = this
       $.ajax({
-          url: `http://10.4.4.224:98/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
-          //url: '/ChartPeriod/GetAllComments',
+          url: `http://10.4.4.92:91/ChartPeriod/LoadDataComment/${Number($(".dataid").text())}/${VueJwtDecode.decode(localStorage.getItem("authToken")).nameid}`,
           type: "GET",
-          // data: {
-          //     dataid: Number($(".dataid").text()),
-          //     userid: VueJwtDecode.decode(localStorage.getItem("authToken")).nameid
-          // },
+          
           dataType: "json",
           success: function (res) {
             var data = res.data;
-            console.log("Lay ra tat ca comment");
-            console.log(res);
+           
             var total = res.total;
 
             $('.total-comments').text(total);
@@ -1916,18 +1923,16 @@ export default {
         CommentMsg: CommentMsg,
         UserID: Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid),
         Tag: Tag,
-        Link: this.$route.path,
+        Link: window.location.href,
         Title: $(".RemarkChart").text(),
         KPILevelCode: this.$route.params.kpilevelcode,
         CategoryID: Number(this.$route.params.catid)
       };
       
-       axios.post("http://10.4.4.92:91/ChartPeriod/AddComment",mObj)
+       axios.post("ChartPeriod/AddComment",mObj)
         .then(data => {
-          
           var res = data.data;
           console.log(res);
-
           if (res.status == true && res.isSendmail == true) {
             $("#comment").val("");
             success("success!");
@@ -1954,15 +1959,11 @@ export default {
           period = $("#tblDataChart tr:nth-child(1) th:nth-child(1)").text();
 
         $("#modal-group-comment-data").modal("show");
-        console.log("opencomment")
-        console.log(number);
-        console.log(value);
-        console.log(period);
+       
 
         var id = e.toElement.dataset.id;
-        console.log(id);
         $(".dataid").text(id);
-
+        console.log(value)
         $(".RemarkChart").text(e.text);
         const monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
