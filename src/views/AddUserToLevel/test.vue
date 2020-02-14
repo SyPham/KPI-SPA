@@ -18,21 +18,19 @@
         <h3>8. Add User Of List Each Levels</h3>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <hierarchy></hierarchy>
       <table
-        id="treetable"
-        class="table table-condensed table-hover table-striped fancytree-fade-expander fancytree-colorize-selected"
-      >
+        id="treetable" class="  fancytree-fade-expander fancytree-colorize-selected">
         <thead>
           <tr>
-            <th>Level</th>
+            <th></th>
             <th class="text-right">Name</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td></td>
+            <td class="demo"></td>
             <td></td>
           </tr>
         </tbody>
@@ -56,7 +54,7 @@
         </div>
         <div class="box-body">
           <div class="box-body">
-            <table class="table table-bordered">
+            <table v-if="events.length" class="table table-bordered">
               <thead>
                 <tr>
                   <th>#</th>
@@ -66,8 +64,8 @@
                 </tr>
               </thead>
               <tbody  class="tbody" id="tbluser">
-                <tr v-for="(item,key,index) in events" :key="index" :data-id="item.ID">
-                  <td class="text-center">{{key+1+skip}}</td>
+                <tr v-for="(item,key,index) in resultQuery" :key="index" :data-id="item.ID">
+                  <td class="text-center">{{key+skip+1}}</td>
                   <td>
                     <div class="pretty p-switch p-fill">
                       <input @click="update(item,index)" :checked='item.Status == true ? "checked" : ""' type="checkbox"  class="checkbox levelID"  name="name" />
@@ -88,7 +86,7 @@
         <div class="box-footer clearfix">
           <Paginate
             v-model="page"
-            :page-count="totalPage "
+            :page-count="totalPage"
             :prev-text="'Prev'"
             :next-text="'Next'"
             :page-range="3"
@@ -102,7 +100,9 @@
             :next-link-class="'page-link'"
             :click-handler="changePage"
           ></Paginate>
-          
+          <!-- <jw-pagination :items="exampleItems" :pageSize="10" @changePage="onChangePage"></jw-pagination> -->
+         <!-- <pagination v-model="page" :records="records" :per-page="4" @paginate="myCallback"></pagination> -->
+
         </div>
       </div>
     </div>
@@ -116,11 +116,14 @@ import { HTTP } from "../../http-constants";
 import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/adminOC/Modal";
 import Paginate from "vuejs-paginate";
-
+import JwPagination from 'jw-vue-pagination';
+import Pagination from 'vue-pagination-2';
 export default {
   name: "IndexKpi",
   data() {
     return {
+      searchQuery: null,
+      events2: [],
       events: [],
       // test: "A",
       id: 0,
@@ -130,11 +133,26 @@ export default {
       skip: 0,
       pageSize: 10,
       code: " ",
+      name: " ",
       levelID: 0,
       searchname: "",
       count: null,
-      ID: null
+      ID: null,
+      exampleItems : null,
+      pageOfItems:[]
     };
+  },
+  computed: {
+    resultQuery(){
+      if(this.searchQuery){
+        return this.events.filter((item)=>{
+          return this.searchQuery.toLowerCase().split(' ').every(v => item.Username.toLowerCase().includes(v))
+        })
+      }
+      else{
+        return this.events;
+      }
+    }
   },
   watch: {
     searchname: function(newOld, oldVal) {
@@ -142,12 +160,13 @@ export default {
       console.log(oldVal)
       this.code = newOld;
       this.LoadDataUser();
-    }
+    },
   },
   components: {
     listoc,
     Hierarchy,
-    Paginate
+    Paginate,
+    JwPagination,
   },
   created() {
     let seft = this;
@@ -158,6 +177,7 @@ export default {
     update: function(item,index){ 
       let self = this
       self.ID = item.ID
+      console.log(self.ID)
       $('.levelID').off('change').on('change', function () {
       let id = self.ID;
       let levelid = Number($('#box .kpi-name .code').text());
@@ -178,7 +198,7 @@ export default {
       console.log("Id of level is " + levelid);
       // axios.get(`http://10.4.4.92:991/AddUserToLevel/LoadDataUser2/${self.code}/${levelid}`)
       if(self.code == ''){
-         axios.get(`http://10.4.4.92:91/AddUserToLevel/LoadDataUser3/${levelid}/${self.page}/${self.pageSize}`)
+         axios.get(`http://10.4.4.92:991/AddUserToLevel/LoadDataUser3/${levelid}/${self.page}/${self.pageSize}`)
         .then(response=>{
         console.log(response)
           if (response.data.status) {
@@ -193,7 +213,7 @@ export default {
       })
       }
       else{
-        axios.get(`http://10.4.4.92:91/AddUserToLevel/LoadDataUser/${levelid}/${self.code}/${self.page}/${self.pageSize}`)
+        axios.get(`http://10.4.4.92:991/AddUserToLevel/LoadDataUser/${levelid}/${self.code}/${self.page}/${self.pageSize}`)
         .then(response=>{
         console.log(response)
           if (response.data.status) {
@@ -289,9 +309,13 @@ export default {
               // Set column #3 info from node data:
   
               $tdList.eq(0).addClass('text-bold').text(node.data.levelnumber);
-              $tdList.eq(1).find('span.fancytree-icon').removeClass('fancytree-icon').addClass('fa fa-book')
-              $tdList.eq(1).addClass('text-bold');
-              $tdList.eq(1).addClass('text-bold');
+              // $tdList.eq(0).text(node.data.levelnumber);
+              // $tdList.eq(1).find('span.fancytree-icon').removeClass('fancytree-icon').addClass('fa fa-book')
+              $tdList.eq(1).find('span.fancytree-icon').removeClass('fancytree-icon')
+              // $tdList.eq(1).addClass('text-bold');
+              // $tdList.eq(1).addClass('text-bold');
+               $tdList.eq(1);
+              $tdList.eq(1);
               // Static markup (more efficiently defined as html row template):
               // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
               // ...

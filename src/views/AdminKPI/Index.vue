@@ -138,7 +138,7 @@ export default {
     LoadData() {
       // debugger
       let seft = this
-      axios.post(`http://10.4.4.92:91/AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}/${seft.locale}`,{
+      axios.post(`http://10.4.4.92:991/AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}/${seft.locale}`,{
         headers:{
           Authorization: 'Bearer '+ localStorage.getItem("authToken")
         }
