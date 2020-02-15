@@ -60,19 +60,18 @@
                   <th>#</th>
                   <th>Username</th>
                   <th>Alias</th>
-                  <th> OC Name  
-                  </th>
+                  <th> OC Name </th>
                 </tr>
               </thead>
               <tbody  class="tbody" id="tbluser">
                 <tr v-for="(item,key,index) in resultQuery" :key="index" :data-id="item.ID">
-                  <td class="text-center">{{key+skip+1}}</td>
+                  <td class="text-center">{{key+1}}</td>
                   <td>
                     <div class="pretty p-switch p-fill">
                       <input @click="update(item,index)" :checked='item.Status == true ? "checked" : ""' type="checkbox"  class="checkbox levelID"  name="name" />
                       <!-- <input v-else type="checkbox" @click="update()" class="checkbox levelID"   name="name" /> -->
                       <div class="state p-success" >
-                        <i class="icon fa fa-check"></i>
+                        <i ></i>
                         <label  class="black username">{{item.Username}}</label>
                       </div>
                     </div>

@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     GetListAllPermissions(Userid = 0) {
-      axios.get(`http://10.4.4.92:91/AdminUser/GetListAllPermissions/${this.Userid}`)
+      axios.get(`http://10.4.4.92:991/AdminUser/GetListAllPermissions/${this.Userid}`)
         .then(r => {
           this.data = r.data;
           console.log(r.data);
@@ -145,7 +145,7 @@ export default {
     },
     get(id) {
       if (id == undefined) return;
-        axios.get("AdminUser/GetbyID/"+ id)
+        axios.get("http://10.4.4.92:991/AdminUser/GetbyID/"+ id)
         .then(r => {
           console.log(r)
           // seft.loading = false;
@@ -165,7 +165,7 @@ export default {
         });
     },
     update() {
-      axios.post("http://10.4.4.92:91/AdminUser/Update",{
+      axios.post("http://10.4.4.92:991/AdminUser/Update",{
           ID: this.ID,
           Username: this.UserName,
           Email: this.Email,

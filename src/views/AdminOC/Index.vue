@@ -47,6 +47,12 @@
           <span class="id" style="display:none"></span>
           <span class="code" style="display:none"></span>
           <span class="level" style="display:none"></span>
+          <div class="input-group">
+            <input v-model="searchname" type="text" class="form-control demo" placeholder="Search KPI Name"/>
+            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+              <button class="input-group-text btn-success" @click="searchname = ''"> <i class="fas fa-remove"></i> Clear</button>
+            </div>
+          </div>
           <!-- <select class="form-control pull-right" style="width:50%"></select> -->
         </div>
         <div class="box-body">
@@ -64,8 +70,8 @@
                 </tr>
               </thead>
               <tbody  class="tbody" id="tblkpilevel">
-                <tr v-for="(item,key,index) in events" :key="index" :data-id="item.ID">
-                  <td :data-kpilevel="item.ID">{{key+1}}</td>
+                <tr v-for="(item,key,index) in events" :key="index" data-id="item.ID">
+                  <td data-kpilevel="item.ID">{{key+1}}</td>
                   <td :data-unit="item.Unit" class="tooltip-css">
                     <div class="top">
                       {{item.KPIName}}
@@ -73,12 +79,11 @@
                     </div>
 
                     <div class="pretty p-switch p-fill">
-                      <input v-if="item.Checked == true" type="checkbox" :data-code="item.KPICode" :value="item.KPIID" checked/>
-                      <input v-else type="checkbox" :data-code="item.KPICode" :value="item.KPIID" />
-                      <span class="level" :data-level="item.LevelNumber" style="display:none"></span>
-                      <span class="kpi-code" :data-kpicode="item.LevelCode" style="display:none"></span>
+                      <input type="checkbox" :checked='item.Checked == true ? "checked" : ""' @click="updateKPIlevel(item,index)" data-code="item.KPICode" value="item.KPIID">
+                      <span class="level" data-level="item.LevelNumber" style="display:none"></span>
+                      <span class="kpi-code" data-kpicode="item.LevelCode" style="display:none"></span>
                       <div class="state p-success">
-                        <i class="icon fa fa-check"></i>
+                        <!-- <i class="icon fa fa-check"></i> -->
                         <label class="textOverflow black">{{item.KPIName}}</label>
                       </div>
                     </div>
@@ -88,7 +93,7 @@
                       <input v-if="item.WeeklyChecked === true"  class="weekly" :data-code="item.KPICode " :value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="weekly"  :data-code="item.KPICode" :value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
-                        <i class="icon fa fa-check"></i>
+                        <!-- <i class="icon fa fa-check"></i> -->
                         <label class="black"></label>
                       </div>
                     </div>
@@ -98,7 +103,7 @@
                       <input v-if="item.MonthlyChecked === true" class="monthly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="monthly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
-                        <i class="icon fa fa-check"></i>
+                        <!-- <i class="icon fa fa-check"></i> -->
                         <label class="black"></label>
                       </div>
                     </div>
@@ -108,7 +113,7 @@
                       <input v-if="item.QuarterlyChecked === true" class="quaterly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="quaterly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
-                        <i class="icon fa fa-check"></i>
+                        <!-- <i class="icon fa fa-check"></i> -->
                         <label class="black"></label>
                       </div>
                     </div>
@@ -122,7 +127,7 @@
                       <input v-if="item.YearlyChecked === true" class="yearly" data-code="item.KPICode" value="item.KPIID" type="checkbox" checked/>
                       <input v-else class="yearly" data-code="item.KPICode" value="item.KPIID" type="checkbox"/>
                       <div class="state p-success">
-                        <i class="icon fa fa-check"></i>
+                        <!-- <i class="icon fa fa-check"></i> -->
                         <label class="black"></label>
                       </div>
                     </div>
@@ -132,8 +137,6 @@
                     <div v-if="item.YearlyChecked || item.QuarterlyChecked || item.MonthlyChecked || item.WeeklyChecked === true" class="pretty p-icon p-rotate">
                       <input @click="showdata" class="showdata" type="checkbox">
                       <div class="state p-success">
-                        <!-- <i class="icon far fa-edit"></i> -->
-                        <!-- <label class="label label-success">Modify</label> -->
                       <button style="font-size: 12px; margin-bottom:-7px;" @click="showdata" id=""  class="btn-sm btn-info showdata ">
                         <i class="far fa-edit"></i>
                       </button>
@@ -165,6 +168,13 @@
             :next-link-class="'page-link'"
             :click-handler="changePage"
           ></Paginate>
+          <!-- <ul id="paginationKPILevel" class="pagination pagination-sm no-margin pull-right">
+            <li><a href="#">«</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">»</a></li>
+        </ul> -->
         </div>
       </div>
     </div>
@@ -178,6 +188,7 @@ import Hierarchy from "../../components/adminOC/Hierarchy";
 import listoc from "../../components/adminOC/Modal";
 import { HTTP } from '../../http-constants';
 import EventBus from "../../utils/EventBus.js";
+import VueJwtDecode from 'vue-jwt-decode'
 import Paginate from "vuejs-paginate";
 export default {
   name: "IndexKpi",
@@ -188,7 +199,9 @@ export default {
       totalPage: 0,
       page: 1,
       skip: 0,
-      pageSize: 6,
+      pageSize: 4 ,
+      searchname: "",
+      name:" ",
       // test: "A"
     };
   },
@@ -233,6 +246,12 @@ export default {
     locale: function(newOld,oldVal){
       this.locale = newOld
       this.loadDataKPILevel()
+    },
+    searchname: function(newOld,oldVal){
+      console.log(newOld)
+      console.log(oldVal)
+      this.code = newOld;
+      this.loadDataKPILevel();
     }
   },
   created() {
@@ -249,6 +268,33 @@ export default {
     
   },
   methods: {
+    updateKPIlevel: function(item,index){
+      let self = this
+      var ID = item.ID;
+      console.log(ID)
+      var KPIID = item.KPIID;
+      var LevelID = item.LevelID;
+      var TimeCheck = new Date();
+      var KPILevelCode = "";
+      var Checked = $('#tblkpilevel tr td:nth-child(2) input').is(':checked');
+      // var Checked = $('#tblkpilevel tr td:nth-child(2) input');
+      console.log(Checked)
+      var UserCheck = Number(VueJwtDecode.decode(localStorage.getItem("authToken")).nameid);
+      var Weekly = null;
+      var Monthly = null;
+      var Quarterly = null;
+      var Yearly = null;
+      var WeeklyChecked = null;
+      var MonthlyChecked = null;
+      var QuarterlyChecked = null;
+      var YearlyChecked = null;
+      var WeeklyPublic = null;
+      var MonthlyPublic = null;
+      var QuarterlyPublic = null;
+      var YearlyPublic = null;
+      self.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic);
+      // self.loadDataKPILevel()
+    },
     showdata(){
       console.log('showdata')
        //update weeklychecked kpilevel
@@ -296,7 +342,7 @@ export default {
             },
             glyph: glyph_opts,
             source: {
-              url: "http://10.4.4.92:91/AdminKPILevel/GetListTree",
+              url: "http://10.4.4.92:991/AdminKPILevel/GetListTree",
               debugDelay: 1000
             },
             table: {
@@ -347,7 +393,7 @@ export default {
                 .eq(1)
                 .find("span.fancytree-icon")
                 .removeClass("fancytree-icon")
-                .addClass("fa fa-book");
+                .addClass("fa fa-home");
               $tdList.eq(1).addClass("text-bold");
               // Static markup (more efficiently defined as html row template):
               // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
@@ -380,75 +426,32 @@ export default {
         },
       };
     },
-    loadDataKPILevel: function(changePageSize, level) {
+
+    loadDataKPILevel() {
       let self = this
       //data onto an array
       let levelid = $("#box .kpi-name .code").text();
       console.log("Id of level is " + levelid);
       let category = $("#box select").find(":selected").val();
-      let kpiLevelConfig = {
-        pageSize: 6,
-        pageIndex: 1
-      };
+     
       let locale = $cookies.get("Lang")
-      console.log(locale)
       if (category === undefined || category === "") category = 0;
-      axios.get(`http://10.4.4.92:91/AdminKPILevel/LoadDataKPILevel2/${levelid}/${category}/${locale}/${kpiLevelConfig.pageIndex}/${kpiLevelConfig.pageSize}`)
+      axios.get(`http://10.4.4.92:991/AdminKPILevel/LoadDataKPILevel3/${levelid}/${category}/${self.name}/${locale}/${self.page}/${self.pageSize}`)
       .then(r => {
         console.log(r)
         if (r.data.status) {
-          let count,
-            data = r.data.data,
-            page = r.data.page,
-            pageSize = r.data.pageSize;
-          if (page === 1) count = 1;
-          else count = (page - 1) * pageSize + 1;
+          self.totalPage = r.data.totalPage;
+          self.page = r.data.page;
+          self.pageSize = r.data.pageSize;
           self.events = r.data.data;
           //  debugger
           console.log(self.events);
 
-          self.pagingKPILevel(
-            r.data.total,
-            function() {
-              console.log("change pageSize");
-              self.loadDataKPILevel("", level);
-            },
-            changePageSize
-          );
-          self.registerEvent();
+          
+          // self.registerEvent();
         }
       })
         
-    },
-    pagingKPILevel: function(totalRow, callback, changePageSize) {
-      let kpiLevelConfig = {
-        pageSize: 6,
-        pageIndex: 1
-      };
-      var totalPage = Math.ceil(totalRow / kpiLevelConfig.pageSize);
-
-      //Unbind pagination if it existed or click change pagesize
-      if (
-        $("#paginationKPILevel a").length === 0 ||
-        changePageSize === true
-      ) {
-        $("#paginationKPILevel").empty();
-        $("#paginationKPILevel").removeData("twbs-pagination");
-        $("#paginationKPILevel").unbind("page");
-      }
-
-      $("#paginationKPILevel").twbsPagination({
-        totalPages: totalPage === 0 ? 1 : totalPage,
-        first: "First",
-        next: "Next",
-        last: "Last",
-        prev: "Previous",
-        visiblePages: 10,
-        onPageClick: function(event, page) {
-          kpiLevelConfig.pageIndex = page;
-          setTimeout(callback, 500);
-        }
-      });
     },
     registerEvent: function () {
       let self = this
@@ -569,7 +572,7 @@ export default {
           } else {
               $('#modal-group-weekly .containStandard').show();
           }
-          self.loadDataKPILevel();
+          // self.loadDataKPILevel();
       });
       //update monthly checked kpilevel
       $('#tblkpilevel .monthly').off('click').on('click', function () {
@@ -606,7 +609,7 @@ export default {
           } else {
               $('#modal-group-monthly .containStandard').show();
           }
-          self.loadDataKPILevel();
+          // self.loadDataKPILevel();
       });
       //update quaterly checked kpilevel
       $('#tblkpilevel .quaterly').off('click').on('click', function () {
@@ -643,7 +646,7 @@ export default {
           } else {
               $('#modal-group-quartly .containStandard').show();
           }
-          self.loadDataKPILevel();
+          // self.loadDataKPILevel();
       });
       //update yearly checked kpilevel
       $('#tblkpilevel .yearly').off('click').on('click', function () {
@@ -680,7 +683,7 @@ export default {
           } else {
               $('#modal-group-yearly .containStandard').show();
           }
-          self.loadDataKPILevel();
+          // self.loadDataKPILevel();
       });
 
       //----------------------------------------------------------------------------------------------
@@ -845,7 +848,7 @@ export default {
           self.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
 
           $('#modal-group-weekly').modal('hide');
-          self.loadDataKPILevel();
+          // self.loadDataKPILevel();
 
 
       });
@@ -878,7 +881,7 @@ export default {
           self.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
 
           $('#modal-group-monthly').modal('hide');
-           self.loadDataKPILevel();
+          //  self.loadDataKPILevel();
       });
       //update quaterly modal
       $("#btnsavequaterlymodal").off('click').on('click', function (e) {
@@ -909,7 +912,7 @@ export default {
           self.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
 
           $('#modal-group-quarterly').modal('hide');
-           self.loadDataKPILevel();
+          //  self.loadDataKPILevel();
       });
       //update yearly modal
       $("#btnsaveyearly").off('click').on('click', function () {
@@ -939,7 +942,7 @@ export default {
           self.updateKPILevel(ID, KPIID, KPILevelCode, UserCheck, Checked, WeeklyChecked, MonthlyChecked, QuarterlyChecked, YearlyChecked, Weekly, Monthly, Quarterly, Yearly, TimeCheck, LevelID, WeeklyPublic, MonthlyPublic, QuarterlyPublic, YearlyPublic,Target,Period);
 
           $('#modal-group-yearly').modal('hide');
-           self.loadDataKPILevel();
+          //  self.loadDataKPILevel();
 
       });
 
@@ -968,15 +971,16 @@ export default {
         Target: Target,
         Period:Period
       };
-      axios.post("AdminKPILevel/UpdateKPILevel",JSON.stringify(mObj))
+      axios.post("http://10.4.4.92:991/AdminKPILevel/UpdateKPILevel",JSON.stringify(mObj))
       .then(result=>{
           if (result) {
             success('Update successfully!.');
+            this.loadDataKPILevel()
           }
       })
     },
     getAllUser() {
-      axios.get("AdminKPILevel/GetListAllUser")
+      axios.get("http://10.4.4.92:991/AdminKPILevel/GetListAllUser")
       .then(data=>{
         var users = [],
             username,
@@ -1011,7 +1015,7 @@ export default {
     },
     loadDetail: function(id) {
       let self = this
-      axios.get(`AdminKPILevel/GetbyID/${id}`)
+      axios.get(`http://10.4.4.92:991/AdminKPILevel/GetbyID/${id}`)
       .then(res=>{
         console.log("loadDetail");
         console.log(res);

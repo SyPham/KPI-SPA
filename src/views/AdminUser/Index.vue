@@ -65,11 +65,10 @@
                 <td>{{user.Skype}}</td>
 
                 <td class="lock">
-                  <div class="pretty p-icon p-jelly">
-                    <input v-if="user.IsActive === true" type="checkbox" class="lockUser" onchange="return lockUser()" :value="user.ID"  />
-                    <input v-else type="checkbox" class="lockUser" @onchange="return this.LockUser()" :value="user.ID" checked  />
-                    <div class="state p-info-o">
-                      <i class="icon fa fa-lock"></i>
+                  <div class="pretty p-switch p-fill">
+                    <input :checked='user.IsActive == true ? "checked" : ""' type="checkbox" @click="LockUser(user,index)" :value="user.ID" >
+                    <div class="state p-success">
+                      <i></i>
                       <label v-if="user.IsActive === true">Unlocked</label>
                       <label v-else>Locked</label>
                     </div>
@@ -173,7 +172,7 @@ export default {
       totalPage: 0,
       page: 1,
       skip: 0,
-      Id: 1,
+      ID: null,
       searchname: "",
       pageSize: 5,
       search:" "
@@ -191,15 +190,15 @@ export default {
     let seft = this;
     // seft.getAll();
     seft.LoadData();
-    seft.LockUser();
-    seft.ID = seft.$route.params.id;
+    // seft.LockUser();
+    // seft.ID = seft.$route.params.id;
     // console.log(seft.ID);
   },
   methods: {
     LoadData() {
       // debugger
       let seft = this;
-      axios.post(`http://10.4.4.92:91/AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
+      axios.post(`http://10.4.4.92:991/AdminUser/LoadData/${seft.page}/${seft.pageSize}/${seft.search}`).then(res => {
         console.log(res);
         seft.skip = res.data.skip;
         seft.totalPage = res.data.totalPage;
@@ -207,12 +206,14 @@ export default {
         seft.data = res.data.data;
       });
     },
-    LockUser(Id=1){
-      axios.get(`AdminUser/LockUser/${Id}`)
+    LockUser: function(user,index){
+      let self = this 
+      self.ID = user.ID
+      console.log(self.ID)
+      axios.get(`http://10.4.4.92:991/AdminUser/LockUser/${self.ID}`)
         .then(r => {
-          // success('Successfully');
+          success('Successfully');
           this.LoadData();
-          console.log('success')
         })
         .catch(r => {
           // console.log(r);

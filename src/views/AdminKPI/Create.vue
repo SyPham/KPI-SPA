@@ -1,6 +1,19 @@
 <template>
   <div class="row">
     <!-- left column -->
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="#/home">{{$t('home')}}</a>
+            </li>
+            <li class="breadcrumb-item active">KPI</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="col-md-12">
       <!-- general form elements -->
       <div class="card card-primary">
@@ -100,7 +113,7 @@ export default {
         return;
       } else {
         
-        axios.post("http://10.4.4.92:91/AdminKPI/add", {
+        axios.post("http://10.4.4.92:991/AdminKPI/add", {
           // Name: this.NameEn,Co
           NameVI: this.NameVI,
           NameEn: this.NameEn,

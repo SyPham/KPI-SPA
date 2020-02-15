@@ -48,7 +48,7 @@ const renderColumns = function(event, data) {
     .eq(1)
     .find("span.fancytree-icon")
     .removeClass("fancytree-icon")
-    .addClass("fa fa-book");
+    .addClass("fa fa-home");
   $tdList.eq(1).addClass("text-bold");
   // Static markup (more efficiently defined as html row template):
   // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");

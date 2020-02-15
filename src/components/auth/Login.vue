@@ -137,31 +137,29 @@ export default {
     }
   },
   created(){
-    console.log(window.location.href)
-    // this.menuSidebar = JSON.parse(localStorage.getItem('Menus'))
-    // console.log(this.menuSidebar)
-    console.log(localStorage.getItem('Menus'))
-    
+
   },
   methods: {
     login(){
       let self = this
       //EventBus.$emit('event-name', self.menuSidebarmenuSidebar)
-      axios.post("http://10.4.4.92:91/api/auth/login", self.user )
+      axios.post("http://10.4.4.92:991/api/auth/login", self.user )
         .then(function(res) {
           console.log(res)
           //self.menuSidebar = res.data.user.Menus
-          self.$auth.setToken(res.data.token, Date.now() + 14400000 ,res.data.user.Menus ,res.data.user.User.Alias,res.data.user.User.Role); // + 4 hours
+          self.$auth.setToken(res.data.token, Date.now() + 14400000 ,res.data.user.Menus ,res.data.user.User.Alias,res.data.user.User.Role,res.data.user.User.IsActive); // + 4 hours
           console.log("res.data.user.User")
           console.log(res.data.user.User)
-          var routerArr = ["/CategoryKPILevel", "/Dataset"];
+          var routerArr = res.data.user.Menus;
+          console.log("routerArr")
+          console.log(routerArr)
           var uri = self.$route.query.redirect || "";
           if(self.$route.query.redirect.length != 0 )
           {
             var n = routerArr.includes(uri);
             if (localStorage.getItem("Role") == 2 && n) {
               self.$router.push(uri);
-            } else if (localStorage.getItem("Role") == 1 && !n) {
+            } else if (localStorage.getItem("Role") == 1 && n) {
               self.$router.push(uri);
             } else {
               self.$router.push("/home");
