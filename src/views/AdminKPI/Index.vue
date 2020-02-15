@@ -1,5 +1,18 @@
 <template>
-  <div class="row" v-if="role == 1">
+  <div class="row">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="#/home">{{$t('home')}}</a>
+            </li>
+            <li class="breadcrumb-item active">KPI</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="col-md-12 my-3">
       <button @click="$router.push(`/adminKPI/create`)" class="btn btn-success float-right">
         <i class="fa fa-plus"></i> {{$t('Add_btn')}}
@@ -18,7 +31,7 @@
             <div class="input-group">
              <input v-model="searchname" type="text" class="form-control" placeholder="Search name"/>
               <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                <button class="input-group-text btn-success" @click="searchname = ' '"> <i class="fas fa-remove"></i> Clear</button>
+                <button class="input-group-text btn-success" @click="searchname = ''"> <i class="fas fa-remove"></i> Clear</button>
               </div>
             </div>
             <!-- /.input group -->
@@ -138,17 +151,31 @@ export default {
     LoadData() {
       // debugger
       let seft = this
-      axios.post(`http://10.4.4.92:991/AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}/${seft.locale}`,{
-        headers:{
-          Authorization: 'Bearer '+ localStorage.getItem("authToken")
-        }
-      }).then(res => {
-        console.log(res);
-        seft.totalPage = res.data.pageCount;
-        seft.page = res.data.page;
-        seft.data = res.data.data;
-        seft.pageSize = res.data.pageSize;
-      });
+      if(seft.name == ''){
+        axios.post(`http://10.4.4.92:991/AdminKPI/LoadData2/${seft.page}/${seft.pageSize}/${seft.locale}`,{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
+        }).then(res => {
+          console.log(res);
+          seft.totalPage = res.data.pageCount;
+          seft.page = res.data.page;
+          seft.data = res.data.data;
+          seft.pageSize = res.data.pageSize;
+        });
+      }else{
+        axios.post(`http://10.4.4.92:991/AdminKPI/LoadData/${seft.page}/${seft.pageSize}/${seft.name}/${seft.locale}`,{
+          headers:{
+            Authorization: 'Bearer '+ localStorage.getItem("authToken")
+          }
+        }).then(res => {
+          console.log(res);
+          seft.totalPage = res.data.pageCount;
+          seft.page = res.data.page;
+          seft.data = res.data.data;
+          seft.pageSize = res.data.pageSize;
+        });
+      }
     },
     changePage(pageNum) {
       this.LoadData(this.name, pageNum);

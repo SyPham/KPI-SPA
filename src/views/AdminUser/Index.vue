@@ -1,5 +1,18 @@
 <template>
   <div class="row">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="#/home">{{$t('home')}}</a>
+            </li>
+            <li class="breadcrumb-item active">Admin User</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="col-md-12 my3">
       <button @click="$router.push(`/adminUser/create`)" class="btn btn-success float-right">
         <i class="fa fa-plus"></i> {{$t('Add_btn')}}  
@@ -14,12 +27,12 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <div class="input-group">
+                <!-- <div class="input-group">
                   <input v-model="searchname" type="text" class="form-control" placeholder="Search name"/>
                   <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
                     <button class="input-group-text btn-success" @click="searchname = ' '"> <i class="fas fa-remove"></i> Clear</button>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

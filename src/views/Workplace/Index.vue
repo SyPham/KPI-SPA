@@ -680,7 +680,6 @@ export default {
       .catch(() => console.log('error occured'))
     },
     uploadData(e) {
-     
       var formData = new FormData();
       var fileUpload = document.querySelector("#UploadedFile");
       formData.append("UploadedFile", fileUpload.files[0]);
