@@ -19,7 +19,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
     "bootstrap-vue-treeview": "^1.0.8",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "^0.7.0",
     "element-ui": "^2.13.0",
     "eslint-plugin-vue": "^6.0.1",
